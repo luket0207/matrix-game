@@ -4,11 +4,14 @@ import Player from './pages/Player.jsx';
 import Score from './pages/Score.jsx';
 import Start from './pages/Start.jsx';
 
-function AppRoutes() {
+function AppRoutes({ iPadRestartSignal }) {
   return (
     <Routes>
       <Route element={<Start />} path="/" />
-      <Route element={<Ipad />} path="/ipad" />
+      <Route
+        element={<Ipad restartSignal={iPadRestartSignal} />}
+        path="/ipad"
+      />
       <Route element={<Player />} path="/player" />
       <Route element={<Score />} path="/score" />
     </Routes>

@@ -1,0 +1,1286 @@
+Feature-001 - iPad Page Player Setup
+Status: done
+
+Start building the iPad page of the game.
+
+The iPad page is the game engine. This page is separate from the normal player-facing mobile pages and is allowed to use a wider iPad-style layout.
+
+At the start, the iPad page should display setup instructions in both English and Japanese.
+
+Important:
+
+- This feature is only for the iPad page.
+- Do not change the normal Start, Player, or Score flow unless required for shared state.
+- Do not add the full gameplay logic yet.
+- This feature should build the iPad setup flow and move into a placeholder gameplay stage.
+- Keep everything button-based where choices are being made.
+
+Initial iPad state:
+
+When the user first opens the iPad page, ask how many players are playing.
+
+This question should be shown in both languages.
+
+Suggested text:
+
+How many players are playing?
+何人でプレイしますか？
+
+Player count options:
+
+- 2 players
+- 3 players
+- 4 players
+- 5 players
+- 6 players
+- 7 players
+- 8 players
+- 9 players
+- 10 players
+
+Requirements:
+
+- The player count options should be buttons.
+- Do not use a dropdown.
+- Do not use a number input.
+- Pressing a player count button should immediately submit the choice.
+- The selected player count should be stored in the iPad/game setup state.
+- Once the player count is selected, move to the player details setup stage.
+
+Player details setup stage:
+
+After the number of players has been selected, generate one input row for each player.
+
+Each row should include:
+
+- A text input for the player's name.
+- Two radio buttons to the right of the name input:
+  - English
+  - Japanese
+
+The language selected here is the preferred language for that individual player only.
+
+Requirements:
+
+- Generate the correct number of player rows based on the selected player count.
+- Each player row should have its own name value.
+- Each player row should have its own preferred language value.
+- The player language should not overwrite the main player-facing app language selected on the Start page.
+- Store this iPad player setup information until the game ends.
+- For now, this state only needs to last during the current browser session.
+- It does not need to survive a refresh.
+- Keep the inputs simple and easy to use on iPad.
+- The radio buttons should be clearly associated with the correct player row.
+
+Suggested player object shape:
+
+{
+  id: 1,
+  name: "",
+  preferredLanguage: "english"
+}
+
+Validation requirements:
+
+- The Start Game button should only be shown once:
+  - Every generated player has a name entered.
+  - Every generated player has a preferred language selected.
+- Player names should not be empty.
+- Trim whitespace when checking whether a name has been entered.
+- Do not require unique names yet unless a later feature asks for it.
+
+Start Game button:
+
+When all player names and languages have been selected, show a Start Game button.
+
+The button should contain both languages in the same button.
+
+Suggested button text:
+
+Start Game / ゲーム開始
+
+Requirements:
+
+- Use the reusable GameButton component if it already exists.
+- Pressing Start Game should move the iPad page to the gameplay stage.
+- Do not route away from /ipad.
+- This should be an internal iPad page stage change.
+- The entered player setup data should remain available in state after the gameplay stage starts.
+
+Gameplay stage:
+
+For this feature, the gameplay stage can be a placeholder.
+
+Requirements:
+
+- Show that the game has started.
+- Display a simple placeholder heading in both languages.
+
+Suggested text:
+
+Game started
+ゲーム開始
+
+- Display the player list so we can confirm the setup data has carried through.
+- Each player should show:
+  - Name
+  - Preferred language
+
+Restart button:
+
+When the iPad page is in the gameplay stage, display a restart button in the bottom-right corner.
+
+Requirements:
+
+- The restart button should only appear during the gameplay stage.
+- The restart button should be positioned in the bottom-right area of the iPad page.
+- Pressing the restart button should reset the iPad page back to its initial setup state.
+- This should clear:
+  - selected player count
+  - player names
+  - player preferred languages
+  - current iPad stage
+- After restarting, the iPad page should again ask how many players are playing.
+- Do not reset the normal player-facing app language unless that state is currently shared in a way that makes this unavoidable.
+- Keep the restart button separate from app-shell__header.
+- Do not bring back app-shell__header content.
+
+Suggested restart button text:
+
+Restart / リスタート
+
+State requirements:
+
+Add or update simple iPad/game setup state for:
+
+- selectedPlayerCount
+- players
+- iPadStage
+
+Suggested iPad stages:
+
+- "selectPlayerCount"
+- "enterPlayerDetails"
+- "gameplay"
+
+Implementation guidance:
+
+- Keep the state local to the iPad page if that is enough for now.
+- If later features need the normal Player page to read this data, it can be moved into shared context later.
+- Do not overbuild a full global game engine yet.
+- Keep the component structure simple.
+- If the iPad page becomes large, split it into small components.
+
+Suggested components if useful:
+
+src/pages/Ipad.jsx
+src/components/GameButton.jsx
+src/components/IpadPlayerSetupRow.jsx
+
+Expected demo:
+
+- Visiting /ipad shows the player count question in English and Japanese.
+- Player count can be selected from buttons for 2 to 10 players.
+- After selecting a player count, the correct number of name input rows appears.
+- Each row has a name input and English/Japanese radio buttons.
+- The Start Game / ゲーム開始 button only appears after all names and languages are selected.
+- Clicking Start Game moves the iPad page to the gameplay stage.
+- The gameplay stage shows a placeholder and displays the selected players.
+- A Restart / リスタート button appears in the bottom-right during the gameplay stage.
+- Clicking restart clears the iPad setup and returns to the first iPad setup question.
+
+Feature-002 - Improve iPad Player Input Usability
+Status: done
+
+Improve the usability of the player name and language selection inputs on the iPad page.
+
+This feature focuses only on the player details setup stage of the iPad page.
+
+The current text inputs are mostly fine, but they should be made slightly taller and easier to use on a touch screen. The bigger improvement needed is for the English/Japanese language selection controls.
+
+The language choice does not need to look like traditional radio buttons. It only needs to behave like a mutually exclusive binary selection.
+
+Requirements:
+
+- Improve the player name input styling.
+- Make the text inputs slightly taller.
+- Keep the text inputs simple and clear.
+- Do not make the text inputs oversized.
+- Make sure the text inputs are comfortable to tap on an iPad.
+- Keep one name input per player row.
+
+Language selection requirements:
+
+- Replace or restyle the English/Japanese radio buttons so they have a much larger tap area.
+- The user should be able to tap the label/button area easily, not just the small radio circle.
+- It should be very clear which language is selected.
+- The two options should still behave as a mutually exclusive choice:
+  - English
+  - Japanese
+- Selecting English should deselect Japanese.
+- Selecting Japanese should deselect English.
+- Each player row should keep its own independent language selection.
+- Changing one player's language should not affect any other player's language.
+
+Suggested UI approach:
+
+Use a segmented-button style control instead of traditional visible radio buttons.
+
+Example visual structure:
+
+[ English ] [ Japanese ]
+
+Behavior:
+
+- The selected option should have a clearly different visual state.
+- The unselected option should still look tappable.
+- The whole option area should be clickable/tappable.
+- The control should be easy to understand without explanation.
+- It should be obvious that only one option can be selected.
+
+Styling requirements:
+
+- Language options should have a large hit area.
+- Language options should have clear spacing.
+- Selected language should be visibly highlighted.
+- Unselected language should be visibly inactive but still readable.
+- Add clear focus styles for keyboard accessibility.
+- Keep styling consistent with the existing game aesthetic.
+- Keep the layout clean on the wider iPad page.
+- Do not make the row feel cramped.
+
+Accessibility requirements:
+
+- The language selection should still be accessible.
+- If using hidden radio inputs, make sure the labels are correctly connected.
+- If using buttons instead of radio inputs, make sure the selected state is clear in the component logic.
+- Do not rely only on tiny radio circles to show the selected option.
+- Do not remove keyboard usability.
+
+Implementation guidance:
+
+- Consider creating a reusable binary choice component if useful.
+- Keep it simple.
+- This component can be reused later for other two-option choices.
+- Suggested component name:
+
+  BinaryChoice.jsx
+
+- Suggested usage:
+
+  <BinaryChoice
+    value={player.preferredLanguage}
+    options={[
+      { value: "english", label: "English" },
+      { value: "japanese", label: "Japanese" }
+    ]}
+    onChange={(value) => updatePlayerLanguage(player.id, value)}
+  />
+
+- If the existing player row component is already separate, update it there.
+- If not, update the relevant section of Ipad.jsx directly.
+- Do not change the player setup state shape unless needed.
+- Do not change the player count flow.
+- Do not change the Start Game validation except to keep it working with the new control.
+- Do not add gameplay logic in this feature.
+
+Expected demo:
+
+- After selecting the number of players on /ipad, the player name inputs are slightly taller and easier to tap.
+- Each player row has a clear English/Japanese binary language selector.
+- The language selector has a much larger hit area than normal radio buttons.
+- It is visually obvious which language is selected.
+- Tapping English selects English and deselects Japanese for that player.
+- Tapping Japanese selects Japanese and deselects English for that player.
+- Changing one player's language does not affect other players.
+- The Start Game / ゲーム開始 button still appears only when every player has a name and selected language.
+
+
+Feature-003 - Add Difficulty Selection to iPad Setup
+Status: done
+
+Add the missing difficulty selection step to the iPad game setup flow.
+
+The iPad page is the game engine, so it needs to know the game difficulty before the player count and player details are selected.
+
+The first question on the iPad setup screen should now be the difficulty of the game.
+
+Updated iPad setup flow:
+
+1. Select difficulty
+2. Select number of players
+3. Enter player names and preferred languages
+4. Start game
+5. Gameplay stage
+
+Difficulty selection stage:
+
+When the user first opens the iPad page, ask what difficulty the game will be.
+
+This question should be shown in both English and Japanese.
+
+Suggested text:
+
+Choose the difficulty
+難易度を選んでください
+
+Difficulty options:
+
+- Easy
+- Medium
+- Hard
+
+Suggested bilingual button labels:
+
+- Easy / かんたん
+- Medium / ふつう
+- Hard / むずかしい
+
+Requirements:
+
+- The difficulty options should be buttons.
+- Do not use a dropdown.
+- Do not use radio buttons.
+- Pressing a difficulty button should immediately submit the choice.
+- The selected difficulty should be stored in the iPad/game setup state.
+- Once the difficulty is selected, move to the player count selection stage.
+- Use the reusable GameButton component if it already exists.
+- Do not route away from /ipad.
+- This should be an internal iPad page stage change.
+
+Player count stage:
+
+After the difficulty has been selected, ask how many players are playing.
+
+This should continue to work as already implemented.
+
+Suggested text:
+
+How many players are playing?
+何人でプレイしますか？
+
+Player count options:
+
+- 2 players
+- 3 players
+- 4 players
+- 5 players
+- 6 players
+- 7 players
+- 8 players
+- 9 players
+- 10 players
+
+Requirements:
+
+- Keep the existing player count button behavior.
+- Pressing a player count button should immediately submit the choice.
+- After selecting player count, move to the player details setup stage.
+- Do not remove or break the existing player count logic.
+
+Player details setup stage:
+
+Keep the existing player details setup behavior.
+
+Each generated player row should still include:
+
+- A text input for the player's name.
+- A clear English/Japanese binary language selector.
+
+Requirements:
+
+- Keep the improved mobile-friendly name inputs.
+- Keep the improved language selector from the previous feature.
+- The selected difficulty should remain stored while entering player details.
+- The selected difficulty should remain available after the game starts.
+
+Start Game button:
+
+Keep the existing Start Game behavior.
+
+The Start Game button should only appear once:
+
+- A difficulty has been selected.
+- A player count has been selected.
+- Every generated player has a name entered.
+- Every generated player has a preferred language selected.
+
+Suggested button text:
+
+Start Game / ゲーム開始
+
+Gameplay stage:
+
+For now, the gameplay stage can remain a placeholder.
+
+Update the placeholder gameplay stage so it also displays the selected difficulty for testing.
+
+It should display:
+
+- Game started / ゲーム開始
+- Selected difficulty
+- Player list
+- Each player's preferred language
+
+Restart button:
+
+Keep the existing restart behavior.
+
+When the iPad page is in the gameplay stage, show the restart button in the bottom-right corner.
+
+Suggested restart button text:
+
+Restart / リスタート
+
+Pressing restart should reset the iPad page back to the first setup step, which is now difficulty selection.
+
+Restart should clear:
+
+- selectedDifficulty
+- selectedPlayerCount
+- player names
+- player preferred languages
+- current iPad stage
+
+Updated state requirements:
+
+Add or update iPad/game setup state for:
+
+- selectedDifficulty
+- selectedPlayerCount
+- players
+- iPadStage
+
+Updated suggested iPad stages:
+
+- "selectDifficulty"
+- "selectPlayerCount"
+- "enterPlayerDetails"
+- "gameplay"
+
+Implementation guidance:
+
+- Update the initial iPad stage to "selectDifficulty".
+- Move the existing player count question so it appears after difficulty selection.
+- Keep the state local to the iPad page if that is still enough for now.
+- Do not connect this to the normal player-facing Start page difficulty unless a later feature specifically asks for that.
+- The iPad difficulty and the normal Start page difficulty can remain separate for now.
+- Do not add full gameplay logic yet.
+- Do not change the normal Start, Player, or Score flow in this feature.
+- Do not reintroduce app-shell__header content.
+
+Expected demo:
+
+- Visiting /ipad first shows the difficulty question in English and Japanese.
+- The user can choose Easy / かんたん, Medium / ふつう, or Hard / むずかしい.
+- After choosing difficulty, the iPad page moves to the player count question.
+- The user can choose 2 to 10 players.
+- After choosing player count, the correct number of player setup rows appears.
+- Each player row still has a name input and improved English/Japanese selector.
+- The Start Game / ゲーム開始 button appears only after all setup information is complete.
+- Clicking Start Game moves to the gameplay placeholder.
+- The gameplay placeholder displays the selected difficulty and player list.
+- The Restart / リスタート button resets the iPad setup back to the difficulty selection step.
+
+
+Feature-004 - Add iPad Return to Start Button
+Status: done
+
+Add a button on the iPad page that can take the user back to the normal Start page if needed.
+
+This button should sit in the same controls area as the existing Restart Game button, but it should be left aligned.
+
+This feature only affects the iPad page.
+
+Current iPad gameplay controls:
+
+- Restart / リスタート button appears during the gameplay stage.
+- It is positioned in the bottom-right area of the iPad page.
+
+New requirement:
+
+- Add a Return to Start button.
+- This button should route the user back to the normal Start page.
+- The Return to Start button should be placed in the same controls element as the Restart Game button.
+- The Return to Start button should be aligned to the left side of that controls area.
+- The Restart Game button should remain aligned to the right side of that controls area.
+
+Suggested button text:
+
+Return to Start / スタートに戻る
+
+Layout requirements:
+
+- Create or update the iPad gameplay controls element.
+- The controls element should sit along the bottom of the iPad page during the gameplay stage.
+- The Return to Start button should be on the left.
+- The Restart Game button should be on the right.
+- The controls should be easy to tap on an iPad.
+- The buttons should not overlap with gameplay content.
+- The layout should remain clean on the wider iPad page.
+- Use the reusable GameButton component if appropriate.
+
+Behavior requirements:
+
+- Clicking Return to Start should navigate to /.
+- Clicking Return to Start should not break the normal Start page flow.
+- It is acceptable for the iPad game setup state to remain unchanged unless existing logic makes it better to clear it.
+- Do not reset the iPad game state from this button unless that is already simple and safe.
+- The Restart Game button should continue to reset the iPad page back to the first iPad setup step.
+- Return to Start and Restart Game must have different behavior:
+  - Return to Start routes to /
+  - Restart Game resets the iPad game setup and stays on /ipad
+
+Visibility requirements:
+
+- The Return to Start button should be shown in the same stage as the Restart Game button.
+- For now, this means it should appear during the iPad gameplay stage.
+- Do not show it during the player-facing mobile Start, Player, or Score pages.
+- Do not add it to app-shell__header.
+- Do not recreate app-shell__header content.
+- Do not add normal navigation links.
+
+Implementation guidance:
+
+- Use react-router-dom navigation for returning to /.
+- If using useNavigate, call navigate("/") from the Return to Start button.
+- Keep the iPad controls separate from the global player-facing Return to Start button.
+- Do not confuse this iPad Return to Start button with the normal player-facing Return to Start button from earlier features.
+- Keep the iPad page state local unless a later feature needs shared game state.
+- Do not add new gameplay logic in this feature.
+
+Expected demo:
+
+- Start the iPad setup flow.
+- Select difficulty.
+- Select player count.
+- Enter all player names and language preferences.
+- Click Start Game / ゲーム開始.
+- In the gameplay stage, there is a bottom controls area.
+- Return to Start / スタートに戻る appears on the left side of the controls area.
+- Restart / リスタート appears on the right side of the controls area.
+- Clicking Return to Start / スタートに戻る routes to /.
+- Clicking Restart / リスタート resets the iPad setup and stays on /ipad.
+- app-shell__header remains empty or removed.
+
+
+Feature-005 - Display Bilingual Text on Separate Lines
+Status: done
+
+Update the way bilingual text is displayed on the iPad page.
+
+When there are bilingual bits of text, they should not be separated with a slash anymore.
+
+Instead of this:
+
+Choose the difficulty / 難易度を選んでください
+
+They should be displayed on separate lines.
+
+Preferred format:
+
+Choose the difficulty
+難易度を選んでください
+
+This should apply to all bilingual text on the iPad page.
+
+Requirements:
+
+- Find all bilingual text currently displayed with a slash separator.
+- Replace slash-separated bilingual text with a two-line layout.
+- English should appear on the first line.
+- Japanese should appear on the second line.
+- The two lines should feel visually connected as one bilingual label or heading.
+- Do not leave visible slash separators between English and Japanese.
+- Do not put both languages in the same line unless a future feature specifically asks for it.
+- Keep the text centered unless a specific layout requires otherwise.
+- Keep the styling clean and easy to read on iPad.
+
+Examples:
+
+Change:
+
+Choose the difficulty / 難易度を選んでください
+
+To:
+
+Choose the difficulty
+難易度を選んでください
+
+Change:
+
+Start Game / ゲーム開始
+
+To:
+
+Start Game
+ゲーム開始
+
+Change:
+
+Restart / リスタート
+
+To:
+
+Restart
+リスタート
+
+Change:
+
+Return to Start / スタートに戻る
+
+To:
+
+Return to Start
+スタートに戻る
+
+Suggested implementation:
+
+- Create a small reusable bilingual text component if useful.
+- This can help avoid manually formatting the same pattern in multiple places.
+
+Suggested component name:
+
+BilingualText.jsx
+
+Suggested usage:
+
+<BilingualText
+  english="Choose the difficulty"
+  japanese="難易度を選んでください"
+/>
+
+Suggested output structure:
+
+<span className="bilingual-text">
+  <span className="bilingual-text__english">Choose the difficulty</span>
+  <span className="bilingual-text__japanese">難易度を選んでください</span>
+</span>
+
+Styling requirements:
+
+- The English and Japanese lines should stack vertically.
+- The spacing between the two lines should be small but clear.
+- The component should work inside headings, buttons, and control labels.
+- When used inside buttons, both lines should be centered inside the button.
+- Do not make the buttons too tall, but make sure both lines are readable.
+- Keep tap targets comfortable on iPad.
+
+Areas to check:
+
+- Difficulty selection heading.
+- Difficulty buttons.
+- Player count heading.
+- Player count buttons if they contain bilingual text.
+- Start Game button.
+- Gameplay placeholder heading.
+- Restart button.
+- Return to Start button.
+- Any other iPad page bilingual labels.
+
+Do not change:
+
+- The iPad setup flow.
+- The difficulty selection logic.
+- The player count logic.
+- The player name input logic.
+- The player language selection logic.
+- The Start Game validation.
+- The restart behavior.
+- The Return to Start behavior.
+- The normal player-facing Start, Player, or Score pages unless they already use the same reusable bilingual component and need the same formatting.
+
+Expected demo:
+
+- Bilingual iPad text no longer uses slash separators.
+- English appears on the first line.
+- Japanese appears on the second line.
+- Bilingual headings are centered and readable.
+- Bilingual buttons show both languages on separate lines inside the button.
+- Start Game shows as two lines.
+- Restart shows as two lines.
+- Return to Start shows as two lines.
+- All existing iPad setup and gameplay controls still work correctly.
+
+
+```txt
+Feature-006 - iPad Gameplay Loop
+Status: done
+
+Introduce the core gameplay loop to the iPad page.
+
+This feature turns the iPad page from a setup screen into the actual game engine. The iPad page should control turn order, generate each turn, show the matrix, handle the secret number, reveal the number, and then move to the next player.
+
+This feature only affects the iPad page.
+
+Do not change the normal player-facing Start, Player, or Score pages unless absolutely required for shared state.
+
+Important:
+
+- Keep the player list in the same order as the names were entered during setup.
+- Randomly select the first player only once when the game starts.
+- After that, turn order should continue from that point through the original player list order.
+- When the end of the player list is reached, loop back to the first player.
+
+Example:
+
+If the entered player order is:
+
+1. Player 1
+2. Player 2
+3. Player 3
+4. Player 4
+
+And Player 2 is randomly selected as the first turn:
+
+- Player 2 goes first.
+- Player 3 goes next.
+- Player 4 goes next.
+- Player 1 goes next.
+- Player 2 goes again.
+
+Gameplay loop overview:
+
+Each turn has the following stages:
+
+1. Pass the iPad prompt
+2. Start player's turn
+3. Generate and display turn matrix
+4. Allow player to hold Show Secret Number
+5. Allow player to Reveal to Everyone after confirmation
+6. Animate the matrix away and reveal the number
+7. Show End Turn button
+8. Move to the next player and repeat
+
+Turn stage 1 - Pass the iPad prompt:
+
+Before each turn starts, display whose turn it is.
+
+Also display this message in both languages:
+
+Pass the iPad to {nextPlayerName}
+{iPadを{nextPlayerName}に渡してください}
+
+Use the current player's name in the message.
+
+Show a button to begin that player's turn.
+
+Button text should include the player's name:
+
+Start {playerName}'s turn
+{playerName}のターンを始める
+
+Requirements:
+
+- This screen should be shown before every turn.
+- The text should be bilingual.
+- English and Japanese should be displayed on separate lines, not separated by a slash.
+- The button should use the reusable GameButton component if possible.
+- Clicking the button starts the current player's turn.
+- Do not generate the turn data before the Start Turn button is pressed unless it is simpler and safe to do so internally.
+
+Turn stage 2 - Generate turn data:
+
+When the player's turn is started, generate:
+
+- One random category.
+- Two random scales from that selected category.
+- One random secret number based on the selected difficulty.
+
+Requirements:
+
+- The selected category must come from the category table defined in this feature.
+- The two scales must both come from the selected category.
+- The two scales must be different from each other.
+- The random secret number must fit the selected difficulty.
+- Store the generated turn data in state until the turn ends.
+
+Difficulty matrix rules:
+
+Easy:
+
+- Matrix size: 3x3
+- Numbers: 1 to 9
+
+Medium:
+
+- Matrix size: 4x4
+- Numbers: 1 to 16
+
+Hard:
+
+- Matrix size: 5x5
+- Numbers: 1 to 25
+
+The selected difficulty controls:
+
+- Matrix grid size.
+- Random secret number range.
+
+Turn stage 3 - Matrix display:
+
+Display the matrix to the current player.
+
+The matrix screen should show:
+
+- The category name at the top.
+- One selected scale on the x-axis.
+- One selected scale on the y-axis.
+- The lower end of the x-axis on the left.
+- The upper end of the x-axis on the right.
+- The lower end of the y-axis at the top.
+- The upper end of the y-axis at the bottom.
+- The numbered grid based on the difficulty.
+- A Show Secret Number button.
+- A Reveal to Everyone button.
+
+Language rules:
+
+- The matrix screen should display in the current player's selected language.
+- If the current player's preferred language is English, show English labels.
+- If the current player's preferred language is Japanese, show Japanese labels.
+- The category and scale data should support both English and Japanese labels.
+- If Japanese translations are not already available for every category and scale, create a simple translation mapping as part of this feature.
+
+Matrix numbering:
+
+- Easy should show numbers 1 to 9 in a 3x3 grid.
+- Medium should show numbers 1 to 16 in a 4x4 grid.
+- Hard should show numbers 1 to 25 in a 5x5 grid.
+- Numbers should be displayed in normal reading order from left to right, top to bottom.
+
+Example 3x3:
+
+1 2 3
+4 5 6
+7 8 9
+
+Example 4x4:
+
+1 2 3 4
+5 6 7 8
+9 10 11 12
+13 14 15 16
+
+Example 5x5:
+
+1 2 3 4 5
+6 7 8 9 10
+11 12 13 14 15
+16 17 18 19 20
+21 22 23 24 25
+
+Turn stage 4 - Show Secret Number hold behavior:
+
+The Show Secret Number button should only show the secret number while the button is being held down.
+
+Requirements:
+
+- The secret number should be hidden by default.
+- Pressing and holding Show Secret Number should reveal the secret number in its correct position on the matrix.
+- Releasing the button should hide the secret number again.
+- This should work properly on touch devices.
+- Use touch events and mouse events if needed so it works during desktop development too.
+- The number should appear in place on the matrix, not as a separate popup.
+- Do not permanently reveal the secret number from this button.
+- This button is for the current player only.
+
+Suggested English text:
+
+Show Secret Number
+
+Suggested Japanese text:
+
+秘密の番号を見る
+
+Turn stage 5 - Reveal to Everyone confirmation:
+
+The Reveal to Everyone button should not reveal the number immediately.
+
+When pressed, show an "Are you sure?" confirmation.
+
+Requirements:
+
+- Pressing Reveal to Everyone opens a confirmation message.
+- The confirmation should ask if the player is sure.
+- The confirmation should use the current player's selected language.
+- The confirmation should have Yes and No options.
+- Pressing No closes the confirmation and returns to the matrix.
+- Pressing Yes begins the reveal animation.
+- Do not reveal the secret number unless Yes is pressed.
+
+Suggested English text:
+
+Reveal to Everyone
+
+Are you sure?
+
+Yes
+
+No
+
+Suggested Japanese text:
+
+みんなに見せる
+
+本当にいいですか？
+
+はい
+
+いいえ
+
+Turn stage 6 - Reveal animation:
+
+When the player confirms the reveal, animate the matrix disappearing and animate the secret number onto the screen.
+
+Requirements:
+
+- The matrix should disappear with a simple animation.
+- The secret number should then appear prominently on the screen.
+- The secret number should be large and clear.
+- The reveal should feel like an intentional moment in the game.
+- Keep the animation simple and reliable.
+- Do not overbuild the animation system.
+- After the reveal animation completes, show the End Turn button.
+
+Suggested implementation:
+
+- Add a CSS class when revealing starts.
+- Animate the matrix with opacity and/or scale.
+- Animate the secret number with opacity and/or scale.
+- Use CSS transitions or keyframes.
+- Avoid adding extra animation libraries unless already installed.
+
+Turn stage 7 - End Turn:
+
+After the secret number has been revealed, show an End Turn button.
+
+Requirements:
+
+- The End Turn button should only appear after the reveal has happened.
+- Pressing End Turn should move the game back to the pass-the-iPad prompt.
+- The next player should be selected according to the turn order.
+- The previous turn data should be cleared.
+- A new category, new scales, and new secret number should be generated when the next player's turn starts.
+
+Suggested English text:
+
+End Turn
+
+Suggested Japanese text:
+
+ターン終了
+
+Turn order requirements:
+
+- When the game starts, randomly pick the first current player index.
+- Store that current player index in state.
+- The player list order must remain the same as the setup input order.
+- At the end of each turn, increase the current player index by 1.
+- If the current player index goes past the last player, loop back to 0.
+- Do not shuffle the player list.
+- Do not randomly pick every turn.
+- Only the first player should be random.
+
+Suggested gameplay state:
+
+- currentPlayerIndex
+- turnStage
+- currentCategory
+- currentXAxisScale
+- currentYAxisScale
+- secretNumber
+- isSecretNumberHeld
+- isConfirmRevealOpen
+- isRevealed
+- isRevealAnimating
+
+Suggested turn stages:
+
+- "passDevice"
+- "matrix"
+- "revealed"
+
+Category and scale data:
+
+Create a central data structure for categories and scales.
+
+Each category should contain:
+
+- English category name.
+- Japanese category name.
+- A list of scales.
+- Each scale should have:
+  - English lower label.
+  - English upper label.
+  - Japanese lower label.
+  - Japanese upper label.
+
+Use the following category and scale data.
+
+Animals:
+
+- Small to Big
+- Scary to Cute
+- Safe to Dangerous
+- Slow to Fast
+- Common to Rare
+
+Food:
+
+- Cheap to Expensive
+- Healthy to Unhealthy
+- Soft to Crunchy
+- Mild to Spicy
+- Sweet to Savoury
+
+Countries:
+
+- Small to Large
+- Cold to Hot
+- Few People to Lots of People
+- Near to Far
+
+Sports:
+
+- Slow to Fast
+- Easy to Play to Hard to Play
+- Cheap to Expensive
+- Boring to Watch to Fun to Watch
+- Safe to Dangerous
+
+Musical Instruments:
+
+- Small to Large
+- Quiet to Loud
+- Cheap to Expensive
+- Easy to Play to Hard to Play
+
+Pokemon:
+
+- Small to Big
+- Scary to Cute
+- Weak to Strong
+- Silly to Cool
+
+Household Objects:
+
+- Small to Large
+- Cheap to Expensive
+- Useless to Useful
+- Soft to Hard
+- Safe to Dangerous
+
+Clothing:
+
+- Casual to Formal
+- Cheap to Expensive
+- Cool to Warm
+- Comfortable to Uncomfortable
+
+Hobbies:
+
+- Cheap to Expensive
+- Popular to Unpopular
+- Indoor to Outdoor
+- Easy to Hard
+- Relaxing to Intense
+
+Japanese translation guidance:
+
+Use simple, understandable Japanese for the category and scale labels.
+
+Suggested Japanese category labels:
+
+- Animals: 動物
+- Food: 食べ物
+- Countries: 国
+- Sports: スポーツ
+- Musical Instruments: 楽器
+- Pokemon: ポケモン
+- Household Objects: 日用品
+- Clothing: 服
+- Hobbies: 趣味
+
+Suggested Japanese scale labels:
+
+- Small: 小さい
+- Big: 大きい
+- Large: 大きい
+- Scary: 怖い
+- Cute: かわいい
+- Safe: 安全
+- Dangerous: 危険
+- Slow: 遅い
+- Fast: 速い
+- Common: よくある
+- Rare: レア
+- Cheap: 安い
+- Expensive: 高い
+- Healthy: 健康的
+- Unhealthy: 不健康
+- Soft: 柔らかい
+- Crunchy: サクサク
+- Mild: マイルド
+- Spicy: 辛い
+- Sweet: 甘い
+- Savoury: しょっぱい
+- Cold: 寒い
+- Hot: 暑い
+- Few People: 人が少ない
+- Lots of People: 人が多い
+- Near: 近い
+- Far: 遠い
+- Easy to Play: 遊びやすい
+- Hard to Play: 遊びにくい
+- Boring to Watch: 見ていてつまらない
+- Fun to Watch: 見ていて楽しい
+- Quiet: 静か
+- Loud: うるさい
+- Weak: 弱い
+- Strong: 強い
+- Silly: おもしろい
+- Cool: かっこいい
+- Useless: 役に立たない
+- Useful: 役に立つ
+- Hard: 硬い
+- Casual: カジュアル
+- Formal: フォーマル
+- Cool: 涼しい
+- Warm: 暖かい
+- Comfortable: 快適
+- Uncomfortable: 不快
+- Popular: 人気
+- Unpopular: 人気がない
+- Indoor: インドア
+- Outdoor: アウトドア
+- Easy: 簡単
+- Relaxing: リラックス
+- Intense: 激しい
+
+Important translation note:
+
+Some English words repeat with different meanings, such as:
+
+- Cool = かっこいい when paired with Silly.
+- Cool = 涼しい when paired with Warm.
+- Hard = 難しい when paired with Easy.
+- Hard = 硬い when paired with Soft.
+
+Do not use a single global translation map blindly if it causes the wrong meaning. Store Japanese labels directly on each scale entry if needed.
+
+Scale selection requirements:
+
+- Pick one random category each turn.
+- Pick two different random scales from that category.
+- Assign one selected scale to the x-axis.
+- Assign the other selected scale to the y-axis.
+- For the x-axis:
+  - lower label appears on the left.
+  - upper label appears on the right.
+- For the y-axis:
+  - lower label appears at the top.
+  - upper label appears at the bottom.
+
+Layout requirements:
+
+- The matrix should be clear and easy to understand.
+- The category should be at the top.
+- The x-axis scale should be visually connected to the horizontal direction.
+- The y-axis scale should be visually connected to the vertical direction.
+- The grid should remain readable on an iPad.
+- The buttons should be easy to tap.
+- Keep text and elements centered unless the matrix layout requires axis labels to sit at the edges.
+- Do not use app-shell__header.
+- Keep the existing iPad bottom controls if they are still needed.
+
+Controls requirements:
+
+During gameplay, keep the existing iPad controls from previous features:
+
+- Return to Start button on the left.
+- Restart button on the right.
+
+These should remain in the controls element.
+
+The gameplay buttons for the current turn should be separate from the bottom controls.
+
+Restart behavior:
+
+The Restart button should reset the iPad page back to the first iPad setup step.
+
+This means it should clear:
+
+- selectedDifficulty
+- selectedPlayerCount
+- players
+- currentPlayerIndex
+- turnStage
+- currentCategory
+- currentXAxisScale
+- currentYAxisScale
+- secretNumber
+- reveal state
+- iPad stage
+
+Return to Start behavior:
+
+The Return to Start button should route to /.
+
+Do not confuse this with ending a turn.
+
+Suggested component structure:
+
+If the iPad page is getting too large, split it into smaller components.
+
+Suggested components:
+
+src/pages/Ipad.jsx
+src/components/GameButton.jsx
+src/components/BilingualText.jsx
+src/components/IpadPassPrompt.jsx
+src/components/IpadMatrixTurn.jsx
+src/components/IpadRevealConfirmation.jsx
+src/components/IpadGameplayControls.jsx
+src/data/matrixCategories.js
+
+Implementation guidance:
+
+- Keep all category data in one file if possible.
+- Keep helper functions small and easy to test.
+- Create a helper to get matrix size from difficulty.
+- Create a helper to get the maximum secret number from difficulty.
+- Create a helper to generate the grid numbers.
+- Create a helper to pick a random category and two random scales.
+- Do not overbuild a full engine class.
+- Keep this as simple React state and helper functions for now.
+- Keep all files as .jsx where components are involved.
+- Data/helper files can be .js if already acceptable in the project, but if the project rule is .jsx only, use .jsx or keep data in the page file for now.
+
+Expected demo:
+
+- Complete the iPad setup flow.
+- When Start Game is clicked, the first player is randomly selected from the player list.
+- The first pass prompt tells the group who to pass the iPad to.
+- The Start Turn button includes that player's name.
+- Clicking Start Turn generates a category, two scales, and a secret number.
+- The matrix appears in that player's preferred language.
+- The matrix size matches the selected difficulty:
+  - Easy: 3x3, numbers 1 to 9.
+  - Medium: 4x4, numbers 1 to 16.
+  - Hard: 5x5, numbers 1 to 25.
+- The category appears at the top.
+- The two selected scales appear on the x and y axes.
+- Holding Show Secret Number reveals the number in place on the matrix.
+- Releasing Show Secret Number hides it again.
+- Clicking Reveal to Everyone shows an Are you sure confirmation.
+- Clicking No closes the confirmation.
+- Clicking Yes animates the matrix away and reveals the secret number.
+- Once revealed, End Turn appears.
+- Clicking End Turn moves to the next player in the original input order.
+- The next turn repeats the same loop.
+- The first player is random only once.
+- Later turns follow the stored player order.
+- Restart resets the iPad page back to difficulty selection.
+- Return to Start routes to /.
+```

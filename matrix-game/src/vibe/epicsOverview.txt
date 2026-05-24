@@ -16,3 +16,29 @@ EPIC-001
   - Updated Return to Start so it resets setup state back to the original pre-language Start screen.
   - Centered the shared page layout rules and added a reusable `GameButton` for the main game controls.
   - Restored Return to Start as an independent shell control styled separately from the main game buttons.
+
+EPIC-002
+- Status: in progress
+- Epic folder: `src/vibe/epics/EPIC-002/`
+- Latest notes:
+  - Replaced the placeholder iPad page with a local setup flow for player count, player details, and placeholder gameplay.
+  - Added local iPad restart behavior that clears the player count, player details, and current iPad stage.
+  - Moved Restart to a persistent top-right iPad control and refined the count/player-row layouts to match the requested iPad form structure.
+  - Removed the extra unrequested iPad page-copy paragraphs so the affected stages keep only their headings.
+  - Moved Restart fully into the shared shell controls row and wired it to reset the local iPad flow with shared control hover/pointer behavior.
+  - Centered the wrapped iPad player-count rows so the shorter final row no longer sits left-aligned.
+  - Improved the iPad player-details stage with taller name inputs and a segmented English/Japanese `BinaryChoice` control.
+  - Refined the iPad player-details layout so the columns align more cleanly and the Start Game action no longer causes a visible content shift.
+  - Finalized the iPad details-stage polish with centered page wrapping, aligned columns, and matching 60px control heights.
+  - Tightened the BinaryChoice selector sizing so the visible control uses an explicit 60px height.
+  - Added a new first-step iPad difficulty selection flow and carried the selected difficulty through to the gameplay placeholder.
+  - Removed the iPad restart query-string URL tracking and switched Restart back to an internal-only reset signal.
+  - Added a gameplay-only bottom controls row on the iPad page with Return to Start on the left and Restart on the right.
+  - Restored the visible iPad gameplay controls row by separating it from the gameplay content block and tightening the bottom control sizing rules.
+  - Replaced slash-separated iPad bilingual copy with a reusable stacked `BilingualText` pattern for headings, buttons, labels, and gameplay summary text.
+  - Moved the iPad gameplay controls into the shell row above `app-shell__content`, with a small gameplay-stage signal so the top controls appear only during gameplay.
+  - Replaced the placeholder gameplay screen with a full iPad turn loop: random first player, pass-device prompt, localized matrix turn, hold-to-show secret number, reveal confirmation/animation, and looping turn order.
+  - Removed the remaining gameplay-only condition from the iPad top shell controls so Return to Start and Restart now stay visible for every `/ipad` stage.
+  - Fixed the matrix hold interaction, added directional axis arrows, removed the unrequested gameplay difficulty chip, and aligned the top y-axis label to the grid edge.
+  - Centered the wider iPad details copy block, tightened the matrix axis spacing, moved reveal confirmation into a modal overlay, and made the whole board animate away before the revealed number appears.
+  - Restored the Japanese matrix button text, stacked the matrix actions with a softer secondary reveal button, and enlarged/recentered the revealed number.

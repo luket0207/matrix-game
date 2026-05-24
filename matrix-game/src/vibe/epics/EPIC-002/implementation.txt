@@ -1,0 +1,682 @@
+Feature: Feature-001 - iPad Page Player Setup
+- What was implemented:
+  - Replaced the placeholder iPad page with a local three-stage flow for player count, player details, and placeholder gameplay.
+  - Added button-based player count selection for 2 through 10 players.
+  - Generated one player setup row per selected player with a name input and English/Japanese language radios.
+  - Gated the Start Game action until every player has a non-empty trimmed name and a selected preferred language.
+  - Added a gameplay placeholder that shows the entered player list and a restart action that resets the iPad flow.
+- Exact scope completed:
+  - The full requested setup flow now happens inside `/ipad` without routing away from the page.
+  - Restart clears `selectedPlayerCount`, `players`, and `iPadStage` back to the initial setup question.
+- Existing components/hooks/utilities/styles considered:
+  - Considered the existing `GameButton` component for the button-based choices and actions.
+  - Considered the existing shared shell/page layout and SCSS patterns in `src/styles.scss`.
+- What was reused:
+  - Reused `GameButton` for player-count selection, Start Game, and Restart.
+  - Reused the existing wide iPad shell route and shared page-copy/page-stack patterns.
+- What was newly created:
+  - New iPad setup and gameplay logic inside `src/pages/Ipad.jsx`.
+  - New iPad-specific SCSS classes inside `src/styles.scss`.
+- Why new code was needed where reuse was not possible:
+  - The previous iPad page was only a placeholder and had no local state or setup UI for the requested game-engine flow.
+- Files changed:
+  - `src/pages/Ipad.jsx`
+  - `src/styles.scss`
+  - `src/vibe/epics/EPIC-002/features.txt`
+  - `src/vibe/epics/EPIC-002/implementation.txt`
+  - `src/vibe/epics/EPIC-002/testing.txt`
+  - `src/vibe/epicsOverview.txt`
+- What was intentionally not changed:
+  - No normal Start, Player, or Score page behavior was changed.
+  - No global game engine, persistence layer, scoring, or gameplay logic was added.
+  - The normal player-facing selected language state remains separate from each iPad player preferred language.
+- Any assumptions made:
+  - Kept the iPad setup state local to `Ipad.jsx` because the current feature only requires it inside `/ipad`.
+- Any tradeoffs or follow-up tasks:
+  - If a later feature needs the mobile Player page to read iPad setup data, the local state can be lifted into shared context at that point.
+
+Bug fix: BUG-001, BUG-002, BUG-003 - iPad restart/control and row layout refinements
+- What was implemented:
+  - Made the iPad Restart control always visible at the top-right above the main iPad content.
+  - Switched Restart to the standalone shell-control styling pattern instead of the main `GameButton` style.
+  - Changed the player-count buttons to show only numbers and arranged them in rows.
+  - Reworked the player setup rows so the title sits above, the name input stays on the left, the language radios stay on the right, and the old bordered card styling is removed.
+- Exact scope completed:
+  - Restart is now available during all iPad stages.
+  - The count picker and player-row layout now match the requested iPad presentation without changing the underlying setup flow.
+- Existing components/hooks/utilities/styles considered:
+  - Considered the existing `app-shell__control` utility-control pattern already used elsewhere in the app shell.
+  - Considered the existing `GameButton` component for the count buttons and Start Game action.
+  - Considered the iPad-specific layout classes already introduced in `src/styles.scss`.
+- What was reused:
+  - Reused the existing iPad-local state and `handleRestart` reset logic.
+  - Reused `GameButton` for the count buttons and Start Game action.
+  - Reused the existing shared shell-control classes for Restart.
+- What was newly created:
+  - No new files.
+- Why new code was needed where reuse was not possible:
+  - The original iPad feature used a gameplay-only restart placement and card-like row styling that did not match the requested iPad utility-control and form-row layout.
+- Files changed:
+  - `src/pages/Ipad.jsx`
+  - `src/styles.scss`
+  - `src/vibe/epics/EPIC-002/bugs.txt`
+  - `src/vibe/epics/EPIC-002/implementation.txt`
+  - `src/vibe/epics/EPIC-002/testing.txt`
+  - `src/vibe/epicsOverview.txt`
+- What was intentionally not changed:
+  - No normal Start, Player, or Score page behavior was changed.
+  - No new shared state, gameplay logic, scoring, or routing changes were introduced.
+- Any assumptions made:
+  - Interpreted “header section” as a top-right control row above the iPad page content, while still avoiding any reintroduction of `app-shell__header`.
+- Any tradeoffs or follow-up tasks:
+  - If a later feature needs the iPad controls to live in the global shell row instead of the page-level control row, the iPad-local state would need to be lifted before that move.
+
+Bug fix: BUG-004 - Remove unrequested iPad page-copy paragraphs
+- What was implemented:
+  - Removed the extra `p` elements from the iPad details-stage and gameplay-stage `page-copy` sections.
+  - Removed the now-unused explanatory copy constants from `Ipad.jsx`.
+- Exact scope completed:
+  - The affected iPad `page-copy` blocks now render only the `h2` headings.
+- Existing components/hooks/utilities/styles considered:
+  - Considered the existing `page-copy` structure already used by the app pages.
+- What was reused:
+  - Reused the existing page layout and stage logic without altering the underlying iPad flow.
+- What was newly created:
+  - No new files.
+- Why new code was needed where reuse was not possible:
+  - The existing stage structure was fine, but the extra paragraph copy exceeded the requested scope and needed to be removed.
+- Files changed:
+  - `src/pages/Ipad.jsx`
+  - `src/vibe/epics/EPIC-002/bugs.txt`
+  - `src/vibe/epics/EPIC-002/implementation.txt`
+  - `src/vibe/epics/EPIC-002/testing.txt`
+  - `src/vibe/epicsOverview.txt`
+- What was intentionally not changed:
+  - No setup logic, validation, routing, or control placement was changed.
+- Any assumptions made:
+  - Applied the bug to the extra iPad page-copy paragraphs currently shown in the details and gameplay stages.
+- Any tradeoffs or follow-up tasks:
+  - If later features need helper copy in the iPad flow again, it should be explicitly requested and added only where needed.
+
+Bug fix: BUG-001 - Move Restart into the shared shell controls row
+- What was implemented:
+  - Moved the visible Restart control from `Ipad.jsx` into `App.jsx` so it now renders inside `app-shell__controls`.
+  - Added a route restart token flow so the shared shell control can reset the local iPad page state without moving the whole iPad setup into shared context.
+  - Added pointer and hover treatment to the shared `app-shell__control` styling.
+- Exact scope completed:
+  - Restart now appears in the actual shared shell controls row on `/ipad`.
+  - Clicking Restart resets the local iPad flow from any iPad stage and keeps the current route on `/ipad`.
+- Existing components/hooks/utilities/styles considered:
+  - Considered the existing `app-shell__controls` and `app-shell__control` pattern in `App.jsx` and `styles.scss`.
+  - Considered the existing local iPad state in `Ipad.jsx`.
+- What was reused:
+  - Reused the existing shared shell-control classes.
+  - Reused the existing local iPad setup state and reset behavior.
+- What was newly created:
+  - No new files.
+- Why new code was needed where reuse was not possible:
+  - The button needed to live in the shared shell controls row, but the actual iPad setup state still needed to remain local for this prompt, so a small route-token reset bridge was the smallest workable structure change.
+- Files changed:
+  - `src/App.jsx`
+  - `src/pages/Ipad.jsx`
+  - `src/styles.scss`
+  - `src/vibe/epics/EPIC-002/bugs.txt`
+  - `src/vibe/epics/EPIC-002/implementation.txt`
+  - `src/vibe/epics/EPIC-002/testing.txt`
+  - `src/vibe/epicsOverview.txt`
+- What was intentionally not changed:
+  - No Start, Player, or Score flow behavior was changed.
+  - The iPad setup state was not lifted into shared app context.
+- Any assumptions made:
+  - Interpreted the requested “header section” placement as the existing `app-shell__controls` row rather than reintroducing any separate header content area.
+- Any tradeoffs or follow-up tasks:
+  - If future iPad controls need richer shared-shell interactions, lifting the iPad setup state into a dedicated shared provider may become cleaner than route-token resets.
+
+Bug fix: BUG-005 - Center wrapped player-count rows
+- What was implemented:
+  - Updated the iPad player-count button layout to use a centered wrapping layout instead of the previous fixed grid treatment.
+  - Added a fixed width override for the count buttons so the final shorter row centers cleanly.
+- Exact scope completed:
+  - The player-count selection rows now stay centered across the available iPad page width, including the final row.
+- Existing components/hooks/utilities/styles considered:
+  - Considered the existing `ipad-page__count-list` layout in `src/styles.scss`.
+  - Considered the existing `GameButton` usage for the count buttons in `Ipad.jsx`.
+- What was reused:
+  - Reused the existing iPad count button markup and `GameButton` component.
+- What was newly created:
+  - No new files.
+- Why new code was needed where reuse was not possible:
+  - The existing fixed grid layout could not center incomplete final rows the way this bug requested.
+- Files changed:
+  - `src/styles.scss`
+  - `src/vibe/epics/EPIC-002/bugs.txt`
+  - `src/vibe/epics/EPIC-002/implementation.txt`
+  - `src/vibe/epics/EPIC-002/testing.txt`
+  - `src/vibe/epicsOverview.txt`
+- What was intentionally not changed:
+  - No iPad state, validation, or route behavior was changed.
+  - No Start, Player, or Score flow behavior was changed.
+- Any assumptions made:
+  - Interpreted “bottom row should be centred” as centering any wrapped partial row of count buttons within the overall selector area.
+- Any tradeoffs or follow-up tasks:
+  - If a future feature changes the count options or target device widths substantially, the fixed count-button width may need a small follow-up adjustment.
+
+Feature: Feature-002 - Improve iPad Player Input Usability
+- What was implemented:
+  - Added a reusable `BinaryChoice` component for the two-option English/Japanese player language selector.
+  - Replaced the old small radio-button presentation in the iPad player rows with a large segmented control.
+  - Increased the player name input height slightly for better iPad touch usability.
+  - Reserved space for the `Start Game` action so the details-stage content no longer shifts when validation unlocks it.
+  - Reworked the player details row structure so the name field side and language selector side line up more consistently.
+- Exact scope completed:
+  - The player details setup stage now has taller name inputs and a larger tap-target binary language selector.
+  - The selected language remains mutually exclusive per player row and still feeds the existing Start Game validation.
+- Existing components/hooks/utilities/styles considered:
+  - Considered the existing `GameButton` component and current iPad player-row structure in `Ipad.jsx`.
+  - Considered the existing iPad-specific layout styles in `src/styles.scss`.
+- What was reused:
+  - Reused the existing iPad-local player setup state and validation logic.
+  - Reused the existing player row structure and update handlers in `Ipad.jsx`.
+- What was newly created:
+  - `src/components/BinaryChoice.jsx`
+- Why new code was needed where reuse was not possible:
+  - The previous tiny radio control layout did not provide the larger, clearer tap targets required for the iPad usability pass.
+  - The previous row structure did not keep the titles and controls aligned as cleanly as the iPad layout needed.
+- Files changed:
+  - `src/components/BinaryChoice.jsx`
+  - `src/pages/Ipad.jsx`
+  - `src/styles.scss`
+  - `src/vibe/epics/EPIC-002/features.txt`
+  - `src/vibe/epics/EPIC-002/implementation.txt`
+  - `src/vibe/epics/EPIC-002/testing.txt`
+  - `src/vibe/epicsOverview.txt`
+- What was intentionally not changed:
+  - No player-count flow, gameplay logic, or route behavior was changed.
+  - No Start, Player, or Score page behavior was changed.
+- Any assumptions made:
+  - Kept the binary choice as a radio-input-based segmented control so the mutually exclusive behavior and keyboard usability stay explicit.
+- Any tradeoffs or follow-up tasks:
+  - If more two-option choices are added later, `BinaryChoice` can be reused before introducing any second binary selector pattern.
+
+Bug fix: BUG-006, BUG-007, BUG-008, BUG-009 - Final iPad details-stage alignment and sizing polish
+- What was implemented:
+  - Reserved a fixed-height `Start Game` action area so the details-stage content no longer shifts when the button appears.
+  - Tightened the iPad details-stage column sizing and spacing so the name side and language side line up more consistently.
+  - Set the player name input and the binary choice container to a matching `60px` height.
+  - Added explicit horizontal centering for the `ipad-page` wrapper inside the shell.
+- Exact scope completed:
+  - The iPad details-stage controls now share the requested sizing and alignment, and the page wrapper centers cleanly inside the iPad shell.
+- Existing components/hooks/utilities/styles considered:
+  - Considered the existing `ipad-page`, `ipad-page__start-action`, `ipad-setup__row`, `ipad-setup__input`, and `binary-choice` styles in `src/styles.scss`.
+- What was reused:
+  - Reused the existing iPad details-stage markup and BinaryChoice component.
+- What was newly created:
+  - No new files.
+- Why new code was needed where reuse was not possible:
+  - The existing details-stage structure was already correct, but the sizing and alignment rules needed to be made more explicit to satisfy the final iPad layout requirements.
+- Files changed:
+  - `src/styles.scss`
+  - `src/vibe/epics/EPIC-002/bugs.txt`
+  - `src/vibe/epics/EPIC-002/implementation.txt`
+  - `src/vibe/epics/EPIC-002/testing.txt`
+  - `src/vibe/epicsOverview.txt`
+- What was intentionally not changed:
+  - No iPad state, validation, or route logic was changed.
+  - No Start, Player, or Score flow behavior was changed.
+- Any assumptions made:
+  - Interpreted the 60px sizing request as applying to the name input control and the visible binary-choice container.
+- Any tradeoffs or follow-up tasks:
+  - If a later feature changes the iPad control typography significantly, the fixed heights may need a small follow-up adjustment to preserve the same visual balance.
+
+Bug fix: BUG-010 - Make the binary choice container exactly 60px high
+- What was implemented:
+  - Changed the visible `binary-choice__options` control from a minimum height to an explicit `60px` height.
+- Exact scope completed:
+  - The binary choice container now uses the requested fixed height instead of allowing a taller rendered result.
+- Existing components/hooks/utilities/styles considered:
+  - Considered the existing `binary-choice__options` sizing rule in `src/styles.scss`.
+- What was reused:
+  - Reused the existing BinaryChoice markup and styling structure.
+- What was newly created:
+  - No new files.
+- Why new code was needed where reuse was not possible:
+  - The previous minimum-height rule did not strictly enforce the requested exact height.
+- Files changed:
+  - `src/styles.scss`
+  - `src/vibe/epics/EPIC-002/bugs.txt`
+  - `src/vibe/epics/EPIC-002/implementation.txt`
+  - `src/vibe/epics/EPIC-002/testing.txt`
+  - `src/vibe/epicsOverview.txt`
+- What was intentionally not changed:
+  - No iPad logic, layout structure, or validation behavior was changed.
+- Any assumptions made:
+  - Applied the request specifically to the visible `binary-choice__options` container height.
+- Any tradeoffs or follow-up tasks:
+  - If future typography or padding changes are added to this control, the exact fixed height should be rechecked in the browser.
+
+Feature: Feature-003 - Add Difficulty Selection to iPad Setup
+- What was implemented:
+  - Added a new first iPad setup stage for selecting difficulty before player count.
+  - Stored the selected difficulty in local iPad state and carried it through the player-details stage into the gameplay placeholder.
+  - Updated the gameplay placeholder to show the selected difficulty for verification.
+  - Updated the restart reset flow so it clears the selected difficulty and returns the iPad setup to the new first step.
+- Exact scope completed:
+  - The `/ipad` flow now moves through difficulty, player count, player details, and gameplay without routing away from the page.
+  - Start Game still requires the existing player details to be complete and now also depends on a selected difficulty being present.
+- Existing components/hooks/utilities/styles considered:
+  - Considered the existing `GameButton` component already used for the iPad setup choices.
+  - Considered the existing local iPad stage/state flow in `src/pages/Ipad.jsx`.
+  - Considered the existing `ipad-page__count-list` and gameplay layout rules in `src/styles.scss`.
+- What was reused:
+  - Reused `GameButton` for the difficulty choices.
+  - Reused the existing local iPad state pattern, player-count stage, player-details stage, BinaryChoice selector, and restart token reset flow.
+- What was newly created:
+  - No new files.
+- Why new code was needed where reuse was not possible:
+  - The current iPad flow started at player count and had no way to capture or display the game difficulty, so a small new stage and one new state field were required.
+- Files changed:
+  - `src/pages/Ipad.jsx`
+  - `src/styles.scss`
+  - `src/vibe/epics/EPIC-002/features.txt`
+  - `src/vibe/epics/EPIC-002/implementation.txt`
+  - `src/vibe/epics/EPIC-002/testing.txt`
+  - `src/vibe/epicsOverview.txt`
+- What was intentionally not changed:
+  - No normal Start, Player, or Score page behavior was changed.
+  - No shared app state was added for the iPad difficulty.
+  - No gameplay logic beyond the existing placeholder stage was added.
+- Any assumptions made:
+  - Kept the iPad difficulty separate from the normal player-facing Start page difficulty, as requested.
+  - Reused the existing restart control behavior in the shared shell and only changed what state it resets inside the iPad flow.
+- Any tradeoffs or follow-up tasks:
+  - If a later feature needs the mobile Player page or gameplay engine to consume the selected difficulty, the iPad-local state can be lifted at that point instead of earlier.
+
+Bug fix: BUG-011 - Remove restart query parameter tracking from `/ipad`
+- What was implemented:
+  - Removed the `?restart=` URL query-string signal from the iPad Restart flow.
+  - Replaced it with an internal restart signal passed from `App.jsx` through `AppRoutes` into `Ipad.jsx`.
+  - Kept the same visible Restart control and the same iPad reset behavior.
+- Exact scope completed:
+  - Clicking Restart on `/ipad` now resets the local iPad setup without modifying the route URL.
+- Existing components/hooks/utilities/styles considered:
+  - Considered the existing shared shell Restart control in `App.jsx`.
+  - Considered the existing `AppRoutes` route composition and the local iPad setup state in `Ipad.jsx`.
+- What was reused:
+  - Reused the existing shared Restart button placement in `app-shell__controls`.
+  - Reused the existing iPad-local state reset behavior and stage flow.
+- What was newly created:
+  - No new files.
+- Why new code was needed where reuse was not possible:
+  - The previous restart bridge depended on the URL as a signal channel, which created an unrequested visible query parameter.
+- Files changed:
+  - `src/App.jsx`
+  - `src/routes.jsx`
+  - `src/pages/Ipad.jsx`
+  - `src/vibe/epics/EPIC-002/bugs.txt`
+  - `src/vibe/epics/EPIC-002/implementation.txt`
+  - `src/vibe/epics/EPIC-002/testing.txt`
+  - `src/vibe/epicsOverview.txt`
+- What was intentionally not changed:
+  - No Start, Player, or Score page behavior was changed.
+  - No iPad layout, validation, difficulty flow, or gameplay placeholder behavior was changed.
+- Any assumptions made:
+  - Interpreted “remove this” as removing restart-tracking from the URL while keeping the existing shared Restart control and reset behavior intact.
+- Any tradeoffs or follow-up tasks:
+  - If future shared shell controls need to trigger more complex iPad actions, a dedicated shared provider may become cleaner than passing additional route-level signals.
+
+Feature: Feature-004 - Add iPad Return to Start Button
+- What was implemented:
+  - Added a gameplay-only iPad controls row at the bottom of the iPad page.
+  - Added a `Return to Start / スタートに戻る` button on the left that routes back to `/`.
+  - Kept a separate `Restart / リスタート` button on the right that resets the local iPad setup and stays on `/ipad`.
+  - Removed the no-longer-needed shared shell restart plumbing and kept the iPad reset logic local to `Ipad.jsx`.
+- Exact scope completed:
+  - During the iPad gameplay stage, the bottom controls area now shows Return to Start on the left and Restart on the right.
+  - Return to Start navigates to `/` without changing the normal Start-page flow.
+  - Restart resets the iPad setup back to the first iPad step and stays on `/ipad`.
+- Existing components/hooks/utilities/styles considered:
+  - Considered the existing `GameButton` component for both gameplay controls.
+  - Considered the current local iPad setup state in `Ipad.jsx`.
+  - Considered the existing app-shell controls row in `App.jsx` and the current gameplay layout styles in `src/styles.scss`.
+- What was reused:
+  - Reused `GameButton` for both bottom gameplay controls.
+  - Reused the existing local iPad setup state, gameplay stage, and reset behavior.
+- What was newly created:
+  - No new files.
+- Why new code was needed where reuse was not possible:
+  - The feature required a gameplay-only bottom controls area with two different actions, which the shared shell controls row was not intended to represent.
+- Files changed:
+  - `src/App.jsx`
+  - `src/routes.jsx`
+  - `src/pages/Ipad.jsx`
+  - `src/styles.scss`
+  - `src/vibe/epics/EPIC-002/features.txt`
+  - `src/vibe/epics/EPIC-002/implementation.txt`
+  - `src/vibe/epics/EPIC-002/testing.txt`
+  - `src/vibe/epicsOverview.txt`
+- What was intentionally not changed:
+  - No normal Start, Player, or Score page behavior was changed.
+  - No new gameplay logic was added.
+  - Return to Start does not clear iPad state before navigating away.
+- Any assumptions made:
+  - Treated the requested bottom controls area as the source of truth for the iPad gameplay controls, so Restart was kept there rather than duplicated in the shared shell controls row.
+- Any tradeoffs or follow-up tasks:
+  - If a later feature needs iPad setup state preserved across returning from `/`, that should be handled separately with explicit persistence or shared state requirements.
+
+Bug fix: BUG-012 - Restore the visible iPad gameplay controls row
+- What was implemented:
+  - Moved the gameplay controls row into its own bottom section beneath the gameplay content.
+  - Replaced the old gameplay-controls classes with a dedicated page-level gameplay controls wrapper.
+  - Added a more specific `GameButton` width override so the bottom controls row no longer disappears behind the base button sizing.
+- Exact scope completed:
+  - The iPad gameplay stage now visibly shows the controls row again, with Return to Start on the left and Restart on the right.
+- Existing components/hooks/utilities/styles considered:
+  - Considered the existing `GameButton` component and the gameplay-stage markup in `Ipad.jsx`.
+  - Considered the current gameplay layout rules in `src/styles.scss`.
+- What was reused:
+  - Reused the existing `GameButton` component, Return to Start navigation, and local restart behavior.
+- What was newly created:
+  - No new files.
+- Why new code was needed where reuse was not possible:
+  - The previous bottom controls relied on light class overrides that were not strong enough against the shared `GameButton` sizing rules, so the row needed a slightly clearer structure and more explicit layout styling.
+- Files changed:
+  - `src/pages/Ipad.jsx`
+  - `src/styles.scss`
+  - `src/vibe/epics/EPIC-002/bugs.txt`
+  - `src/vibe/epics/EPIC-002/implementation.txt`
+  - `src/vibe/epics/EPIC-002/testing.txt`
+  - `src/vibe/epicsOverview.txt`
+- What was intentionally not changed:
+  - No normal Start, Player, or Score behavior was changed.
+  - No iPad setup flow, validation, or gameplay placeholder behavior was changed.
+- Any assumptions made:
+  - Interpreted the bug as restoring the controls row during the gameplay stage, which is where that row was intended to appear in the current feature scope.
+- Any tradeoffs or follow-up tasks:
+  - If a later feature wants these controls visible in additional iPad stages, that should be requested separately.
+
+Bug fix: BUG-013 - Move the iPad gameplay controls row above `app-shell__content`
+- What was implemented:
+  - Moved the iPad gameplay controls row from `Ipad.jsx` into the shared shell row in `App.jsx`.
+  - Added a small gameplay-stage visibility signal from `Ipad.jsx` through `AppRoutes` so the shell only shows those controls during the iPad gameplay stage.
+  - Added a small restart signal from `App.jsx` back into `Ipad.jsx` so the top-row Restart button can still reset the local iPad setup.
+  - Added a left-aligned shell-button variant so Return to Start sits on the left while Restart stays on the right.
+- Exact scope completed:
+  - During the iPad gameplay stage, the controls row now appears above `app-shell__content` in the shell controls area.
+  - Return to Start still routes to `/`, and Restart still resets the local iPad setup while staying on `/ipad`.
+- Existing components/hooks/utilities/styles considered:
+  - Considered the existing `app-shell__controls` and `app-shell__control` shell patterns in `App.jsx` and `src/styles.scss`.
+  - Considered the existing local iPad stage/state flow in `Ipad.jsx`.
+  - Considered the current `AppRoutes` route composition.
+- What was reused:
+  - Reused the existing shell controls row and shell button styling family.
+  - Reused the existing local iPad reset behavior and gameplay-stage flow.
+  - Reused the existing `BilingualText` formatting for the iPad top controls.
+- What was newly created:
+  - No new files.
+- Why new code was needed where reuse was not possible:
+  - The bug clarified that the intended controls placement was outside the page content, so a small route-level signal between the iPad page and the shell was required to keep the state local while moving the UI to the shell row.
+- Files changed:
+  - `src/App.jsx`
+  - `src/routes.jsx`
+  - `src/pages/Ipad.jsx`
+  - `src/styles.scss`
+  - `src/vibe/epics/EPIC-002/bugs.txt`
+  - `src/vibe/epics/EPIC-002/implementation.txt`
+  - `src/vibe/epics/EPIC-002/testing.txt`
+  - `src/vibe/epicsOverview.txt`
+- What was intentionally not changed:
+  - No normal Start, Player, or Score behavior was changed.
+  - No iPad gameplay logic, validation, or copy behavior was changed.
+- Any assumptions made:
+  - Treated this bug as a correction to the earlier placement requirement, so the shell row above `app-shell__content` is now the source of truth for the iPad gameplay controls.
+- Any tradeoffs or follow-up tasks:
+  - If future iPad-only shell controls are added, it may become cleaner to group the iPad shell-control state into a small dedicated provider, but that was intentionally not introduced here.
+
+Feature: Feature-006 - iPad Gameplay Loop
+- What was implemented:
+  - Added central matrix category/scale data in `src/data/matrixCategories.js`.
+  - Added small gameplay helpers in `src/utils/matrixGame.js` for matrix size, number generation, turn data generation, random first-player selection, and next-player looping.
+  - Extended `Ipad.jsx` from setup-only state into a gameplay loop with:
+    - random first player selection once when the game starts
+    - pass-device stage before every turn
+    - per-turn matrix generation from the selected difficulty
+    - hold-to-show secret-number behavior
+    - reveal confirmation
+    - reveal animation state
+    - end-turn flow that advances through the original player order and loops back to the start
+  - Added `IpadPassPrompt.jsx`, `IpadMatrixTurn.jsx`, and `IpadRevealConfirmation.jsx` to keep the iPad page split into smaller focused UI pieces.
+  - Kept the gameplay shell controls working above `app-shell__content` through the existing `App.jsx` and `AppRoutes` bridge.
+- Exact scope completed:
+  - The `/ipad` route now works as a real game loop after setup instead of stopping at a placeholder gameplay screen.
+  - Start Game picks the first player randomly once, then later turns follow the original entered order.
+  - Each turn now moves through pass-device, matrix, reveal, and end-turn flow without leaving `/ipad`.
+- Existing components/hooks/utilities/styles considered:
+  - Considered the existing `GameButton`, `BinaryChoice`, and `BilingualText` shared components.
+  - Considered the current shell controls flow in `App.jsx` and `routes.jsx`.
+  - Considered the existing local iPad setup state and SCSS structure in `Ipad.jsx` and `styles.scss`.
+- What was reused:
+  - Reused `GameButton` for setup, pass-prompt, matrix, confirmation, and end-turn actions.
+  - Reused `BinaryChoice` for the player language selector.
+  - Reused `BilingualText` for the existing bilingual setup and shell controls.
+  - Reused the existing shell-level iPad gameplay controls placement and restart signal pattern.
+- What was newly created:
+  - `src/data/matrixCategories.js`
+  - `src/utils/matrixGame.js`
+  - `src/components/IpadPassPrompt.jsx`
+  - `src/components/IpadRevealConfirmation.jsx`
+  - `src/components/IpadMatrixTurn.jsx`
+- Why new code was needed where reuse was not possible:
+  - The old iPad route only handled setup and had no turn engine, matrix data, or reveal flow, so a small set of dedicated gameplay helpers and UI components was required.
+- Files changed:
+  - `src/data/matrixCategories.js`
+  - `src/utils/matrixGame.js`
+  - `src/pages/Ipad.jsx`
+  - `src/components/IpadPassPrompt.jsx`
+  - `src/components/IpadRevealConfirmation.jsx`
+  - `src/components/IpadMatrixTurn.jsx`
+  - `src/styles.scss`
+  - `src/vibe/epics/EPIC-002/features.txt`
+  - `src/vibe/epics/EPIC-002/implementation.txt`
+  - `src/vibe/epics/EPIC-002/testing.txt`
+  - `src/vibe/epicsOverview.txt`
+- What was intentionally not changed:
+  - No normal Start, Player, or Score flow behavior was changed.
+  - No persistence beyond the current in-memory browser session was added.
+  - No player-facing mobile gameplay UI was added.
+- Any assumptions made:
+  - Interpreted “show the secret number in its correct position on the matrix” as highlighting the chosen numbered cell in place while the hold action is active, since the grid numbers themselves are always visible.
+  - Kept the selected difficulty visible during gameplay as a small summary chip below the active gameplay content so the current difficulty remains testable without changing the shell controls.
+  - Used `turnStage` plus `isRevealAnimating` instead of adding a second explicit `isRevealed` state flag.
+- Any tradeoffs or follow-up tasks:
+  - The reveal animation is intentionally simple CSS opacity/scale motion rather than a larger animation system.
+  - If later prompts need scoring, turn history, or player-facing synced gameplay, the current local turn state will likely need a shared game-state layer.
+
+Feature: Feature-005 - Display Bilingual Text on Separate Lines
+- What was implemented:
+  - Added a reusable `BilingualText` component for stacked English/Japanese text.
+  - Replaced slash-separated bilingual copy across the iPad page with two-line bilingual text in headings, difficulty buttons, player labels, the language legend, the Start Game button, the gameplay heading, the selected difficulty display, the preferred-language display, the Return to Start button, and the Restart button.
+  - Removed the old slash-separated bilingual input placeholder by simplifying it to `Name`, while keeping the player label itself bilingual above the input.
+- Exact scope completed:
+  - The iPad page no longer shows slash-separated bilingual UI copy where two-line bilingual formatting was requested.
+  - The existing iPad setup flow, gameplay placeholder, and button behaviors remain unchanged.
+- Existing components/hooks/utilities/styles considered:
+  - Considered the existing `GameButton` component for the iPad buttons.
+  - Considered the existing `BinaryChoice` component for the language selector.
+  - Considered the existing iPad page structure and gameplay controls in `Ipad.jsx`.
+- What was reused:
+  - Reused `GameButton` for all iPad button controls.
+  - Reused `BinaryChoice` for the player language selector.
+  - Reused the existing local iPad state and stage flow.
+- What was newly created:
+  - `src/components/BilingualText.jsx`
+- Why new code was needed where reuse was not possible:
+  - The iPad page had many repeated slash-separated bilingual strings, and a small shared formatter was the smallest clean way to keep the new two-line pattern consistent across headings, buttons, and labels.
+- Files changed:
+  - `src/components/BilingualText.jsx`
+  - `src/pages/Ipad.jsx`
+  - `src/styles.scss`
+  - `src/vibe/epics/EPIC-002/features.txt`
+  - `src/vibe/epics/EPIC-002/implementation.txt`
+  - `src/vibe/epics/EPIC-002/testing.txt`
+  - `src/vibe/epicsOverview.txt`
+- What was intentionally not changed:
+  - No iPad setup logic, difficulty selection logic, player count logic, player language behavior, Start Game validation, or gameplay behavior was changed.
+  - No normal Start, Player, or Score page copy or layout was changed.
+- Any assumptions made:
+  - Treated the old slash-separated `Name / 名前` input placeholder as out of place for a two-line pattern inside a single-line input, so I removed the slash by keeping the field label bilingual and simplifying the placeholder to `Name`.
+- Any tradeoffs or follow-up tasks:
+  - If later prompts want bilingual stacked formatting on non-iPad pages too, `BilingualText` can be reused there rather than introducing another bilingual text pattern.
+
+Bug fix: BUG-014 - Keep the iPad top shell controls visible on every iPad stage
+- What was implemented:
+  - Removed the gameplay-only visibility condition from the iPad shell controls in `App.jsx`.
+  - Simplified the `/ipad` route wiring by removing the gameplay-controls callback prop from `AppRoutes` and `Ipad.jsx`.
+  - Kept the existing top shell placement, Return to Start behavior, and Restart reset signal.
+- Exact scope completed:
+  - The `/ipad` route now shows the top shell controls row throughout difficulty selection, player count, player details, pass-device, and matrix gameplay stages.
+- Existing components/hooks/utilities/styles considered:
+  - Considered the existing `app-shell__controls` and `app-shell__control` shell pattern in `App.jsx` and `src/styles.scss`.
+  - Considered the existing restart signal path from `App.jsx` into `Ipad.jsx`.
+- What was reused:
+  - Reused the existing shell control layout and bilingual control labels.
+  - Reused the existing internal restart signal and iPad-local reset behavior.
+- What was newly created:
+  - No new files.
+- Why new code was needed where reuse was not possible:
+  - The bug was caused by the previous gameplay-stage condition, so the smallest fix was to remove that condition rather than adding another control system.
+- Files changed:
+  - `src/App.jsx`
+  - `src/routes.jsx`
+  - `src/pages/Ipad.jsx`
+  - `src/vibe/epics/EPIC-002/bugs.txt`
+  - `src/vibe/epics/EPIC-002/implementation.txt`
+  - `src/vibe/epics/EPIC-002/testing.txt`
+  - `src/vibe/epicsOverview.txt`
+- What was intentionally not changed:
+  - No gameplay logic, matrix generation, player validation, or iPad page styling was changed.
+  - No normal Start, Player, or Score behavior was changed.
+- Any assumptions made:
+  - Interpreted “these controls should be visible whenever we are on the ipad page” as keeping the same top-row controls and placement from BUG-013, but removing the gameplay-stage condition entirely.
+- Any tradeoffs or follow-up tasks:
+  - If future prompts need different iPad shell controls per stage, that should be introduced explicitly instead of reusing hidden stage gating.
+
+Bug fix: BUG-015, BUG-016, BUG-017, BUG-018 - Matrix hold interaction and axis cleanup
+- What was implemented:
+  - Updated `GameButton` so it forwards additional interaction props to the underlying button/link element, which allows the matrix hold interaction to work.
+  - Added explicit axis arrows to the matrix UI: left-to-right on the x-axis and top-to-bottom on the y-axis.
+  - Reworked the matrix board layout so the x-axis sits on its own row and the y-axis aligns directly against the matrix grid.
+  - Removed the unrequested `ipad-page__difficulty-chip` gameplay summary UI and its styles.
+- Exact scope completed:
+  - Holding `Show Secret Number` now highlights the secret-number cell inside the matrix.
+  - The matrix axes now show direction arrows.
+  - The top y-axis label now lines up with the top edge of the matrix grid instead of the x-axis row.
+  - The extra gameplay difficulty chip no longer appears.
+- Existing components/hooks/utilities/styles considered:
+  - Considered the existing `GameButton` shared component before replacing the hold-action button.
+  - Considered the existing `IpadMatrixTurn.jsx` matrix markup and `src/styles.scss` matrix layout rules.
+  - Considered the existing iPad gameplay state and secret-cell highlight logic in `Ipad.jsx`.
+- What was reused:
+  - Reused the existing matrix secret-cell highlight class and hold-state logic.
+  - Reused `GameButton` rather than replacing it with a separate custom hold button.
+- What was newly created:
+  - No new files.
+- Why new code was needed where reuse was not possible:
+  - The existing shared button abstraction was swallowing the hold handlers, so it needed a small prop-forwarding expansion.
+  - The existing matrix layout did not have enough structure to place directional arrows and align the y-axis directly to the grid without a small markup/style adjustment.
+- Files changed:
+  - `src/components/GameButton.jsx`
+  - `src/components/IpadMatrixTurn.jsx`
+  - `src/pages/Ipad.jsx`
+  - `src/styles.scss`
+  - `src/vibe/epics/EPIC-002/bugs.txt`
+  - `src/vibe/epics/EPIC-002/implementation.txt`
+  - `src/vibe/epics/EPIC-002/testing.txt`
+  - `src/vibe/epicsOverview.txt`
+- What was intentionally not changed:
+  - No turn-order logic, reveal-confirmation flow, restart behavior, or normal Start/Player/Score behavior was changed.
+  - No new gameplay UI beyond the requested axis arrows was added.
+- Any assumptions made:
+  - Treated “highlight this number with a different style within the matrix” as using the existing secret-cell emphasis style rather than inventing a second reveal treatment.
+  - Treated the requested axis arrows as simple visual direction indicators rather than adding any extra explanatory text.
+- Any tradeoffs or follow-up tasks:
+  - The axis arrows are intentionally simple text-arrow indicators to keep the change small and within scope.
+
+Bug fix: BUG-019, BUG-020, BUG-021, BUG-022 - Matrix layout polish and modal reveal confirmation
+- What was implemented:
+  - Added explicit horizontal centering for the wider `ipad-page__copy` block.
+  - Tightened the matrix axis layout so the y-axis stays thinner, the x-axis start label is left aligned, and the axis labels sit tighter to the matrix edges.
+  - Replaced the text-based axis arrows with thin CSS-drawn arrows centered within each axis.
+  - Moved the reveal hide animation from the grid to the whole `matrix-turn__board` and delayed the large revealed number until the board is fully hidden.
+  - Wrapped the reveal confirmation in a centered modal overlay with dialog semantics and a semi-transparent page backdrop.
+- Exact scope completed:
+  - The player-details copy block now centers correctly.
+  - The matrix axis text and arrows now align more tightly and uniformly.
+  - The full matrix board animates out before the revealed number appears.
+  - The reveal confirmation now behaves like a modal instead of an inline panel.
+- Existing components/hooks/utilities/styles considered:
+  - Considered the existing `IpadMatrixTurn.jsx` board structure and current matrix SCSS rules.
+  - Considered the existing `IpadRevealConfirmation.jsx` confirmation component before replacing it with a new system.
+  - Considered whether PrimeReact dialog patterns could be reused, but this repo does not currently include PrimeReact as an installed dependency.
+- What was reused:
+  - Reused the existing matrix-turn component structure, reveal state flow, and `GameButton` actions.
+  - Reused the existing confirmation component rather than introducing a second confirmation component.
+- What was newly created:
+  - No new files.
+- Why new code was needed where reuse was not possible:
+  - The existing matrix board needed a small structural/style refinement to meet the updated axis alignment and reveal-animation requirements.
+  - A modal overlay treatment was required, but no installed dialog library or in-repo modal component was available to reuse directly.
+- Files changed:
+  - `src/components/IpadMatrixTurn.jsx`
+  - `src/components/IpadRevealConfirmation.jsx`
+  - `src/styles.scss`
+  - `src/vibe/epics/EPIC-002/bugs.txt`
+  - `src/vibe/epics/EPIC-002/implementation.txt`
+  - `src/vibe/epics/EPIC-002/testing.txt`
+  - `src/vibe/epicsOverview.txt`
+- What was intentionally not changed:
+  - No turn-order logic, hold interaction logic, restart behavior, or normal Start/Player/Score behavior was changed.
+  - No new dependency was added.
+- Any assumptions made:
+  - Treated the requested reveal modal as a small local overlay implementation because PrimeReact is referenced in the rules but is not actually installed in this repo, and adding a new dependency would have exceeded the smallest-scope fix.
+- Any tradeoffs or follow-up tasks:
+  - If the project later adds PrimeReact for real, this local confirmation overlay could be revisited to align with the shared dialog pattern at that time.
+
+Bug fix: BUG-023, BUG-024, BUG-025 - Japanese button text restore and reveal action styling
+- What was implemented:
+  - Restored the broken Japanese action-button strings in `IpadMatrixTurn.jsx`.
+  - Restored the Japanese confirmation copy in `IpadRevealConfirmation.jsx`.
+  - Added a dedicated matrix display wrapper so the revealed number can occupy the board area cleanly.
+  - Changed the matrix action area to a one-column stacked layout.
+  - Added a softer secondary style for `Reveal to Everyone` while keeping `Show Secret Number` as the stronger primary action.
+  - Increased the revealed-number size and centered it vertically and horizontally within the matrix display area.
+- Exact scope completed:
+  - The Japanese matrix/reveal buttons display correctly again.
+  - The two main matrix actions now stack vertically with the primary action on top.
+  - The revealed number now appears larger and centered in the reveal area.
+- Existing components/hooks/utilities/styles considered:
+  - Considered the existing `GameButton` shared component and the current matrix action structure in `IpadMatrixTurn.jsx`.
+  - Considered the existing reveal-confirmation component before replacing any copy pattern.
+  - Considered the current matrix display and reveal layout rules in `src/styles.scss`.
+- What was reused:
+  - Reused `GameButton` for both action buttons and the reveal confirmation buttons.
+  - Reused the existing matrix turn/reveal state flow.
+- What was newly created:
+  - No new files.
+- Why new code was needed where reuse was not possible:
+  - The Japanese text corruption needed direct string restoration in the existing components.
+  - The revealed number needed a dedicated display wrapper to center cleanly without changing the underlying gameplay flow.
+- Files changed:
+  - `src/components/IpadMatrixTurn.jsx`
+  - `src/components/IpadRevealConfirmation.jsx`
+  - `src/styles.scss`
+  - `src/vibe/epics/EPIC-002/bugs.txt`
+  - `src/vibe/epics/EPIC-002/implementation.txt`
+  - `src/vibe/epics/EPIC-002/testing.txt`
+  - `src/vibe/epicsOverview.txt`
+- What was intentionally not changed:
+  - No turn-order logic, reveal timing logic, restart behavior, or normal Start/Player/Score behavior was changed.
+  - No new dependencies were added.
+- Any assumptions made:
+  - Treated the Japanese button-text bug as applying to the current matrix-turn and reveal-confirmation buttons in the affected iPad flow.
+- Any tradeoffs or follow-up tasks:
+  - If later prompts want the reveal-state number to use a more elaborate animation, that should be handled separately from this sizing/layout pass.

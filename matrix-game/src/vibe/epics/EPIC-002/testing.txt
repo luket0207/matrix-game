@@ -1,0 +1,492 @@
+Feature: Feature-001 - iPad Page Player Setup
+- Manual test steps:
+  1. Visit `/ipad`.
+  2. Confirm the page asks how many players are playing in English and Japanese.
+  3. Confirm the `Restart / リスタート` control is visible in the top-right area above the main iPad content.
+  4. Click any player-count button from 2 to 10.
+  5. Confirm the page generates the same number of player rows.
+  6. Enter names for only some players or leave language radios unselected and confirm the Start Game button does not appear yet.
+  7. Enter a non-empty name for every player and select English or Japanese for every row.
+  8. Confirm the `Start Game / ゲーム開始` button appears only after all rows are complete.
+  9. Click Start Game and confirm the page stays on `/ipad`, shows the placeholder gameplay heading, and lists every player name with the chosen preferred language.
+  10. Click Restart and confirm the iPad page returns to the original player-count question with cleared setup data.
+- Expected result for each step:
+  1. The iPad route loads successfully.
+  2. The first setup question is bilingual.
+  3. Restart is available as a utility control on the iPad page.
+  4. The player count is saved immediately.
+  5. The correct number of name/language rows appears.
+  6. The start action stays hidden while any row is incomplete.
+  7. Each player row stores its own name and preferred language.
+  8. The start action becomes available only when validation passes for every row.
+  9. The gameplay stage starts without leaving `/ipad`, and the setup data is still visible.
+  10. Restart fully resets the local iPad setup flow.
+- Automated tests completed where relevant:
+  - `npm run build`
+- Automated tests still needed to fully prove behavior:
+  - Add a project `lint` script if linting is expected as part of the epic quality gate.
+  - Manual browser verification of the iPad row layout and top-right restart placement at iPad-like widths.
+- Test status:
+  - passed
+
+Bug fix: BUG-001, BUG-002, BUG-003 - iPad restart/control and row layout refinements
+- Manual test steps:
+  1. Visit `/ipad` and confirm the Restart control is already visible in the top-right area.
+  2. Confirm the player-count buttons display only `2` through `10`.
+  3. Confirm the player-count buttons are arranged in rows instead of a single narrow column.
+  4. Choose a player count and confirm each player section is labeled `Player x`.
+  5. Confirm each player row uses the full available width, with the name input on the left and the language radios on the right at iPad-like widths.
+  6. Confirm the player rows no longer use bordered card styling.
+  7. Click Restart from the count stage, details stage, and gameplay stage and confirm each time that the iPad page returns to the original player-count question with cleared local setup data.
+- Expected result for each step:
+  1. Restart is always available as a utility control on the iPad page.
+  2. The count buttons show numbers only.
+  3. The count-picker layout appears in rows.
+  4. Player sections are separated by simple titles.
+  5. The row layout follows the requested left-input/right-radio structure.
+  6. The old boxed player-row presentation is gone.
+  7. Restart consistently resets the iPad flow from any stage.
+- Automated tests completed where relevant:
+  - `npm run build`
+- Automated tests still needed to fully prove behavior:
+  - Manual browser verification of the iPad control placement and row alignment at iPad-like widths.
+- Test status:
+  - passed
+
+Bug fix: BUG-004 - Remove unrequested iPad page-copy paragraphs
+- Manual test steps:
+  1. Visit `/ipad` and select a player count.
+  2. Confirm the details stage `page-copy` section shows only the `h2` heading.
+  3. Complete the player setup and start the game.
+  4. Confirm the gameplay stage `page-copy` section shows only the `h2` heading.
+- Expected result for each step:
+  1. The iPad setup flow loads normally.
+  2. No extra `p` elements appear under the details-stage heading.
+  3. The gameplay stage still starts normally.
+  4. No extra `p` elements appear under the gameplay-stage heading.
+- Automated tests completed where relevant:
+  - `npm run build`
+- Automated tests still needed to fully prove behavior:
+  - Manual browser verification that only the requested headings remain visible in both iPad stages.
+- Test status:
+  - passed
+
+Bug fix: BUG-001 - Move Restart into the shared shell controls row
+- Manual test steps:
+  1. Visit `/ipad`.
+  2. Confirm the Restart control appears in the shared top-right shell controls row above the main content, not inside the iPad page content area.
+  3. Hover the Restart control and confirm it shows the shared shell-control hover treatment and pointer cursor.
+  4. Choose a player count and enter player details.
+  5. Click Restart and confirm the app stays on `/ipad` and returns to the initial player-count question.
+  6. Repeat Restart from the gameplay stage and confirm the same reset behavior.
+- Expected result for each step:
+  1. The iPad route loads successfully.
+  2. Restart uses the shared shell controls placement.
+  3. The control has the expected interactive hover/pointer feedback.
+  4. The local iPad setup flow progresses normally.
+  5. Restart resets the local iPad setup from the details stage.
+  6. Restart resets the local iPad setup from the gameplay stage as well.
+- Automated tests completed where relevant:
+  - `npm run build`
+- Automated tests still needed to fully prove behavior:
+  - Manual browser verification that Restart now lives in `app-shell__controls` and not inside `app-shell__content`.
+- Test status:
+  - passed
+
+Bug fix: BUG-005 - Center wrapped player-count rows
+- Manual test steps:
+  1. Visit `/ipad`.
+  2. Look at the player-count selector before choosing a number.
+  3. Confirm the wrapped final row of count buttons is centered within the selector area instead of sitting left-aligned.
+- Expected result for each step:
+  1. The iPad route loads successfully.
+  2. The count buttons are visible in wrapped rows.
+  3. The shorter final row is centered like the row above it.
+- Automated tests completed where relevant:
+  - `npm run build`
+- Automated tests still needed to fully prove behavior:
+  - Manual browser verification of the wrapped row centering at iPad-like widths.
+- Test status:
+  - passed
+
+Feature: Feature-002 - Improve iPad Player Input Usability
+- Manual test steps:
+  1. Visit `/ipad` and select any player count.
+  2. Confirm each player row still shows one name input and one English/Japanese language selector.
+  3. Confirm the name inputs are slightly taller and easier to tap than before.
+  4. Tap anywhere on the `English` segment for one player and confirm it becomes the selected state.
+  5. Tap anywhere on the `日本語` segment for the same player and confirm it becomes selected while `English` becomes unselected.
+  6. Change one player's selected language and confirm the other players' language choices do not change.
+  7. Use the keyboard to move to a language option and confirm the focused option shows a clear focus style.
+  8. Confirm the `Start Game / ゲーム開始` button still appears only when every player has both a non-empty name and a selected language.
+- Expected result for each step:
+  1. The iPad details stage loads normally.
+  2. The existing player row structure remains intact.
+  3. The name inputs have a more comfortable touch target.
+  4. The selected English state is visually obvious.
+  5. The selector behaves as a mutually exclusive binary choice.
+  6. Each player row keeps its own independent language value.
+  7. The binary selector remains keyboard accessible.
+  8. The existing validation behavior still works.
+- Automated tests completed where relevant:
+  - `npm run build`
+- Automated tests still needed to fully prove behavior:
+  - Add a project `lint` script if linting is expected as part of the epic quality gate.
+  - Manual browser verification of the segmented language selector hit area and selection states on an iPad-like screen.
+- Test status:
+  - passed
+
+Feature: Feature-002 - Additional layout verification
+- Manual test steps:
+  1. Visit `/ipad`, choose a player count, and complete enough rows to make the `Start Game / ゲーム開始` button appear.
+  2. Confirm the name-side titles and fields line up consistently with each other across the player rows.
+  3. Confirm the language-side titles and segmented controls line up consistently with each other across the player rows.
+  4. Confirm the rest of the details-stage content does not jump to a different position when the Start Game action appears.
+- Expected result for each step:
+  1. The iPad details stage behaves normally.
+  2. The name column appears visually aligned across rows.
+  3. The language column appears visually aligned across rows.
+  4. Reserving the Start Game area prevents a visible layout shift.
+- Automated tests completed where relevant:
+  - `npm run build`
+- Automated tests still needed to fully prove behavior:
+  - Manual browser verification of row alignment and no-shift behavior on an iPad-like screen.
+- Test status:
+  - passed
+
+Bug fix: BUG-006, BUG-007, BUG-008, BUG-009 - Final iPad details-stage alignment and sizing polish
+- Manual test steps:
+  1. Visit `/ipad` and choose a player count.
+  2. Confirm the `page-stack ipad-page` content sits horizontally centered within the iPad shell.
+  3. Confirm the name-side titles and inputs line up consistently across the player rows.
+  4. Confirm the language-side titles and segmented controls line up consistently across the player rows.
+  5. Confirm the name input control height matches the visible binary choice control height at `60px`.
+  6. Complete enough rows to make the `Start Game / ゲーム開始` button appear and confirm the surrounding content does not shift vertically.
+- Expected result for each step:
+  1. The iPad details stage loads normally.
+  2. The iPad page wrapper is centered inside the shell.
+  3. The name column appears visually aligned across rows.
+  4. The language column appears visually aligned across rows.
+  5. The paired controls match the requested height.
+  6. The reserved action area prevents a visible layout jump.
+- Automated tests completed where relevant:
+  - `npm run build`
+- Automated tests still needed to fully prove behavior:
+  - Manual browser verification of the centered wrapper, aligned columns, and matching 60px control heights on an iPad-like screen.
+- Test status:
+  - passed
+
+Bug fix: BUG-010 - Make the binary choice container exactly 60px high
+- Manual test steps:
+  1. Visit `/ipad` and choose a player count.
+  2. Inspect the player details rows visually.
+  3. Confirm the visible binary choice control height matches the requested `60px` target.
+- Expected result for each step:
+  1. The iPad details stage loads normally.
+  2. The language selector still renders correctly.
+  3. The `binary-choice__options` control no longer renders taller than `60px`.
+- Automated tests completed where relevant:
+  - `npm run build`
+- Automated tests still needed to fully prove behavior:
+  - Manual browser verification of the exact `60px` rendered selector height.
+- Test status:
+  - passed
+
+Feature: Feature-003 - Add Difficulty Selection to iPad Setup
+- Manual test steps:
+  1. Visit `/ipad`.
+  2. Confirm the first setup question asks for the game difficulty in English and Japanese.
+  3. Click `Easy / かんたん`, `Medium / ふつう`, or `Hard / むずかしい`.
+  4. Confirm the page immediately advances to the existing player-count question.
+  5. Choose any player count and complete all player names and language selections.
+  6. Confirm the `Start Game / ゲーム開始` button appears only after all player rows are complete.
+  7. Click Start Game and confirm the page stays on `/ipad`.
+  8. Confirm the gameplay placeholder shows `Game started / ゲーム開始`, the selected difficulty, and the entered player list.
+  9. Click Restart and confirm the iPad page resets back to the new difficulty-selection step with cleared setup data.
+- Expected result for each step:
+  1. The iPad route loads successfully.
+  2. The difficulty stage is now the first visible step.
+  3. The selected difficulty is stored immediately.
+  4. The existing player-count stage still works after the new first step.
+  5. The existing player-details stage still works as before.
+  6. Start Game remains hidden until all required setup information is complete.
+  7. The route does not leave `/ipad`.
+  8. The gameplay placeholder keeps the selected difficulty and player setup data available.
+  9. Restart clears difficulty, player count, player details, and current stage back to the first setup step.
+- Automated tests completed where relevant:
+  - `npm run build`
+- Automated tests still needed to fully prove behavior:
+  - Add a project `lint` script if linting is expected as part of the epic quality gate.
+  - Manual browser verification of the new first-step flow and gameplay difficulty summary at iPad-like widths.
+- Test status:
+  - passed
+
+Bug fix: BUG-011 - Remove restart query parameter tracking from `/ipad`
+- Manual test steps:
+  1. Visit `/ipad`.
+  2. Click Restart from the initial difficulty stage.
+  3. Confirm the browser remains on `/ipad` without any added `?restart=` query parameter.
+  4. Select a difficulty and player count, then click Restart again.
+  5. Confirm the iPad page resets to the difficulty-selection step and the URL still stays clean.
+- Expected result for each step:
+  1. The iPad route loads successfully.
+  2. Restart still works from the shared top-right control.
+  3. The route URL does not gain restart-tracking state.
+  4. Restart still works after progressing into the setup flow.
+  5. The local iPad state resets fully without changing the route URL.
+- Automated tests completed where relevant:
+  - `npm run build`
+- Automated tests still needed to fully prove behavior:
+  - Add a project `lint` script if linting is expected as part of the epic quality gate.
+  - Manual browser verification that Restart no longer changes the URL while still resetting the iPad flow.
+- Test status:
+  - passed
+
+Feature: Feature-004 - Add iPad Return to Start Button
+- Manual test steps:
+  1. Visit `/ipad`.
+  2. Select a difficulty, select a player count, complete all player names and language selections, and click `Start Game / ゲーム開始`.
+  3. Confirm a bottom controls area appears during the gameplay stage.
+  4. Confirm `Return to Start / スタートに戻る` appears on the left side of that controls area.
+  5. Confirm `Restart / リスタート` appears on the right side of that controls area.
+  6. Click Return to Start and confirm the app navigates to `/`.
+  7. Go back to `/ipad`, reach gameplay again, and click Restart.
+  8. Confirm Restart stays on `/ipad` and resets the iPad flow back to the first setup step.
+- Expected result for each step:
+  1. The iPad route loads successfully.
+  2. The gameplay stage starts normally after the existing setup flow.
+  3. The gameplay controls row sits along the bottom area of the iPad page without overlapping the content.
+  4. The left control routes back to the normal Start page.
+  5. The right control resets the local iPad setup instead of navigating away.
+  6. The normal Start page loads without breaking its existing flow.
+  7. The gameplay controls remain available when the gameplay stage is active.
+  8. Restart returns the iPad route to the difficulty-selection step and keeps the route on `/ipad`.
+- Automated tests completed where relevant:
+  - `npm run build`
+- Automated tests still needed to fully prove behavior:
+  - Add a project `lint` script if linting is expected as part of the epic quality gate.
+  - Manual browser verification of the bottom-left/bottom-right control layout at iPad-like widths.
+- Test status:
+  - passed
+
+Bug fix: BUG-012 - Restore the visible iPad gameplay controls row
+- Manual test steps:
+  1. Visit `/ipad`.
+  2. Complete the setup flow and enter the gameplay stage.
+  3. Confirm a visible bottom controls row appears beneath the gameplay content.
+  4. Confirm `Return to Start / スタートに戻る` appears on the left side of that row.
+  5. Confirm `Restart / リスタート` appears on the right side of that row.
+  6. Click both controls and confirm they still perform their existing actions.
+- Expected result for each step:
+  1. The iPad route loads successfully.
+  2. The gameplay stage starts normally.
+  3. The controls row is visibly present again.
+  4. The left control routes back to `/`.
+  5. The right control resets the iPad setup and stays on `/ipad`.
+  6. Restoring the row does not change the existing control behaviors.
+- Automated tests completed where relevant:
+  - `npm run build`
+- Automated tests still needed to fully prove behavior:
+  - Add a project `lint` script if linting is expected as part of the epic quality gate.
+  - Manual browser verification that the restored bottom controls row stays visible at iPad-like widths.
+- Test status:
+  - passed
+
+Bug fix: BUG-013 - Move the iPad gameplay controls row above `app-shell__content`
+- Manual test steps:
+  1. Visit `/ipad`.
+  2. Complete the setup flow and enter the gameplay stage.
+  3. Confirm the controls row appears above the main white content card, in the shell row above `app-shell__content`.
+  4. Confirm `Return to Start` appears on the left side of that top controls row.
+  5. Confirm `Restart` appears on the right side of that top controls row.
+  6. Click Return to Start and confirm the app routes to `/`.
+  7. Return to `/ipad`, enter gameplay again, click Restart, and confirm the app stays on `/ipad` and resets to the first iPad setup step.
+- Expected result for each step:
+  1. The iPad route loads successfully.
+  2. The gameplay stage starts normally.
+  3. The gameplay controls row is visible above `app-shell__content`, not inside the page content area.
+  4. The left control routes to the Start page.
+  5. The right control resets the iPad setup.
+  6. Return to Start still performs its existing navigation behavior.
+  7. Restart still performs its existing reset behavior while staying on `/ipad`.
+- Automated tests completed where relevant:
+  - `npm run build`
+- Automated tests still needed to fully prove behavior:
+  - Add a project `lint` script if linting is expected as part of the epic quality gate.
+  - Manual browser verification of the restored top controls row placement at iPad-like widths.
+- Test status:
+  - passed
+
+Feature: Feature-006 - iPad Gameplay Loop
+- Manual test steps:
+  1. Visit `/ipad`, choose a difficulty, choose a player count, enter all player names and language selections, and click `Start Game`.
+  2. Confirm the first player is chosen automatically and a pass-device prompt appears for that player before the turn begins.
+  3. Confirm the pass-device prompt button includes that player’s name and starts the turn when clicked.
+  4. Confirm the matrix screen shows:
+     - one category
+     - one x-axis scale
+     - one y-axis scale
+     - a numbered grid sized to the selected difficulty
+  5. Confirm Easy shows `1` to `9`, Medium shows `1` to `16`, and Hard shows `1` to `25`.
+  6. Confirm the matrix labels and turn buttons appear in the current player’s preferred language.
+  7. Press and hold `Show Secret Number` and confirm the secret cell is highlighted in place on the matrix; release and confirm the highlight disappears.
+  8. Click `Reveal to Everyone`, confirm the confirmation UI appears in the player’s language, click `No`, and confirm the matrix returns without revealing.
+  9. Click `Reveal to Everyone` again, click `Yes`, and confirm the matrix animates away and the secret number appears prominently.
+  10. Confirm `End Turn` appears only after the reveal completes.
+  11. Click `End Turn` and confirm the next player follows the original entered order from the random starting point.
+  12. Continue until the last entered player has taken a turn and confirm the order loops back to the first player in the original list.
+  13. While in gameplay, click the top shell `Restart` control and confirm the iPad route resets to difficulty selection.
+  14. While in gameplay, click the top shell `Return to Start` control and confirm the app routes to `/`.
+- Expected result for each step:
+  1. The iPad setup flow still completes normally.
+  2. The first player is random only once at the start of the game.
+  3. The pass-device stage appears before each turn and starts the current player’s turn on demand.
+  4. Each turn generates a category, two different scales, and a secret number.
+  5. The grid size matches the selected difficulty.
+  6. The matrix stage localizes to the current player’s selected language.
+  7. The hold action reveals the chosen secret position temporarily and only while held.
+  8. The confirmation can be cancelled safely without revealing the number.
+  9. Confirming the reveal triggers the reveal state and number display.
+  10. End Turn only becomes available after the reveal.
+  11. Turn order advances to the next player in the original setup order.
+  12. The order loops correctly instead of reshuffling.
+  13. Restart clears the full iPad game state and returns to the first setup step.
+  14. Return to Start routes back to `/`.
+- Automated tests completed where relevant:
+  - `npm run build`
+- Automated tests still needed to fully prove behavior:
+  - Add a project `lint` script if linting is expected as part of the epic quality gate.
+  - Manual browser verification of the hold interaction, reveal animation, and matrix readability at iPad-like widths.
+- Test status:
+  - passed
+
+Feature: Feature-005 - Display Bilingual Text on Separate Lines
+- Manual test steps:
+  1. Visit `/ipad`.
+  2. Confirm the difficulty heading shows English on the first line and Japanese on the second line, with no visible slash.
+  3. Confirm the difficulty buttons show English on the first line and Japanese on the second line.
+  4. Choose a difficulty and confirm the player-count heading also shows stacked bilingual text with no slash.
+  5. Continue to the player details stage and confirm the page heading, player labels, and language legend all use stacked bilingual text.
+  6. Complete the setup and confirm the `Start Game` button shows English on the first line and Japanese on the second line.
+  7. Start the game and confirm the gameplay heading, selected difficulty display, preferred-language display, Return to Start button, and Restart button all use stacked bilingual text with no slash separators.
+  8. Confirm the existing buttons and setup flow still work normally.
+- Expected result for each step:
+  1. The iPad route loads successfully.
+  2. The first heading uses the new two-line bilingual layout.
+  3. The difficulty buttons remain readable and tappable.
+  4. The player-count stage keeps its existing behavior while using the new bilingual format.
+  5. The player-details stage shows stacked bilingual labels without changing the existing inputs or selector behavior.
+  6. The Start Game button remains readable and functional with two-line text.
+  7. The gameplay stage shows bilingual copy on separate lines throughout the visible iPad UI.
+  8. The feature changes presentation only and does not break existing flow behavior.
+- Automated tests completed where relevant:
+  - `npm run build`
+- Automated tests still needed to fully prove behavior:
+  - Add a project `lint` script if linting is expected as part of the epic quality gate.
+  - Manual browser verification that the stacked bilingual text remains readable inside buttons, headings, and labels at iPad-like widths.
+- Test status:
+  - passed
+
+Bug fix: BUG-014 - Keep the iPad top shell controls visible on every iPad stage
+- Manual test steps:
+  1. Visit `/ipad`.
+  2. Confirm the top shell controls row is visible immediately on the difficulty-selection stage.
+  3. Confirm `Return to Start` appears on the left and `Restart` appears on the right.
+  4. Move through difficulty selection, player-count selection, and player-details entry.
+  5. Confirm the same top shell controls remain visible throughout each setup stage.
+  6. Start the game and confirm the same top shell controls remain visible during pass-device and matrix gameplay stages.
+  7. Click Restart from a setup stage and confirm the page resets back to the first iPad step while staying on `/ipad`.
+  8. Click Return to Start from any iPad stage and confirm the app routes to `/`.
+- Expected result for each step:
+  1. The iPad route loads successfully.
+  2. The top controls are no longer hidden until gameplay.
+  3. The controls stay in the requested left/right top-row positions.
+  4. The existing setup flow still works.
+  5. The controls remain visible regardless of the current iPad setup stage.
+  6. The controls remain visible during gameplay as well.
+  7. Restart still performs the existing iPad reset behavior.
+  8. Return to Start still performs the existing navigation behavior.
+- Automated tests completed where relevant:
+  - `npm run build`
+- Automated tests still needed to fully prove behavior:
+  - Add a project `lint` script if linting is expected as part of the epic quality gate.
+  - Manual browser verification that the top controls stay visible across all iPad stages at iPad-like widths.
+- Test status:
+  - passed
+
+Bug fix: BUG-015, BUG-016, BUG-017, BUG-018 - Matrix hold interaction and axis cleanup
+- Manual test steps:
+  1. Visit `/ipad`, complete setup, and start a gameplay turn.
+  2. Press and hold `Show Secret Number`.
+  3. Confirm one numbered matrix cell becomes visibly highlighted while the button is held.
+  4. Release the button and confirm the temporary highlight disappears again.
+  5. Confirm the x-axis shows a left-to-right arrow between its labels.
+  6. Confirm the y-axis shows a top-to-bottom arrow between its labels.
+  7. Confirm the top y-axis label lines up with the top edge of the matrix grid rather than the x-axis label row above it.
+  8. Confirm there is no extra gameplay difficulty chip shown below the matrix content.
+- Expected result for each step:
+  1. The gameplay turn still starts normally.
+  2. The hold interaction is accepted.
+  3. The secret number is shown in place by highlighting the correct matrix cell.
+  4. The matrix returns to its non-held state after release.
+  5. The x-axis direction is visually clear.
+  6. The y-axis direction is visually clear.
+  7. The y-axis top label aligns with the grid top edge.
+  8. The unrequested difficulty summary UI is gone.
+- Automated tests completed where relevant:
+  - `npm run build`
+- Automated tests still needed to fully prove behavior:
+  - Add a project `lint` script if linting is expected as part of the epic quality gate.
+  - Manual browser verification of the hold interaction and final axis alignment at iPad-like widths.
+- Test status:
+  - passed
+
+Bug fix: BUG-019, BUG-020, BUG-021, BUG-022 - Matrix layout polish and modal reveal confirmation
+- Manual test steps:
+  1. Visit `/ipad`, move to the player-details stage, and confirm the `page-copy ipad-page__copy` block is centered horizontally.
+  2. Start a gameplay turn and confirm the first x-axis label sits left aligned against the matrix edge and the second x-axis label sits right aligned against the opposite edge.
+  3. Confirm the y-axis stays visually narrow and the axis labels sit tight to the matrix edges.
+  4. Confirm both axis arrows appear centered within their axes rather than pushing the labels outward.
+  5. Click `Reveal to Everyone` and confirm an overlay appears over the page with the confirmation centered in front of it.
+  6. Confirm the overlay behind the dialog is semi-transparent.
+  7. Confirm the full matrix board, including the scales, animates away before the large revealed number appears.
+  8. Confirm the large revealed number only appears after the board is fully hidden.
+- Expected result for each step:
+  1. The player-details copy block is centered.
+  2. The x-axis endpoint labels align cleanly to the grid edges.
+  3. The y-axis remains thin and uniform.
+  4. The axis arrows stay centered without widening the axis tracks excessively.
+  5. The reveal confirmation behaves like a modal.
+  6. The backdrop visually separates the dialog from the page behind it.
+  7. The scales and matrix disappear together as one animated board.
+  8. The revealed number appears after the board transition, not during it.
+- Automated tests completed where relevant:
+  - `npm run build`
+- Automated tests still needed to fully prove behavior:
+  - Add a project `lint` script if linting is expected as part of the epic quality gate.
+  - Manual browser verification of the modal overlay, axis spacing, and reveal timing at iPad-like widths.
+- Test status:
+  - passed
+
+Bug fix: BUG-023, BUG-024, BUG-025 - Japanese button text restore and reveal action styling
+- Manual test steps:
+  1. Visit `/ipad`, start a gameplay turn with a player whose preferred language is Japanese, and confirm the two action buttons display correct Japanese text.
+  2. Open the reveal confirmation in Japanese and confirm the confirmation heading and buttons also display correct Japanese text.
+  3. Confirm `Show Secret Number` appears above `Reveal to Everyone`.
+  4. Confirm `Reveal to Everyone` looks less prominent than `Show Secret Number`.
+  5. Reveal the number and confirm the number appears larger than before.
+  6. Confirm the revealed number is centered vertically and horizontally within the matrix display area.
+- Expected result for each step:
+  1. The Japanese matrix action labels are readable and correct.
+  2. The Japanese confirmation copy is readable and correct.
+  3. The actions are stacked vertically in the requested order.
+  4. The reveal action reads as the secondary option visually.
+  5. The reveal state has stronger number emphasis.
+  6. The revealed number sits centered in the display area.
+- Automated tests completed where relevant:
+  - `npm run build`
+- Automated tests still needed to fully prove behavior:
+  - Add a project `lint` script if linting is expected as part of the epic quality gate.
+  - Manual browser verification of the Japanese copy, stacked action layout, and reveal centering at iPad-like widths.
+- Test status:
+  - passed

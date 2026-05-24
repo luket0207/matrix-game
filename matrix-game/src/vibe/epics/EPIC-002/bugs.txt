@@ -1,0 +1,636 @@
+BUG-001
+
+Status: fixed
+
+The restart game button should be ever present on the ipad page and should be above the main content in the header section to the right hand side. Like the return to start button on the player/start page.
+
+Expected behavior:
+- The iPad restart control should always be visible on `/ipad`.
+- It should appear in a top-right utility-control position above the main iPad content, following the same shell-control style family as Return to Start.
+
+Actual behavior:
+- Restart only appeared during the gameplay stage.
+- It was placed in the bottom-right content area and used the main `GameButton` style.
+
+Suspected cause:
+- The initial iPad feature treated restart as a stage-specific gameplay action rather than a persistent page-level utility control.
+
+Attempted fixes:
+- Moved Restart to a persistent top-right controls row at the top of the iPad page.
+- Switched Restart to the existing `app-shell__control app-shell__control--button` styling pattern.
+- Reused the existing reset logic so Restart now works from every iPad stage.
+
+Final fix if solved:
+- Restart is now rendered in `app-shell__controls`, stays visible throughout the iPad flow, resets the local iPad state through the route restart token, and uses the shared shell-control hover/pointer behavior.
+
+
+BUG-002
+
+Status: fixed
+
+The buttons for selecting how many players there are should only be the numbers not "2 players", so remove that word. They should also be placed in rows on the page.
+
+Expected behavior:
+- The player-count buttons should show only the numbers.
+- The count buttons should be arranged in rows on the iPad page.
+
+Actual behavior:
+- Each button included the extra word `players`.
+- The layout did not match the requested compact rows-of-numbers presentation.
+
+Suspected cause:
+- The initial iPad setup reused the generic button copy from the feature pass without refining it for the requested count-picker layout.
+
+Attempted fixes:
+- Changed the player-count button labels to plain numbers only.
+- Updated the count-button grid to render in clear rows across the iPad page width.
+
+Final fix if solved:
+- The count picker now shows only the numbers 2 through 10 and lays them out in rows.
+
+
+BUG-003
+
+Status: fixed
+
+The layout of the names/langauge selection is terrible, they should be set in rows with the radio buttons to the right and the name input to the left. There should be no boarder around them and should just be seperated by a title saying "Player x"
+
+The inputs rows should take up the whole width of the page (with padding). 
+
+Expected behavior:
+- Each player setup item should be separated by a simple `Player x` title.
+- The name input should sit to the left and the language radios to the right.
+- The rows should use the full available width with padding, without bordered card styling around each player.
+
+Actual behavior:
+- The player rows used bordered card-like containers.
+- The row layout and spacing did not match the requested left-input/right-radios structure.
+
+Suspected cause:
+- The initial layout leaned on generic card-style grouping instead of a flatter row-based iPad form layout.
+
+Attempted fixes:
+- Removed the bordered/background card treatment from each player row.
+- Kept the player title as the separator above each row.
+- Updated the row layout so the input stays on the left and the language radios stay on the right at iPad widths.
+- Kept the player setup area full-width with row padding.
+
+Final fix if solved:
+- The player setup rows now use a flatter full-width layout with `Player x` titles, the name input on the left, and the language radios on the right.
+
+
+BUG-004
+
+Status: fixed
+
+I want the two p tag elements in the page-copy element to be removed. Please stop putting extra text in when I don't ask for it. The h2 can remain.
+
+Expected behavior:
+- The `page-copy` area on the iPad page should keep the `h2` heading only, without extra paragraph copy when it was not requested.
+
+Actual behavior:
+- The iPad details and gameplay stages still rendered extra `p` elements inside `page-copy`.
+
+Suspected cause:
+- The initial iPad feature added explanatory copy around the setup and gameplay headings that went beyond the requested scope.
+
+Attempted fixes:
+- Removed the extra `p` elements from the iPad details-stage and gameplay-stage `page-copy` sections.
+- Removed the now-unused iPad copy constants from `Ipad.jsx`.
+
+Final fix if solved:
+- The iPad `page-copy` sections now keep only the requested `h2` headings.
+
+
+BUG-005
+
+Status: fixed
+
+Can we make the numbers in the selection of players amount on the ipad page centered, so at the moment the numbers are left aligned, where the bottom row should be cenetred to the page like the top row is. 
+
+Expected behavior:
+- The wrapped player-count number buttons should stay centered within the iPad page width, including the shorter final row.
+
+Actual behavior:
+- The final wrapped row of player-count buttons sat left-aligned instead of centering with the row above it.
+
+Suspected cause:
+- The count picker was still using a fixed grid layout, which left partial rows aligned to the start of the grid.
+
+Attempted fixes:
+- Switched the iPad count picker layout from the fixed grid treatment to a centered wrapping flex layout.
+- Set a fixed button width for the count buttons so wrapped rows can center evenly.
+
+Final fix if solved:
+- The player-count number buttons now wrap in centered rows, including the final shorter row.
+
+
+BUG-006
+
+Status: fixed
+
+When the "Start Game" button appears on the ipad page, it shouldn't shift the other content to a different place. 
+
+Expected behavior:
+- When the `Start Game` action becomes available, the rest of the details-stage content should stay in place instead of shifting vertically.
+
+Actual behavior:
+- The details-stage layout could visibly shift when the `Start Game` action appeared.
+
+Suspected cause:
+- The action area did not reserve a final consistent space/height for the button state.
+
+Attempted fixes:
+- Reserved a fixed-height action area for the `Start Game` button.
+- Matched that reserved area to the current control sizing so the content keeps its position.
+
+Final fix if solved:
+- The `Start Game` action now appears without shifting the rest of the details-stage content.
+
+
+BUG-007
+
+Status: fixed
+
+The titles for the inputs should line up and so should the inputs themselves on the ipad page for name and language 
+
+Expected behavior:
+- The name-side titles and fields should line up cleanly with each other.
+- The language-side titles and controls should line up cleanly with each other.
+
+Actual behavior:
+- The details-stage row layout did not keep the name and language columns aligned as consistently as requested.
+
+Suspected cause:
+- The row spacing and column sizing were not explicit enough for the iPad layout.
+
+Attempted fixes:
+- Tightened the iPad details-stage column sizing and column gap.
+- Kept the name side and language side in clearer aligned column tracks.
+
+Final fix if solved:
+- The player details rows now align the titles and the controls more consistently across the iPad page.
+
+
+BUG-008
+
+Status: fixed
+
+The inputs are not quite the same height, as in the name input and the binary choice inputs container. Let's make them both 60px high.
+
+Expected behavior:
+- The player name input and the binary choice control should both be 60px high.
+
+Actual behavior:
+- The name input and the language selector container were close, but not exactly the same height.
+
+Suspected cause:
+- The two controls were using separate min-height values and internal spacing.
+
+Attempted fixes:
+- Set the name input height to `60px`.
+- Set the binary choice container height to `60px`.
+- Adjusted the segmented labels so they still fit cleanly inside the fixed-height selector.
+
+Final fix if solved:
+- The name input and the binary choice container now both render at 60px high.
+
+
+BUG-009
+
+Status: fixed
+
+For some reason the page-stack ipad-page section is not horizontally centered, can we fix this please
+
+Expected behavior:
+- The `page-stack ipad-page` section should be horizontally centered inside the wider iPad shell.
+
+Actual behavior:
+- The iPad page wrapper was not explicitly centered within the available shell width.
+
+Suspected cause:
+- The iPad page wrapper relied on inherited layout behavior instead of having its own explicit centering rules.
+
+Attempted fixes:
+- Added explicit horizontal centering with `margin-inline: auto`.
+- Added explicit self-centering for the iPad page wrapper inside the shell content.
+
+Final fix if solved:
+- The `page-stack ipad-page` section is now horizontally centered inside the iPad shell.
+
+
+BUG-010
+
+Status: fixed
+
+The element binary-choice__options has a height of 62px not 60px like asked for. 
+
+Expected behavior:
+- The visible `binary-choice__options` control should be exactly `60px` high.
+
+Actual behavior:
+- The control was rendering at `62px` high instead of the requested `60px`.
+
+Suspected cause:
+- The selector container was still using a minimum-height rule, which allowed the final rendered height to exceed the requested fixed value.
+
+Attempted fixes:
+- Changed the binary choice container from `min-height: 60px` to `height: 60px`.
+
+Final fix if solved:
+- The `binary-choice__options` control now uses an explicit `60px` height.
+
+
+BUG-011
+
+Status: fixed
+
+Why are we tracking how many restarts have been initiated in a UTM? I didn't ask for this. Please do not do things I am not asking for and remove this. 
+
+Expected behavior:
+- Restarting the iPad flow should not add restart-tracking query parameters to the `/ipad` URL.
+- The restart communication should stay internal to the app.
+
+Actual behavior:
+- Clicking Restart used a `?restart=` query parameter in the URL to signal the iPad page to reset.
+
+Suspected cause:
+- The earlier shell-to-page restart bridge used the route URL as the smallest cross-component signal path.
+
+Attempted fixes:
+- Removed the `useNavigate` + `?restart=` query-string approach from `App.jsx`.
+- Passed an internal restart signal prop through `AppRoutes` into `Ipad.jsx`.
+- Reset the iPad-local state from that internal signal instead of reading `location.search`.
+
+Final fix if solved:
+- Restart now resets the iPad flow through an internal prop-based signal, and the `/ipad` URL no longer changes when Restart is clicked.
+
+
+BUG-012
+
+Status: fixed
+
+The whole controls row with the return to start and restart options has completely disappeared from the ipad page?
+
+Expected behavior:
+- During the iPad gameplay stage, the bottom controls row should be visibly present.
+- The row should show `Return to Start` on the left and `Restart` on the right.
+
+Actual behavior:
+- The gameplay controls row was no longer visibly appearing on the iPad page.
+
+Suspected cause:
+- The gameplay controls were nested inside the gameplay content block and relied on light class-level width overrides that were being beaten by the base `GameButton` layout rules.
+
+Attempted fixes:
+- Moved the gameplay controls row out into its own sibling block beneath the gameplay content.
+- Replaced the old gameplay-controls class names with a dedicated page-level gameplay-controls wrapper.
+- Added a more specific width override for the `GameButton` instances inside that gameplay controls row.
+
+Final fix if solved:
+- The iPad gameplay controls row now renders as its own visible bottom section, with `Return to Start` on the left and `Restart` on the right.
+
+
+BUG-013
+
+Status: fixed
+
+Bug-012 wasn't fixed at all. The controls row with the return to start and restart options on the ipad page still isn't present at all. It should be at the top of the page above the app-shell__content element
+
+Expected behavior:
+- During the iPad gameplay stage, the controls row with Return to Start and Restart should appear above `app-shell__content`.
+- The controls should render in the shell controls row at the top of the page.
+
+Actual behavior:
+- The controls were still being rendered inside the iPad page content area instead of above `app-shell__content`.
+- As a result, the requested top controls row was not present where expected.
+
+Suspected cause:
+- The previous fix restored the controls inside `Ipad.jsx`, but this bug clarified that the intended placement was the shell row above the main content.
+
+Attempted fixes:
+- Moved the iPad gameplay controls out of `Ipad.jsx` and back into `App.jsx`.
+- Added a small gameplay-stage visibility callback from `Ipad.jsx` through `AppRoutes` so `App.jsx` knows when to show the iPad shell controls row.
+- Added a small restart signal from `App.jsx` back down into `Ipad.jsx` so Restart can still reset the local iPad setup while staying above `app-shell__content`.
+- Added a left-aligned shell button variant for the iPad Return to Start control.
+
+Final fix if solved:
+- During the iPad gameplay stage, the Return to Start and Restart controls now appear in the shell controls row above `app-shell__content`, with Return to Start on the left and Restart on the right.
+
+BUG-014
+
+Status: fixed
+
+BUG-012 and BUG-013 still not been addressed. Whenever we are on the ipad page, these controls should be visible. They are not conditional on anything, they should always be present on the ipad page.
+
+Expected behavior:
+- The top shell controls row on `/ipad` should always be visible.
+- `Return to Start` should stay on the left and `Restart` should stay on the right for every iPad stage.
+
+Actual behavior:
+- The top iPad shell controls only appeared during the gameplay stage.
+- The earlier gameplay visibility bridge kept the controls hidden during difficulty, player-count, and player-details stages.
+
+Suspected cause:
+- `App.jsx` still gated the iPad shell controls on a gameplay-stage signal coming from `Ipad.jsx`.
+
+Attempted fixes:
+- Removed the gameplay-only visibility condition from the iPad shell controls in `App.jsx`.
+- Simplified the route/page wiring by removing the no-longer-needed gameplay-controls callback prop from `routes.jsx` and `Ipad.jsx`.
+- Kept the existing top-row placement and restart-signal reset behavior intact.
+
+Final fix if solved:
+- The `/ipad` route now always shows the top shell controls row, with `Return to Start` on the left and `Restart` on the right, regardless of the current iPad stage.
+
+
+BUG-015
+
+Status: fixed
+
+When the "Show Secret Number" button is being held down, it is not showing the secret number. What it should do is highlight this number with a different style within the matrix
+
+Expected behavior:
+- Holding `Show Secret Number` should visibly highlight the chosen secret-number cell inside the matrix.
+
+Actual behavior:
+- Holding the button did not visibly change the matrix, so the secret number was not being shown in place while held.
+
+Suspected cause:
+- The shared `GameButton` component was not forwarding the hold/touch event handlers down to the underlying native button element.
+
+Attempted fixes:
+- Updated `GameButton` to forward additional interaction props to its rendered button/link element.
+- Kept the existing matrix secret-cell styling path and hold-state logic in `IpadMatrixTurn.jsx`.
+
+Final fix if solved:
+- Holding `Show Secret Number` now activates the existing secret-cell highlight style inside the matrix as intended.
+
+
+BUG-016
+
+Status: fixed
+
+There should be some arrows along the axis to show the direction of the scales, the top axis arrow should be pointing from left to right and the side from top to bottom.
+
+Expected behavior:
+- The x-axis should include a left-to-right directional arrow.
+- The y-axis should include a top-to-bottom directional arrow.
+
+Actual behavior:
+- The matrix showed only the scale endpoint labels, with no directional arrows to indicate how each axis should be read.
+
+Suspected cause:
+- The initial matrix-turn UI rendered just the endpoint labels and did not include any arrow markers in the axis layout.
+
+Attempted fixes:
+- Added a horizontal arrow between the x-axis labels.
+- Added a vertical arrow between the y-axis labels.
+- Adjusted the matrix board layout so the arrows sit along the same axis structures as the labels.
+
+Final fix if solved:
+- The matrix now shows a left-to-right arrow on the x-axis and a top-to-bottom arrow on the y-axis.
+
+
+BUG-017
+
+Status: fixed
+
+We need to remove the element ipad-page__difficulty-chip. This wasn't asked for and you need to remember to stop adding interface elements that are not asked for.
+
+Expected behavior:
+- The extra `ipad-page__difficulty-chip` element should not appear on the iPad page.
+
+Actual behavior:
+- A difficulty summary chip was being rendered during gameplay even though it was not requested.
+
+Suspected cause:
+- The gameplay loop pass added an extra summary UI element to keep difficulty visible during testing.
+
+Attempted fixes:
+- Removed the difficulty-chip rendering from `Ipad.jsx`.
+- Removed the now-unused `ipad-page__difficulty-chip` SCSS rules.
+
+Final fix if solved:
+- The unrequested `ipad-page__difficulty-chip` element is no longer rendered or styled.
+
+
+BUG-018
+
+Status: fixed
+
+The text within matrix-turn__axis-label matrix-turn__axis-label--top on the y-axis should line up with the top edge of the matrix, at the moment it is higher than it because it is lined up with matrix-turn__x-axis when it shouldn't be.
+
+Expected behavior:
+- The top y-axis label should align with the top edge of the matrix grid itself, not with the separate x-axis label row above it.
+
+Actual behavior:
+- The top y-axis label was sitting too high because the y-axis layout was aligned against the full matrix area, including the x-axis row.
+
+Suspected cause:
+- The previous board structure nested the x-axis labels and grid together, so the y-axis stretched against the combined height instead of the grid height alone.
+
+Attempted fixes:
+- Restructured the matrix board into explicit grid rows so the x-axis sits on its own row and the y-axis aligns directly against the matrix grid row.
+- Added explicit top/bottom alignment rules for the y-axis endpoint labels.
+
+Final fix if solved:
+- The top y-axis label now aligns with the top edge of the matrix grid instead of the x-axis row above it.
+
+
+BUG-019
+
+Status: fixed
+
+The text element page-copy ipad-page__copy isn't centered horizonatally 
+
+Expected behavior:
+- The `page-copy ipad-page__copy` block should be horizontally centered within the iPad page width.
+
+Actual behavior:
+- The player-details copy block was not centered horizontally as intended.
+
+Suspected cause:
+- The wider `ipad-page__copy` variation relied on inherited layout centering without its own explicit horizontal centering rule.
+
+Attempted fixes:
+- Added explicit `margin-inline: auto` to `ipad-page__copy`.
+
+Final fix if solved:
+- The `page-copy ipad-page__copy` block now centers horizontally within the iPad page.
+
+
+BUG-020
+
+Status: fixed
+
+The alignment of the text of the scales in the axis is now terrible. Also the Y axis has become really wide, I think because of the inclusion of the arrow. Can we make sure these are thin and uniform please.
+The first element matrix-turn__axis-label on the matrix-turn__x-axis should be left aligned too, right now it is centred so just looks like it's floating in the middle of nowhere. All axis words should be tight to the matrix and align with the edges of it, with the arrows being in the middle of the axis. 
+
+Expected behavior:
+- The axis areas should stay thin and uniform.
+- The first x-axis label should be left aligned.
+- All axis labels should sit tight to the matrix edges, with the arrows centered within the axis.
+
+Actual behavior:
+- The y-axis became too wide after the arrow was added.
+- The axis labels looked loose and poorly aligned.
+- The first x-axis label was centered instead of left aligned.
+
+Suspected cause:
+- The previous arrow implementation used text content and wider axis tracks, which made the axis areas expand and loosened label alignment.
+
+Attempted fixes:
+- Narrowed the y-axis column and tightened the gaps around the matrix board.
+- Replaced the text-arrow rendering with thin CSS-drawn arrow treatments.
+- Added explicit left/right alignment for the x-axis endpoint labels and tightened the vertical axis label layout to the matrix edges.
+
+Final fix if solved:
+- The axis areas are now thinner and more uniform, with the x-axis start label left aligned, the labels tight to the matrix edges, and the arrows centered within each axis.
+
+
+BUG-021
+
+Status: fixed
+
+When we reveal the number and it is animated into view, the matrix itself and all the scales should be animated out of view first. This means the whole matrix-turn__board element is invisible when the number is revealed. 
+
+Expected behavior:
+- The entire `matrix-turn__board` should animate out first.
+- The revealed number should appear only after the board has animated away.
+
+Actual behavior:
+- Only the grid itself was animating away, while the axes remained visible.
+- The revealed number was becoming visible during the same animation window instead of after the board had finished hiding.
+
+Suspected cause:
+- The hide animation was attached only to the grid, and the revealed-number visibility condition included the animation phase.
+
+Attempted fixes:
+- Moved the hide animation to the whole `matrix-turn__board` element.
+- Changed the revealed-number visibility so it appears only in the revealed stage after the hide animation completes.
+
+Final fix if solved:
+- The full board, including the scales, now animates out first, and the revealed number appears only after that transition finishes.
+
+
+BUG-022
+
+Status: fixed
+
+The "Are you sure" question before revealing to everyone should be in a modal with a semi transparent overlay over the page behind it. 
+
+Expected behavior:
+- The reveal confirmation should appear in a modal dialog with a semi-transparent overlay over the page behind it.
+
+Actual behavior:
+- The confirmation rendered inline in the page without any overlay, so it did not feel modal.
+
+Suspected cause:
+- The original confirmation component was implemented as a simple in-flow panel rather than a dialog/overlay treatment.
+
+Attempted fixes:
+- Wrapped the confirmation content in a dedicated full-screen overlay container.
+- Added dialog semantics and centered the confirmation panel above a semi-transparent backdrop.
+
+Final fix if solved:
+- The reveal confirmation now appears as a centered modal dialog with a semi-transparent page overlay behind it.
+
+
+BUG-023
+
+Status: fixed
+
+Expected behavior:
+- The Japanese matrix action button labels should display the correct Japanese text again.
+
+Actual behavior:
+- The Japanese action labels were rendering as mojibake instead of readable Japanese.
+
+Suspected cause:
+- The Japanese strings in the matrix-turn and reveal-confirmation components had been saved with corrupted encoding.
+
+Attempted fixes:
+- Restored the Japanese matrix action button labels in `IpadMatrixTurn.jsx`.
+- Restored the Japanese reveal-confirmation button and heading text in `IpadRevealConfirmation.jsx`.
+
+Final fix if solved:
+- The Japanese button labels and confirmation text now render correctly again.
+
+The buttons for the Japanese version have lost their correct text. They used to display correctly but now the text is like this for some reason: ç§˜å¯†ã®ç•ªå·ã‚’è¦‹ã‚‹ and ã¿ã‚“ãªã«è¦‹ã›ã‚‹. Please revert it back to what it was before.
+
+
+BUG-024
+
+Status: fixed
+
+Expected behavior:
+- `Show Secret Number` should remain the more prominent primary action.
+- `Reveal to Everyone` should appear less prominent.
+- The two buttons should be stacked vertically, with `Show Secret Number` on top.
+
+Actual behavior:
+- Both actions used the same strong visual treatment.
+- The actions were not styled as a clear primary/secondary pair.
+
+Suspected cause:
+- The matrix actions reused the same shared `GameButton` treatment without a secondary variant or a forced one-column layout.
+
+Attempted fixes:
+- Kept the current action order so `Show Secret Number` stays first.
+- Switched the action layout to a single-column stacked layout.
+- Added a softer secondary visual treatment to the `Reveal to Everyone` button.
+
+Final fix if solved:
+- The matrix actions now stack vertically, with `Show Secret Number` on top and `Reveal to Everyone` styled as the less prominent secondary action.
+
+I want you to make a style change to the "Reveal to Everyone" button, so that it is less prominant than the "Show Secret Number" button. I also want them to be veritcally stacked with show secret number to be on the top. 
+
+
+BUG-025
+
+Status: fixed
+
+Expected behavior:
+- The revealed number should appear larger.
+- It should be centered both vertically and horizontally in the reveal area.
+
+Actual behavior:
+- The revealed number was smaller than requested and did not occupy a strongly centered display area.
+
+Suspected cause:
+- The revealed number was rendered below the board in normal document flow, which limited its visual emphasis and centering.
+
+Attempted fixes:
+- Added a dedicated matrix display area around the board and revealed number.
+- Changed the revealed number to an absolute centered overlay within that display area.
+- Increased the revealed-number font size substantially.
+
+Final fix if solved:
+- The revealed number now appears much larger and centers vertically and horizontally within the matrix display area.
+
+When the number is revealed, it does it correctly, but the number itself needs to be bigger and centred both vertically and horizonatally. 
+
+
+BUG-026
+
+Status: fixed
+
+The "Reveal for Everyone" button should be visually different from the "Show Secret Number" button at rest, not just through a hover effect. I want the "Show Secret Number" button to be like it is now with no changes, whereas the "Reveal for everyone" button should be visually less prominant, with a lighter colour. 
+
+Expected behavior:
+- `Show Secret Number` should keep its existing primary appearance.
+- `Reveal to Everyone` should look lighter and less prominent even before hover.
+
+Actual behavior:
+- The reveal button only looked different on hover.
+- At rest it was still picking up the same dark primary styling as the main button.
+
+Suspected cause:
+- The secondary reveal-button styles were being overridden by the later shared `.game-button` base rules in `styles.scss`.
+
+Attempted fixes:
+- Moved the reveal-button secondary appearance to a more specific selector that applies after the shared `.game-button` rules.
+- Kept the primary `Show Secret Number` button styling unchanged.
+
+Final fix if solved:
+- `Reveal to Everyone` now has a lighter, less prominent rest state while `Show Secret Number` keeps the original stronger primary styling.
