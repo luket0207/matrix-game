@@ -1,0 +1,696 @@
+VIBE CODING RULES
+
+Purpose
+- Keep shipping fast without building messy or fragile code.
+- Build a clean React webapp for planning, managing, and carrying out wedding-related tasks.
+- Prefer reuse of existing components, layouts, hooks, utilities, and styles before adding new custom code.
+- Keep features easy to review, debug, extend, and redesign later.
+- Keep every coding pass small, controlled, and directly tied to the exact instruction given.
+- Prevent the coding agent from adding extra features, extra abstractions, or speculative improvements that were not requested.
+
+Core Principles
+- Reuse first: always check existing components, layouts, hooks, utilities, and styles before creating new ones.
+- Small focused files: avoid large multi-purpose files.
+- Single responsibility: each file should do one clear job.
+- Consistent style: follow existing project patterns and naming.
+- No hidden magic: keep logic explicit and traceable.
+- Prefer simple, readable code over clever abstractions.
+- Build features in small shippable increments.
+- Do not introduce new dependencies unless there is a clear reason and the existing stack cannot solve the problem cleanly.
+- Do exactly what was requested, no more and no less.
+- Treat the user's prompt as the scope boundary for the current coding pass.
+- Do not expand the task based on assumptions about future features.
+- Do not improve unrelated areas of the app while completing a requested feature.
+- Do not add "nice to have" functionality unless it was explicitly requested.
+- If something seems useful but was not requested, note it as a follow-up instead of implementing it.
+
+Hard Scope Control Rules
+- The coding agent must only implement the specific feature, fix, or change requested in the current prompt.
+- Do not add additional features, screens, flows, data models, styling systems, helper layers, or abstractions unless explicitly requested.
+- Do not perform opportunistic refactors outside the files required for the current task.
+- Do not redesign existing UI unless the prompt explicitly asks for a redesign.
+- Do not change app structure unless the prompt explicitly asks for structure changes or the task cannot work without the smallest possible structure change.
+- Do not introduce new architecture in anticipation of future requirements.
+- Do not add placeholder features for later unless specifically requested.
+- Do not add demo content, example screens, fake navigation, or sample flows unless the prompt asks for them.
+- Do not add extra validation, extra states, extra settings, or extra controls beyond what was requested.
+- Do not create generic systems when a small feature-level implementation is enough.
+- Do not create "just in case" utilities, hooks, context providers, constants files, or config files.
+- Do not modify unrelated files to make the app "cleaner" during a feature pass.
+- Do not rename files, components, props, routes, or folders unless the prompt asks for it or it is strictly required to complete the task.
+- Do not change existing behavior unless the current task explicitly requires that behavior to change.
+- If the requested change reveals a possible improvement outside scope, record it in implementation notes as a follow-up instead of implementing it.
+- If the prompt is ambiguous, choose the smallest reasonable interpretation and document the assumption.
+- When in doubt, implement less and report what remains.
+
+Incremental Delivery Rules
+- Each prompt should result in one small, reviewable change.
+- Prefer the smallest working implementation that satisfies the prompt.
+- Finish the requested increment before touching anything else.
+- Stop once the requested behavior works.
+- Do not continue into the next logical feature unless the prompt explicitly asks for it.
+- Do not combine multiple unrelated improvements into one pass.
+- Keep changes easy to inspect in a diff.
+- Avoid large rewrites unless the prompt explicitly asks for a rewrite.
+- If a task seems large, split the work into the smallest useful slice and complete only the slice requested.
+- If a future step is obvious, mention it in notes rather than implementing it.
+- If a feature requires setup and implementation, do the minimum setup needed for the current feature only.
+- A coding pass is successful when the requested change works, not when the surrounding area has been fully improved.
+
+Stop Rules For The Coding Agent
+- Stop coding when the requested change is complete.
+- Stop coding before starting any adjacent feature.
+- Stop coding before performing broad cleanup outside the touched area.
+- Stop coding before adding optional enhancements.
+- Stop coding before introducing a new dependency.
+- Stop coding before creating a new shared abstraction unless explicitly required.
+- Stop coding if the next step would require guessing user intent.
+- Stop coding if the next step belongs in a different feature or epic.
+- Report back with:
+  - What was changed
+  - Files changed
+  - What was intentionally not changed
+  - Any assumptions made
+  - Any follow-up work that should be handled separately
+
+Technology Rules
+- This project uses React.
+- This project uses Vite.
+- This project uses JavaScript, not TypeScript, unless explicitly changed by the user.
+- This project uses PrimeReact for UI components.
+- This project uses SCSS for styling.
+- This project uses React Router DOM for routing.
+- All React component files must use the `.jsx` extension.
+- All React page files must use the `.jsx` extension.
+- All React hook files must use the `.jsx` extension if they contain JSX, otherwise `.js` is allowed for pure non-JSX logic.
+- All feature entry files that export React components must use `index.jsx`.
+- Do not create `.tsx` files.
+- Do not create `.ts` files.
+- Do not create React component files with the `.js` extension.
+- Plain utility files that contain no JSX may use `.js`.
+- Plain mock data files that contain no JSX may use `.js`.
+- Plain constants files that contain no JSX may use `.js`.
+- New UI should use PrimeReact components where appropriate before creating custom UI from scratch.
+- New routes/pages must use React Router DOM patterns already established in the project.
+- New styling must use SCSS and follow the existing SCSS structure.
+- Do not replace PrimeReact components with custom components unless there is a clear design or behavior reason.
+- Do not introduce another UI library unless explicitly approved.
+
+File Extension Rules
+- Use `.jsx` for:
+  - React components
+  - React pages
+  - React layouts
+  - React route components
+  - React context providers that render JSX
+  - Feature entry files that export React components
+  - Any file containing JSX syntax
+- Use `.js` only for:
+  - Pure utilities
+  - Pure data files
+  - Constants
+  - Configuration helpers
+  - Non-JSX hooks
+  - Non-JSX validation helpers
+- Do not create `.tsx` or `.ts` files.
+- Do not convert existing `.jsx` files to `.js`.
+- If editing an existing React component that is currently `.js`, rename it to `.jsx` only if doing so is directly related to the requested task or required by the current instruction.
+- When creating imports, use paths that match the actual `.jsx` files and the project's existing import style.
+- Keep file naming consistent with existing project conventions.
+
+Component Reuse Rules
+- Before building a new component, check whether an existing component can be reused or extended.
+- Prefer reusable shared components for common UI patterns such as:
+  - Page layouts
+  - Cards
+  - Buttons
+  - Forms
+  - Dialogs/modals
+  - Tables/lists
+  - Empty states
+  - Loading states
+  - Error messages
+  - Navigation elements
+- If a component is likely to be used in more than one feature, place it in a shared/common component area only when reuse is immediate or explicitly requested.
+- If a component is specific to one feature, keep it inside that feature folder.
+- Do not duplicate components with only minor wording or styling differences.
+- When creating a reusable component, keep it flexible but not over-engineered.
+- Prefer composition over large configurable components with too many props.
+- Do not promote a feature component to shared just because it might be reused later.
+- Do not build a component library during a feature pass unless explicitly requested.
+
+Shared Component Promotion Rules
+- Start components inside the feature that needs them.
+- Promote a component to `src/components/` only when it is reused or clearly required by the current task.
+- Do not over-generalize a component before it has a second real use case.
+- Do not promote components based only on possible future reuse.
+- When promoting a component, update imports and remove duplicate feature-level versions.
+- Document the promotion in the relevant epic `implementation.txt`.
+- Briefly note meaningful shared component additions in `src/vibe/epicsOverview.txt`.
+- If promotion is not required for the current prompt, keep the component feature-local.
+
+Folder Structure Rules
+- Keep app-level setup in `src/app/` where appropriate.
+- Keep routes/pages in `src/pages/` or the project's established route folder.
+- Keep shared reusable components in `src/components/`.
+- Keep feature-specific code in `src/features/<feature>/`.
+- Keep shared hooks in `src/hooks/`.
+- Keep shared utilities/helpers in `src/utils/`.
+- Keep global styles/tokens in `src/assets/scss/` or the project's established SCSS folder.
+- Put feature-specific styles next to the feature/component they style.
+- Keep vibe process files under `src/vibe/`.
+- Do not create random top-level folders under `src/` without a clear reason.
+- Do not create new folders unless they are needed for the current requested task.
+- Do not reorganize folders during feature work unless explicitly requested.
+- For new larger features, use this shape only where useful for the current task:
+  - `src/features/<feature>/components/`
+  - `src/features/<feature>/hooks/`
+  - `src/features/<feature>/utils/`
+  - `src/features/<feature>/state/` if needed now
+  - `src/features/<feature>/data/` if needed now
+  - `src/features/<feature>/index.jsx` as the feature entry/export file if useful now
+
+Code Quality Rules
+- Prefer composition over monolithic components.
+- Soft file-size limits:
+  - Components: target <= 250 lines
+  - Utilities/helpers: target <= 150 lines
+  - Hooks: target <= 150 lines
+  - If bigger, split into smaller files.
+- Keep business logic out of JSX markup when possible.
+- Extract repeated logic to shared helpers/hooks only when repetition exists now.
+- Do not create helper functions for hypothetical future reuse.
+- Do not duplicate utility logic that already exists.
+- Use clear names. Avoid vague names like `data2`, `temp`, `stuff`, `thing`, or `misc`.
+- Remove dead code and stale comments in files directly touched by the task.
+- Do not clean unrelated files.
+- Leave concise comments only where logic is genuinely non-obvious.
+- Keep imports tidy and remove unused imports in touched files.
+- Avoid deeply nested JSX where smaller components would be clearer.
+- Avoid deeply nested conditionals where helper functions would be clearer.
+- Do not add comments explaining obvious code.
+- Do not add speculative TODOs unless they relate directly to a known follow-up from the current prompt.
+
+State and Data Flow
+- Keep state as local as possible.
+- Lift state only when needed by multiple children now.
+- Keep derived values computed, not duplicated in state.
+- Prefer pure functions in `utils` for deterministic logic.
+- Side effects should be isolated and predictable.
+- Keep API/data access logic away from presentational components.
+- Do not store the same source of truth in multiple places.
+- Use clear naming for loading, error, empty, and success states.
+- Forms should have clear initial values, validation, submit handling, and reset/cancel behavior where relevant.
+- Do not introduce global state unless the prompt requires shared state across distant parts of the app.
+- Do not introduce context providers unless the current feature genuinely needs them.
+- Do not add persistence unless explicitly requested.
+
+Data Model and Domain Rules
+- Keep wedding-planning domain concepts clearly named and consistent.
+- Use the same terms across code, UI, route names, state, data files, and vibe files.
+- Define shared data shapes before building features that depend on them, but only for concepts required by the current task.
+- Avoid creating slightly different versions of the same concept in different features.
+- Important domain concepts may include:
+  - Tasks
+  - Guests
+  - Suppliers/vendors
+  - Budget items
+  - Events
+  - Timeline items
+  - Notes
+  - Documents/checklists
+- When adding a new domain concept required by the current task, document:
+  - What it represents
+  - Required fields
+  - Optional fields
+  - Where it is stored
+  - Which current features use it
+- Do not add domain concepts that are not required by the current task.
+- If a domain model changes, update only the affected mock data, utilities, components, and tests.
+- Meaningful domain model changes must be recorded in the relevant epic `implementation.txt`.
+- Briefly note important domain model changes in `src/vibe/epicsOverview.txt`.
+
+Mock Data and Real Data Rules
+- Early features may use mock data to move quickly.
+- Mock data must be clearly separated from real app logic.
+- Keep mock data in obvious files such as:
+  - `src/features/<feature>/data/mock<Thing>.js`
+  - `src/data/mock/`
+- Do not hard-code mock data directly inside components.
+- Components should receive data through props, hooks, or clear data helpers.
+- When replacing mock data with real data, remove stale mock imports.
+- If mock data is still used intentionally, make this clear in implementation notes.
+- Mock data should follow the same shape expected from real data where possible.
+- Do not let mock data define hidden behavior that is not documented elsewhere.
+- Do not add mock data for future features.
+- Add only the minimum mock data needed to demonstrate or test the current requested feature.
+
+Persistence and Storage Rules
+- Be clear about where data is stored.
+- Do not introduce persistence without explicit instruction or a direct need from the current task.
+- If using localStorage, sessionStorage, IndexedDB, backend APIs, or another storage method, document:
+  - What is stored
+  - Why it is stored
+  - Where it is read
+  - Where it is updated
+  - How it can be reset or migrated
+- Keep persistence logic out of presentational components.
+- Avoid saving derived values that can be recalculated.
+- If storage structure changes, document the change in the relevant epic `implementation.txt`.
+- Briefly note meaningful storage/persistence changes in `src/vibe/epicsOverview.txt`.
+- Do not mix multiple persistence approaches for the same data without a clear reason.
+- Do not add persistence as a convenience if the requested task only needs temporary local UI state.
+
+Routing Rules
+- Use React Router DOM for all app navigation.
+- Keep route definitions clear and easy to scan.
+- Do not hard-code navigation behavior in unrelated components.
+- Use route constants/helpers only if routes are already reused or the current task needs them.
+- Pages should compose feature/components rather than containing all logic directly.
+- Route names and paths should be human-readable and consistent.
+- Avoid adding routes without updating navigation if the page should be reachable by users.
+- Do not add routes for future pages unless explicitly requested.
+- Keep fallback/not-found behavior clean and intentional.
+- Meaningful route/page additions should be briefly noted in `src/vibe/epicsOverview.txt`.
+
+PrimeReact Rules
+- Use PrimeReact components before building custom equivalents.
+- Prefer PrimeReact components for:
+  - Buttons
+  - Inputs
+  - Dropdowns/selects
+  - Dialogs
+  - Toasts/messages
+  - Data tables
+  - Menus/navigation
+  - Cards/panels
+  - Calendars/date pickers
+  - Checkboxes/radio buttons
+- Keep PrimeReact usage consistent across the app.
+- Do not mix multiple competing approaches for the same UI pattern.
+- When wrapping PrimeReact components, keep wrappers simple and reusable.
+- PrimeReact styling overrides should be done carefully in SCSS.
+- Avoid inline styles unless they are genuinely dynamic.
+- If a PrimeReact component needs custom behavior, prefer composition around it rather than rewriting it from scratch.
+- Do not build custom UI systems when PrimeReact already covers the requested need.
+- Do not add extra PrimeReact widgets beyond the requested interface.
+
+Styling and Theme Rules
+- Use SCSS for styling.
+- Use the existing global SCSS variables, mixins, tokens, or theme files where available.
+- New colors, spacing, typography, or theme values should be added to global tokens first only if reused now.
+- Component styles should consume global tokens where possible.
+- Avoid hard-coded hex values in component styles unless there is a clear reason.
+- Keep feature-specific styles next to the feature/component they style.
+- Keep global styles global and component styles local.
+- Do not create one giant stylesheet for unrelated components.
+- Prefer class names that describe structure or purpose, not visual appearance only.
+- Responsive behavior should be considered when building layouts.
+- Avoid styling by targeting fragile PrimeReact internal selectors unless necessary.
+- When PrimeReact overrides are necessary, keep them scoped and documented.
+- Do not redesign global theme styling during feature work unless explicitly requested.
+- Do not add new visual variants unless the current prompt requires them.
+
+Responsive Layout Rules
+- Build layouts mobile-first where practical.
+- Pages should work on desktop, tablet, and mobile widths.
+- Avoid fixed widths unless there is a clear reason.
+- Test major pages at narrow and wide screen sizes.
+- PrimeReact components should be checked for responsive behavior.
+- Tables/lists must have a usable mobile layout or scrolling behavior.
+- Forms must remain usable on mobile.
+- Navigation must remain usable on mobile.
+- Avoid layouts that require precise mouse interaction only.
+- Do not add complex responsive behavior beyond what the requested feature needs.
+
+Accessibility and UX Rules
+- Forms must have clear labels.
+- Buttons and actions must have clear text.
+- Do not rely on color alone to communicate meaning.
+- Loading, empty, and error states should be visible to the user where relevant to the current task.
+- Interactive elements should be keyboard usable where practical.
+- Dialogs/modals should have clear close/cancel actions.
+- Destructive actions should require confirmation where appropriate.
+- User-facing wording should be clear, calm, and practical.
+- Avoid placeholder text as the only label for an input.
+- Do not add new UX flows that were not requested.
+- Keep UX changes limited to the current requested behavior.
+
+Naming and Copy Rules
+- Use clear, user-friendly wording in the UI.
+- Keep labels consistent across the app.
+- Do not use different names for the same concept.
+- Button text should describe the action.
+- Good button examples:
+  - `Add guest`
+  - `Save task`
+  - `Delete supplier`
+  - `Add budget item`
+  - `Mark as done`
+- Avoid vague button text such as:
+  - `Submit`
+  - `OK`
+  - `Click here`
+  - `Do it`
+- Empty states should explain what the user can do next.
+- Error messages should explain the problem and the next action where possible.
+- Keep wedding-planning language calm, practical, and easy to understand.
+- Do not rewrite existing copy outside the current feature unless requested.
+
+Form and Validation Rules
+- Forms must have clear initial values.
+- Forms must have submit, cancel, and reset behavior where appropriate.
+- Validation rules should be explicit and easy to find.
+- Do not hide validation logic deep inside JSX.
+- Reuse existing form components and validation helpers before creating new ones.
+- Show validation errors near the relevant field.
+- Disable submit actions only when the reason is clear to the user.
+- Required fields should be visibly marked.
+- Form state should not be duplicated unnecessarily.
+- Form components should be split when the form becomes hard to scan.
+- Form submission success and failure should be visible to the user.
+- Use PrimeReact form components where appropriate.
+- Do not add validation rules that were not requested unless they are necessary to prevent broken behavior.
+- Do not add extra form fields beyond the prompt.
+
+Error Handling Rules
+- Every feature that loads, saves, deletes, or updates data must handle errors clearly.
+- Error states should be visible to the user.
+- Do not fail silently.
+- Use shared error display patterns where available.
+- Keep technical error details out of normal user-facing messages unless useful.
+- Log enough information during development to debug the issue.
+- If an error reveals a missing app-level pattern, create a reusable pattern only if needed by the current task.
+- Error handling should be documented in implementation notes when it is part of the feature.
+- Do not add broad error-handling architecture unless explicitly requested.
+
+Delete and Destructive Action Rules
+- Destructive actions must be deliberate.
+- Use confirmation dialogs for deleting important data.
+- Confirmation wording should clearly state what will be deleted.
+- Prefer soft delete or undo patterns only where requested or already established.
+- Do not place destructive buttons where they can be clicked accidentally.
+- Use consistent PrimeReact dialog/toast patterns for confirmations and results.
+- Deleting important wedding-planning data such as guests, tasks, suppliers, budget items, notes, or events should require confirmation.
+- Destructive actions should have clear success and failure feedback.
+- Do not add destructive actions unless they are requested.
+
+Feature Planning Rules
+- Each feature should have a clear goal before implementation starts.
+- Each feature should be small enough to implement in one focused pass.
+- Do not start broad rewrites unless the epic specifically asks for it.
+- If a feature requires a shared component now, build the smallest useful shared component first and then use it in the feature.
+- If a feature reveals missing structure, add the smallest useful structure rather than redesigning everything.
+- For larger features, separate only the parts needed now:
+  - UI components
+  - State/data logic
+  - Utility functions
+  - Route/page composition
+  - Styles
+- Do not break a feature into extra subfeatures during implementation unless the prompt asks for that planning work.
+- Do not add extra features to make an epic feel more complete.
+
+Refactor Rules
+- Refactors should have a clear reason.
+- Avoid mixing large refactors with unrelated feature work.
+- If a refactor is needed during feature work, keep it as small as possible.
+- Record meaningful refactors in `implementation.txt`.
+- Record broad/shared refactors briefly in `src/vibe/epicsOverview.txt`.
+- After refactoring, run the relevant manual tests again.
+- Do not change behavior during a refactor unless the behavior change is explicitly part of the feature.
+- Do not rename or move files without updating imports and documentation.
+- Prefer incremental refactors over risky rewrites.
+- Do not refactor unrelated code because it looks messy.
+- Do not refactor for future flexibility unless explicitly requested.
+- If a refactor would be useful but is outside scope, record it as a follow-up.
+
+AI Agent Instruction Rules
+- Prompts given to the coding agent should be explicit and scoped.
+- Each implementation prompt should include:
+  - Feature goal
+  - Exact scope for this pass
+  - Files likely to change
+  - Files or areas that should not be changed
+  - Existing components/patterns to check first
+  - Expected behavior
+  - Styling requirements
+  - Testing requirements
+  - Documentation updates required
+  - Clear stop point
+- Tell the agent when to stop and report back.
+- Do not ask the agent to implement multiple unrelated features in one pass.
+- If the agent makes assumptions, those assumptions must be recorded in implementation notes.
+- Coding agent prompts should remind the agent to check existing components before creating new ones.
+- Coding agent prompts should remind the agent to use PrimeReact, SCSS, and React Router DOM where relevant.
+- Coding agent prompts should remind the agent that all React component files must be `.jsx`.
+- Coding agent prompts should explicitly say not to add extra features beyond the requested scope.
+- Coding agent prompts should explicitly say not to do unrelated refactors.
+- Coding agent prompts should remind the agent to update only the relevant documentation files.
+- Coding agent prompts should remind the agent to update:
+  - `features.txt`
+  - `implementation.txt`
+  - `testing.txt`
+  - `bugs.txt` if relevant
+  - `src/vibe/epicsOverview.txt` if meaningful work was completed
+- Coding agent prompts should ask for a summary of intentionally skipped out-of-scope work.
+
+Mandatory Agent Behavior For Every Prompt
+- Read the user's prompt carefully and identify the smallest requested change.
+- Check relevant existing files before creating new files.
+- Reuse existing patterns where practical.
+- Implement only the requested change.
+- Keep React files as `.jsx`.
+- Keep pure utilities and mock data as `.js` where appropriate.
+- Avoid new dependencies.
+- Avoid unrelated refactors.
+- Avoid future-proofing.
+- Avoid broad architecture changes.
+- Avoid extra UI.
+- Avoid extra routes.
+- Avoid extra data models.
+- Avoid extra styling systems.
+- Run relevant checks where possible.
+- Update only relevant vibe files.
+- Stop and report back when the requested task is complete.
+
+Reuse Checklist Mandatory Before New Code
+- Before implementing any feature, review and decide if these can be reused:
+  - Existing page layouts
+  - Existing shared components
+  - Existing feature components
+  - Existing hooks
+  - Existing utilities/helpers
+  - Existing SCSS variables/tokens/mixins
+  - Existing PrimeReact patterns
+  - Existing React Router DOM route patterns
+  - Existing form patterns
+  - Existing table/list/card patterns
+  - Existing loading, empty, and error state patterns
+- In implementation notes, explicitly record:
+  - Which existing parts were considered
+  - Which were reused
+  - Which new parts were created
+  - Why reuse was not possible where new code was needed
+- Keep this checklist short and relevant to the files touched.
+- Do not use the checklist as permission to inspect or refactor unrelated app areas.
+
+Definition of Done Per Feature
+- Feature behavior works as requested.
+- No extra features were added beyond the prompt.
+- No unrelated refactors were performed.
+- All new React component/page/layout files use `.jsx`.
+- All files containing JSX use `.jsx`.
+- Reuse checklist completed and documented.
+- Code follows folder and file-size rules.
+- PrimeReact is used where appropriate.
+- React Router DOM patterns are followed where routing is involved.
+- Styling uses SCSS and global tokens where appropriate.
+- Forms include validation where relevant.
+- Loading, empty, error, and success states are handled where relevant.
+- Destructive actions use confirmation where appropriate.
+- Mobile/responsive behavior has been considered.
+- No obvious console errors.
+- No unused imports or dead code in touched files.
+- `testing.txt` updated with:
+  - How to manually test the feature
+  - Expected results
+  - Any automated tests that exist or should be added
+- `implementation.txt` includes:
+  - What was changed
+  - What was reused
+  - What was newly created
+  - What was intentionally not changed
+  - Any assumptions
+  - Any follow-up work
+- `src/vibe/epicsOverview.txt` updated with a brief note if meaningful work was completed.
+- Run quality checks before marking complete where possible:
+  - `npm run lint`
+  - `npm run build`
+
+Vibe Workflow Rules
+- All vibe process files live under `src/vibe/`.
+- Epic tracking structure:
+  - `src/vibe/epics/<epic-name>/features.txt`
+  - `src/vibe/epics/<epic-name>/implementation.txt`
+  - `src/vibe/epics/<epic-name>/bugs.txt`
+  - `src/vibe/epics/<epic-name>/testing.txt`
+- A project-level overview file must live at:
+  - `src/vibe/epicsOverview.txt`
+- Keep workflow updates tied to the current feature only.
+- Do not create new epic folders unless the prompt asks for a new epic or the current work belongs to a clearly specified epic.
+- Do not update unrelated epic files.
+
+Epics Overview Maintenance
+- `src/vibe/epicsOverview.txt` must be maintained continuously throughout the project.
+- Whenever meaningful work is completed inside any epic, add a very brief summary entry to `src/vibe/epicsOverview.txt`.
+- This file is used as the project memory/index so past work can be found quickly later.
+- Entries should be short, scannable, and useful for finding previous work.
+- Do not duplicate full implementation notes here.
+- Keep detailed notes inside the epic's own:
+  - `implementation.txt`
+  - `testing.txt`
+  - `bugs.txt`
+- Update `src/vibe/epicsOverview.txt` after:
+  - Every completed feature
+  - Meaningful bug fixes
+  - Meaningful refactors
+  - Route/page additions
+  - Shared component additions
+  - Important state/data structure changes
+  - Important domain model changes
+  - Important persistence/storage changes
+  - Epic status changes
+  - Epic completion
+- Keep entries brief enough that the file remains useful as a navigation/index file.
+- Do not let the overview become a second implementation log.
+- Do not add overview entries for work that was not actually completed.
+- Do not expand overview notes into future plans unless clearly marked as follow-up.
+
+Each overview entry should include:
+- Epic name
+- Feature/work area touched
+- Very brief summary of what changed
+- Current status
+- Path to the relevant epic folder
+
+Example overview entry:
+
+EPIC-001
+- Status: in progress
+- Epic folder: `src/vibe/epics/EPIC-001/`
+- Latest notes:
+  - Added initial app routing and homepage shell.
+  - Created shared layout components.
+  - Confirmed PrimeReact button/card patterns.
+
+Epics and Files
+
+features.txt
+- List every feature/sub-feature needed to complete the epic.
+- Keep items small enough to implement in one focused pass.
+- Include status markers:
+  - `not started`
+  - `in progress`
+  - `done`
+  - `blocked`
+- Include notes on when to stop implementation and start testing.
+- Include basic testing checkpoints where useful.
+- Do not mark a feature done until implementation and testing notes are updated.
+- Do not add new features to `features.txt` unless the user has requested them or they are required to break down the current epic.
+- Do not use `features.txt` as a place to invent extra scope.
+
+implementation.txt
+- After implementing a feature, add a short entry with:
+  - Feature name
+  - What was implemented
+  - Exact scope completed
+  - Existing components/hooks/utilities/styles considered
+  - What was reused
+  - What was newly created
+  - Why new code was needed where reuse was not possible
+  - Files changed
+  - What was intentionally not changed
+  - Any assumptions made
+  - Any tradeoffs or follow-up tasks
+- Also add a brief summary of meaningful work to `src/vibe/epicsOverview.txt`.
+- Keep implementation notes factual.
+- Do not describe unbuilt future work as if it has been completed.
+
+bugs.txt
+- Track bugs related to the epic only.
+- Each bug entry should include:
+  - Bug title
+  - Repro steps
+  - Expected behavior
+  - Actual behavior
+  - Suspected cause
+  - Attempted fixes
+  - Final fix if solved
+  - Status:
+    - `not started`
+    - `investigating`
+    - `attempted`
+    - `fixed`
+    - `blocked`
+- Meaningful fixed bugs should also be briefly noted in `src/vibe/epicsOverview.txt`.
+- Do not fix unrelated bugs unless the current prompt asks for it.
+- If an unrelated bug is discovered, record it as a follow-up or bug entry only if relevant.
+
+testing.txt
+- Must be updated after every feature implementation.
+- For each feature, include:
+  - Manual test steps written for a non-developer to follow
+  - Expected result for each step
+  - Automated tests completed where relevant
+  - Automated tests still needed to fully prove behavior
+  - Test status:
+    - `not started`
+    - `in progress`
+    - `passed`
+    - `failed`
+    - `blocked`
+- Testing notes should cover the requested feature only.
+- Do not add broad regression plans unless the prompt asks for regression testing or the epic is being completed.
+
+Epic Completion Gate
+- An epic is only done when its testing has been run and documented.
+- After an epic is marked `done`, its final summary must be added to `src/vibe/epicsOverview.txt` in the same change.
+- At the end of every epic, execute and record:
+  - Full manual regression flow for that epic
+  - Relevant automated tests proving the epic works as intended
+  - Any remaining gaps, with clear next actions
+  - A brief final summary entry for that epic in `src/vibe/epicsOverview.txt`
+- Do not mark an epic done just because the current feature is done.
+- Do not complete adjacent epic work unless the prompt explicitly asks for epic completion.
+
+Working Agreement While Vibe Coding
+- Build in small increments and log progress in epic files continuously.
+- Do not jump to new features until current feature notes are updated.
+- If blocked, log the blocker and next best option instead of guessing silently.
+- Prefer shippable progress over large risky rewrites.
+- When changing shared systems, note potential impact on other epics.
+- Reuse existing components before creating new ones.
+- Use PrimeReact, SCSS, and React Router DOM consistently.
+- Keep all React component files as `.jsx`.
+- Keep `src/vibe/epicsOverview.txt` updated as a brief running index of meaningful work completed across all epics.
+- Keep the app structure simple until the project genuinely needs more abstraction.
+- Do not over-engineer early wedding-planning features before the real requirements are known.
+- Do not let the agent continue working after the requested scope is complete.
+- Do not let the agent turn a small prompt into a larger product design exercise.
+- Do not let the agent add features just because they seem obvious or helpful.
+- When the current prompt is complete, stop, summarize, and wait for the next instruction.
+
+Standard Prompt Footer For Coding Agent
+
+Add this footer to implementation prompts when using the coding agent:
+
+Scope control:
+- Only implement what is explicitly requested in this prompt.
+- Do not add extra features, extra screens, extra fields, extra routes, or extra abstractions.
+- Do not do unrelated refactors or cleanup.
+- Do not future-proof the code beyond the current requirement.
+- Use existing components, hooks, utilities, styles, and patterns before creating new ones.
+- All React files must use `.jsx`.
+- Pure non-JSX utilities, constants, and mock data may use `.js`.
+- Stop when the requested change works.
+- Report back with files changed, behavior added, assumptions made, and anything intentionally left for a future prompt.

@@ -1,0 +1,161 @@
+Mini Game Project - Initial Setup Epic
+
+This mini project is a simple game site intended to be played between friends. Keep the implementation lightweight and do not overbuild. The goal of this epic is only to remove the default React/Vite boilerplate, create the basic page structure, set up routing, and prepare the project for deployment through GitHub Pages.
+
+Use React with Vite.
+Use .jsx files only.
+Use react-router-dom for routing.
+Keep the structure simple and easy to extend later.
+Do not add game logic yet.
+Do not add unnecessary styling frameworks or extra dependencies unless specifically required.
+
+Repository name:
+
+matrix-game
+
+
+Feature-001 - Basic Site Structure and Routing
+Status: not started
+
+Remove the default React/Vite boilerplate content and set up the basic structure of the site.
+
+The site needs the following pages:
+
+1. Start
+2. iPad
+3. Player
+4. Score
+
+Requirements:
+
+- Remove the default Vite/React demo content.
+- Create a clean src structure for the app.
+- Set up react-router-dom.
+- Create a central routes.jsx file to define the app routes.
+- Create one simple page component for each page:
+  - Start.jsx
+  - Ipad.jsx
+  - Player.jsx
+  - Score.jsx
+- The Start page should be the homepage route.
+- The routes should be:
+
+  /          -> Start
+  /ipad      -> iPad
+  /player    -> Player
+  /score     -> Score
+
+- Each page should display a simple heading with the page name for now.
+- Add basic navigation links somewhere simple so each route can be tested.
+- Do not add game logic yet.
+- Do not design the full UI yet.
+- Keep the styling minimal and only add what is needed to confirm the structure works.
+
+Suggested structure:
+
+src/
+  App.jsx
+  main.jsx
+  routes.jsx
+  pages/
+    Start.jsx
+    Ipad.jsx
+    Player.jsx
+    Score.jsx
+
+Routing requirements:
+
+- main.jsx should wrap the app in BrowserRouter.
+- routes.jsx should contain the route definitions.
+- App.jsx should render the routes and any basic shared layout needed for testing.
+- Navigation links should use Link or NavLink from react-router-dom.
+- Do not hardcode full URLs for internal navigation.
+
+Expected demo:
+
+- Running the app locally should show the Start page at the root route.
+- The user should be able to navigate to iPad, Player, and Score pages.
+- Each route should load the correct page component.
+- The app should no longer show any default React/Vite boilerplate content.
+
+
+Feature-002 - GitHub Pages Setup
+Status: not started
+
+Set up the project so it can be deployed to GitHub Pages.
+
+Important context:
+
+- The GitHub repository already exists.
+- The repository name is matrix-game.
+- The project has already been created locally.
+- The repo needs an initial commit.
+- A gh-pages branch needs to be created for deployment.
+- There needs to be a repeatable method for deploying future builds to GitHub Pages.
+
+Requirements:
+
+- Check the package.json file and confirm the project has the correct scripts for building and deploying.
+- Add the gh-pages package if needed.
+- Configure the project for GitHub Pages deployment.
+- Because this is a Vite project, configure the Vite base path for the GitHub repository name.
+- The Vite config should use:
+
+  base: "/matrix-game/"
+
+- Add or update vite.config.js if required.
+- Add package.json scripts similar to:
+
+  "predeploy": "npm run build",
+  "deploy": "gh-pages -d dist"
+
+- Make the initial git commit if no commit exists yet.
+- Create the gh-pages branch through the deployment process.
+- Do not manually move source files into the gh-pages branch.
+- The gh-pages branch should only contain the built deployment files.
+- The main working branch should remain the source code branch.
+- Add clear notes in the README explaining how to deploy future changes.
+
+Suggested vite.config.js setup:
+
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+
+export default defineConfig({
+  plugins: [react()],
+  base: "/matrix-game/",
+});
+
+Suggested deployment flow:
+
+1. Make changes on the main branch.
+2. Run npm run build to test the build.
+3. Run npm run deploy to publish the dist folder to the gh-pages branch.
+4. In GitHub repository settings, configure GitHub Pages to deploy from the gh-pages branch.
+
+README requirements:
+
+Add a short section explaining:
+
+- This project is deployed using GitHub Pages.
+- The source code lives on the main branch.
+- The deployed build files are published to the gh-pages branch.
+- To deploy future changes, run:
+
+  npm run build
+  npm run deploy
+
+- GitHub Pages should be configured to deploy from:
+
+  Branch: gh-pages
+  Folder: /root
+
+Expected demo:
+
+- The project should have an initial commit.
+- The project should have a working GitHub Pages deployment setup.
+- vite.config.js should include base: "/matrix-game/".
+- Running npm run deploy should build the project and publish the dist folder to the gh-pages branch.
+- The README should explain the future deployment process clearly.
+- The app should still work locally after the GitHub Pages setup.
+- The deployed GitHub Pages site should not show a blank screen because of an incorrect base path.
