@@ -1,0 +1,309 @@
+BUG-001
+
+Status: fixed
+
+When running the site locally I do not see a website. Just the following text on the page...
+
+Html Webpack Plugin:
+
+  Error: Child compilation failed:
+  Module not found: Error: Can't resolve 'C:\Users\PC\Documents\GitHub\matrix-game\matrix-game\public\index.html' in 'C:\Users\PC\Documents\GitHub\matrix-game\matrix-game'
+  ModuleNotFoundError: Module not found: Error: Can't resolve 'C:\Users\PC\Documents\GitHub\matrix-game\matrix-game\public\index.html' in 'C:\Users\PC\Documents\GitHub\matrix-g  ame\matrix-game'
+      at C:\Users\PC\Documents\GitHub\matrix-game\matrix-game\node_modules\webpack\lib\Compilation.js:2156:28
+      at C:\Users\PC\Documents\GitHub\matrix-game\matrix-game\node_modules\webpack\lib\NormalModuleFactory.js:1092:13
+      at eval (eval at create (C:\Users\PC\Documents\GitHub\matrix-game\matrix-game\node_modules\tapable\lib\HookCodeFactory.js:31:10), :10:1)
+      at C:\Users\PC\Documents\GitHub\matrix-game\matrix-game\node_modules\webpack\lib\NormalModuleFactory.js:476:22
+      at eval (eval at create (C:\Users\PC\Documents\GitHub\matrix-game\matrix-game\node_modules\tapable\lib\HookCodeFactory.js:31:10), :9:1)
+      at C:\Users\PC\Documents\GitHub\matrix-game\matrix-game\node_modules\webpack\lib\NormalModuleFactory.js:658:22
+      at C:\Users\PC\Documents\GitHub\matrix-game\matrix-game\node_modules\webpack\lib\NormalModuleFactory.js:199:10
+      at C:\Users\PC\Documents\GitHub\matrix-game\matrix-game\node_modules\webpack\lib\NormalModuleFactory.js:933:25
+      at C:\Users\PC\Documents\GitHub\matrix-game\matrix-game\node_modules\webpack\lib\NormalModuleFactory.js:1178:8
+      at C:\Users\PC\Documents\GitHub\matrix-game\matrix-game\node_modules\webpack\lib\NormalModuleFactory.js:1308:5
+      at C:\Users\PC\Documents\GitHub\matrix-game\matrix-game\node_modules\neo-async\async.js:6883:13
+      at C:\Users\PC\Documents\GitHub\matrix-game\matrix-game\node_modules\webpack\lib\NormalModuleFactory.js:1291:45
+      at finishWithoutResolve (C:\Users\PC\Documents\GitHub\matrix-game\matrix-game\node_modules\enhanced-resolve\lib\Resolver.js:945:11)
+      at C:\Users\PC\Documents\GitHub\matrix-game\matrix-game\node_modules\enhanced-resolve\lib\Resolver.js:1034:14
+      at C:\Users\PC\Documents\GitHub\matrix-game\matrix-game\node_modules\enhanced-resolve\lib\Resolver.js:1111:5
+      at eval (eval at create (C:\Users\PC\Documents\GitHub\matrix-game\matrix-game\node_modules\tapable\lib\HookCodeFactory.js:31:10), :16:1)
+      at C:\Users\PC\Documents\GitHub\matrix-game\matrix-game\node_modules\enhanced-resolve\lib\Resolver.js:1111:5
+      at eval (eval at create (C:\Users\PC\Documents\GitHub\matrix-game\matrix-game\node_modules\tapable\lib\HookCodeFactory.js:31:10), :27:1)
+      at C:\Users\PC\Documents\GitHub\matrix-game\matrix-game\node_modules\enhanced-resolve\lib\DescriptionFilePlugin.js:94:43
+      at C:\Users\PC\Documents\GitHub\matrix-game\matrix-game\node_modules\enhanced-resolve\lib\Resolver.js:1111:5
+      at eval (eval at create (C:\Users\PC\Documents\GitHub\matrix-game\matrix-game\node_modules\tapable\lib\HookCodeFactory.js:31:10), :15:1)
+      at C:\Users\PC\Documents\GitHub\matrix-game\matrix-game\node_modules\enhanced-resolve\lib\Resolver.js:1111:5
+      at eval (eval at create (C:\Users\PC\Documents\GitHub\matrix-game\matrix-game\node_modules\tapable\lib\HookCodeFactory.js:31:10), :16:1)
+      at C:\Users\PC\Documents\GitHub\matrix-game\matrix-game\node_modules\enhanced-resolve\lib\Resolver.js:1111:5
+      at eval (eval at create (C:\Users\PC\Documents\GitHub\matrix-game\matrix-game\node_modules\tapable\lib\HookCodeFactory.js:31:10), :16:1)
+      at C:\Users\PC\Documents\GitHub\matrix-game\matrix-game\node_modules\enhanced-resolve\lib\Resolver.js:1111:5
+      at eval (eval at create (C:\Users\PC\Documents\GitHub\matrix-game\matrix-game\node_modules\tapable\lib\HookCodeFactory.js:31:10), :27:1)
+      at C:\Users\PC\Documents\GitHub\matrix-game\matrix-game\node_modules\enhanced-resolve\lib\DescriptionFilePlugin.js:94:43
+      at C:\Users\PC\Documents\GitHub\matrix-game\matrix-game\node_modules\enhanced-resolve\lib\Resolver.js:1111:5
+      at eval (eval at create (C:\Users\PC\Documents\GitHub\matrix-game\matrix-game\node_modules\tapable\lib\HookCodeFactory.js:31:10), :16:1)
+      at C:\Users\PC\Documents\GitHub\matrix-game\matrix-game\node_modules\enhanced-resolve\lib\Resolver.js:1111:5
+      at eval (eval at create (C:\Users\PC\Documents\GitHub\matrix-game\matrix-game\node_modules\tapable\lib\HookCodeFactory.js:31:10), :15:1)
+      at C:\Users\PC\Documents\GitHub\matrix-game\matrix-game\node_modules\enhanced-resolve\lib\DirectoryExistsPlugin.js:52:15
+      at process.processTicksAndRejections (node:internal/process/task_queues:81:21)
+  
+  - Compilation.js:2156 
+    [matrix-game]/[webpack]/lib/Compilation.js:2156:28
+  
+  - NormalModuleFactory.js:1092 
+    [matrix-game]/[webpack]/lib/NormalModuleFactory.js:1092:13
+  
+  
+  - NormalModuleFactory.js:476 
+    [matrix-game]/[webpack]/lib/NormalModuleFactory.js:476:22
+  
+  
+  - NormalModuleFactory.js:658 
+    [matrix-game]/[webpack]/lib/NormalModuleFactory.js:658:22
+  
+  - NormalModuleFactory.js:199 
+    [matrix-game]/[webpack]/lib/NormalModuleFactory.js:199:10
+  
+  - NormalModuleFactory.js:933 
+    [matrix-game]/[webpack]/lib/NormalModuleFactory.js:933:25
+  
+  - NormalModuleFactory.js:1178 
+    [matrix-game]/[webpack]/lib/NormalModuleFactory.js:1178:8
+  
+  - NormalModuleFactory.js:1308 
+    [matrix-game]/[webpack]/lib/NormalModuleFactory.js:1308:5
+  
+  - async.js:6883 
+    [matrix-game]/[neo-async]/async.js:6883:13
+  
+  - NormalModuleFactory.js:1291 
+    [matrix-game]/[webpack]/lib/NormalModuleFactory.js:1291:45
+  
+  - Resolver.js:945 finishWithoutResolve
+    [matrix-game]/[enhanced-resolve]/lib/Resolver.js:945:11
+  
+  - Resolver.js:1034 
+    [matrix-game]/[enhanced-resolve]/lib/Resolver.js:1034:14
+  
+  - Resolver.js:1111 
+    [matrix-game]/[enhanced-resolve]/lib/Resolver.js:1111:5
+  
+  
+  - Resolver.js:1111 
+    [matrix-game]/[enhanced-resolve]/lib/Resolver.js:1111:5
+  
+  
+  - DescriptionFilePlugin.js:94 
+    [matrix-game]/[enhanced-resolve]/lib/DescriptionFilePlugin.js:94:43
+  
+  - Resolver.js:1111 
+    [matrix-game]/[enhanced-resolve]/lib/Resolver.js:1111:5
+  
+  
+  - Resolver.js:1111 
+    [matrix-game]/[enhanced-resolve]/lib/Resolver.js:1111:5
+  
+  
+  - Resolver.js:1111 
+    [matrix-game]/[enhanced-resolve]/lib/Resolver.js:1111:5
+  
+  
+  - Resolver.js:1111 
+    [matrix-game]/[enhanced-resolve]/lib/Resolver.js:1111:5
+  
+  
+  - DescriptionFilePlugin.js:94 
+    [matrix-game]/[enhanced-resolve]/lib/DescriptionFilePlugin.js:94:43
+  
+  - Resolver.js:1111 
+    [matrix-game]/[enhanced-resolve]/lib/Resolver.js:1111:5
+  
+  
+  - Resolver.js:1111 
+    [matrix-game]/[enhanced-resolve]/lib/Resolver.js:1111:5
+  
+  
+  - DirectoryExistsPlugin.js:52 
+    [matrix-game]/[enhanced-resolve]/lib/DirectoryExistsPlugin.js:52:15
+  
+  - task_queues:81 process.processTicksAndRejections
+    node:internal/process/task_queues:81:21
+  
+  - child-compiler.js:211 
+    [matrix-game]/[html-webpack-plugin]/lib/child-compiler.js:211:18
+  
+  - Compiler.js:672 finalCallback
+    [matrix-game]/[webpack]/lib/Compiler.js:672:5
+  
+  - Compiler.js:708 
+    [matrix-game]/[webpack]/lib/Compiler.js:708:11
+  
+  - Compiler.js:1417 
+    [matrix-game]/[webpack]/lib/Compiler.js:1417:17
+  
+  
+  - Hook.js:21 Hook.CALL_ASYNC_DELEGATE [as _callAsync]
+    [matrix-game]/[tapable]/lib/Hook.js:21:14
+  
+  - Compiler.js:1413 
+    [matrix-game]/[webpack]/lib/Compiler.js:1413:33
+  
+  - Compilation.js:3291 finalCallback
+    [matrix-game]/[webpack]/lib/Compilation.js:3291:11
+  
+  - Compilation.js:3637 
+    [matrix-game]/[webpack]/lib/Compilation.js:3637:11
+  
+  
+  - Hook.js:21 Hook.CALL_ASYNC_DELEGATE [as _callAsync]
+    [matrix-game]/[tapable]/lib/Hook.js:21:14
+  
+  - Compilation.js:3630 
+    [matrix-game]/[webpack]/lib/Compilation.js:3630:38
+  
+  
+  - Compilation.js:704 
+    [matrix-game]/[webpack]/lib/Compilation.js:704:11
+  
+  - SourceMapDevToolPlugin.js:840 
+    [matrix-game]/[webpack]/lib/SourceMapDevToolPlugin.js:840:10
+  
+  - async.js:2830 
+    [matrix-game]/[neo-async]/async.js:2830:7
+  
+  - async.js:2857 Object.each
+    [matrix-game]/[neo-async]/async.js:2857:9
+
+Expected behavior:
+- Running the site locally should start the Vite development server and show the app.
+
+Actual behavior:
+- The previous local-start flow could still point at the old CRA/Webpack entry path, which expected `public/index.html`.
+
+Suspected cause:
+- The project had been migrated to Vite, but the local startup workflow was still easy to invoke using the old `npm start` habit.
+
+Attempted fixes:
+- Added a `start` script alias that runs `vite`.
+- Updated the README local-start instructions to include `npm start`.
+- Re-verified the production build with `npm run build`.
+
+Final fix if solved:
+- Local startup now uses Vite through both `npm start` and `npm run dev`, avoiding the old CRA/Webpack `public/index.html` expectation.
+  
+
+Bug-002
+
+Status: fixed
+
+When the user selects the langauge on the start page, the icon for linking to the iPad page should dissapear and never be shown again. 
+
+Expected behavior:
+- After the user selects a language on the Start page, the iPad access icon should disappear and stay hidden for the rest of the current game flow.
+
+Actual behavior:
+- The bug tracker had not yet recorded the language-lock behavior as fixed.
+
+Suspected cause:
+- The iPad icon visibility needed to be tied to shared setup state rather than just the current route.
+
+Attempted fixes:
+- Verified the shared game state stores `selectedLanguage`.
+- Verified the shared app shell only shows the iPad icon when `selectedLanguage === null`.
+- Re-ran the production build to confirm the current implementation still compiles.
+
+Final fix if solved:
+- The iPad access icon is now hidden as soon as a language is selected and stays hidden for the remainder of the current session flow.
+
+
+Bug-003
+
+Status: fixed
+
+The lanauage question should be bi-lingual. The English answer should be in English and the Japanese answer should be in Japanese.
+
+Expected behavior:
+- The language selection prompt should be bilingual, and the language answers should display as `English` and `日本語`.
+
+Actual behavior:
+- The initial language screen showed `Japanese` in English, and the Japanese copy in the Start page file had mojibake encoding issues.
+
+Suspected cause:
+- The Start page labels were still using an English-only language option label and mis-encoded Japanese strings.
+
+Attempted fixes:
+- Updated the Start page language prompt to `Choose your language / 言語を選んでください`.
+- Updated the language choices to `English` and `日本語`.
+- Replaced the mis-encoded Japanese strings in the Start page labels object.
+- Re-ran the production build to confirm the updated strings compile correctly.
+
+Final fix if solved:
+- The language question is now bilingual and the language choices correctly display `English` and `日本語`.
+
+BUG-004
+
+Status: fixed
+
+Remove the title page-copy__eyebrow on all pages and never put it back in. We don't want titles. 
+
+Expected behavior:
+- No page should render the `page-copy__eyebrow` title text.
+
+Actual behavior:
+- Start, Player, Score, and iPad still rendered eyebrow title copy above the main heading.
+
+Suspected cause:
+- The page-level layout components were still carrying over temporary eyebrow text from earlier scaffolding.
+
+Attempted fixes:
+- Removed `page-copy__eyebrow` usage from Start, Player, Score, and iPad.
+- Removed the now-unused `.page-copy__eyebrow` styling rule from `styles.scss`.
+- Re-ran the production build to confirm the simplified page copy still compiles.
+
+Final fix if solved:
+- All eyebrow titles have been removed from the current page set and the styling hook is no longer present.
+
+
+BUG-005
+
+Status: fixed
+
+The return to start button should link back to the start page, in it's original state, so before the language question has been asked
+
+Expected behavior:
+- Clicking Return to Start should bring the app back to the original Start state before any language has been selected.
+
+Actual behavior:
+- The button routed back to `/`, but the in-memory language and difficulty state stayed set, so the Start page did not reset to its initial question.
+
+Suspected cause:
+- The button navigation did not clear the shared setup state before routing back.
+
+Attempted fixes:
+- Added a `resetGameSetup` action to the shared game state provider.
+- Wired the Return to Start control to clear language and difficulty before navigating to `/`.
+- Re-ran the production build to confirm the reset flow still compiles.
+
+Final fix if solved:
+- Return to Start now resets the shared setup state and returns the app to the original pre-language Start screen.
+
+
+BUG-006
+
+Status: fixed
+
+The Return to Start button in the header should be independant of the other buttons and should follow the style of the ipad icon
+
+Expected behavior:
+- The Return to Start control should remain a separate shell control and visually follow the same standalone control style as the iPad icon instead of the main game buttons.
+
+Actual behavior:
+- Return to Start had been switched over to the shared `GameButton` styling, so it looked and behaved like the main setup buttons instead of an independent shell control.
+
+Suspected cause:
+- The recent shared button pass reused the `GameButton` component for Return to Start, which merged two intentionally different button roles.
+
+Attempted fixes:
+- Switched Return to Start back to the standalone `app-shell__control app-shell__control--button` shell control pattern.
+- Removed the now-unused return-button-specific style hook.
+- Re-verified the production build with `npm run build`.
+
+Final fix if solved:
+- Return to Start is now independent from the main game buttons again and follows the same shell-control styling pattern as the iPad icon.

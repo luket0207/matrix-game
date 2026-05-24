@@ -5,3 +5,14 @@ EPIC-001
   - Replaced the CRA boilerplate with a Vite app shell and React Router page structure.
   - Added Start, iPad, Player, and Score routes with minimal navigation.
   - Configured GitHub Pages deployment, created the initial commit, and published `gh-pages`.
+  - Fixed the local start workflow by mapping `npm start` to Vite and documenting the updated local run path.
+  - Added a mobile-first shared shell with a wider iPad layout and subtle iPad access icon.
+  - Added Start page language and difficulty selection with lightweight shared game state.
+  - Verified and recorded that the iPad access icon stays hidden after language selection during the current game flow.
+  - Fixed the Start page language prompt and labels so the setup choices display as `English` and `日本語`.
+  - Removed all shell header content and visible nav, keeping the iPad access control as a standalone top-right element.
+  - Added a language-aware Return to Start control that replaces the iPad icon after setup begins.
+  - Removed eyebrow title copy from the current page set.
+  - Updated Return to Start so it resets setup state back to the original pre-language Start screen.
+  - Centered the shared page layout rules and added a reusable `GameButton` for the main game controls.
+  - Restored Return to Start as an independent shell control styled separately from the main game buttons.

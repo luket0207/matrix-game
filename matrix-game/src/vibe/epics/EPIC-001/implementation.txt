@@ -85,3 +85,341 @@ Feature: Feature-002 - GitHub Pages Setup
   - Used the repository name `matrix-game` from the feature file as the required Vite base path.
 - Any tradeoffs or follow-up tasks:
   - None inside the current feature scope.
+
+Bug fix: BUG-001 - Local site start path
+- What was implemented:
+  - Added a `start` script alias to `package.json` so local startup runs Vite directly.
+  - Updated the README local-run instructions to include `npm start`.
+- Exact scope completed:
+  - Fixed the local startup path so the project no longer depends on the old CRA/Webpack startup expectation.
+- Existing components/hooks/utilities/styles considered:
+  - Considered the current Vite scripts and README instructions.
+- What was reused:
+  - Reused the existing Vite dev server configuration and app structure.
+- What was newly created:
+  - No new files.
+- Why new code was needed where reuse was not possible:
+  - The existing `dev` script worked, but the common `npm start` entrypoint was missing after the Vite migration.
+- Files changed:
+  - `package.json`
+  - `README.md`
+  - `src/vibe/epics/EPIC-001/bugs.txt`
+  - `src/vibe/epics/EPIC-001/implementation.txt`
+  - `src/vibe/epics/EPIC-001/testing.txt`
+  - `src/vibe/epicsOverview.txt`
+- What was intentionally not changed:
+  - No route, layout, or styling behavior was changed.
+  - No new dependencies were added.
+- Any assumptions made:
+  - Interpreted the bug as a local startup workflow issue tied to the old CRA/Webpack path after the Vite migration.
+- Any tradeoffs or follow-up tasks:
+  - Manual browser verification of the dev server page can still be done locally after starting `npm start`.
+
+Feature: Feature-003 - Mobile-First Page Aesthetic Structure
+- What was implemented:
+  - Reworked the shared app shell to use a centered mobile-width frame for Start, Player, and Score.
+  - Added a wider shell mode for the iPad route.
+  - Removed the visible iPad nav link and replaced it with a subtle top-right access icon.
+  - Added mobile-focused visual structure and larger tap-friendly button styling for future flows.
+- Exact scope completed:
+  - Start, Player, and Score now render inside a mobile-style centered shell on desktop.
+  - The iPad page now uses a wider layout treatment.
+  - The iPad page is reachable through the top-right icon instead of the main nav.
+- Existing components/hooks/utilities/styles considered:
+  - Considered the existing `App.jsx` nav layout, page components, and `styles.scss` shell styles.
+- What was reused:
+  - Reused the existing route structure and page files.
+- What was newly created:
+  - `src/app/GameStateProvider.jsx`
+- Why new code was needed where reuse was not possible:
+  - The original shell was a generic centered layout and did not distinguish mobile player pages from the wider iPad page.
+- Files changed:
+  - `src/App.jsx`
+  - `src/main.jsx`
+  - `src/pages/Start.jsx`
+  - `src/pages/Player.jsx`
+  - `src/pages/Score.jsx`
+  - `src/pages/Ipad.jsx`
+  - `src/styles.scss`
+  - `src/app/GameStateProvider.jsx`
+- What was intentionally not changed:
+  - No gameplay logic was added.
+  - No desktop-specific gameplay layout was added beyond centered development usability.
+- Any assumptions made:
+  - Treated the subtle top-right `i` button as the requested iPad access icon.
+- Any tradeoffs or follow-up tasks:
+  - Later features can refine the visual identity further without changing the shell behavior added here.
+
+Feature: Feature-004 - Start Page Language and Difficulty Selection
+- What was implemented:
+  - Added lightweight shared app state for `selectedLanguage` and `selectedDifficulty`.
+  - Implemented a two-step Start page flow for language first, then difficulty.
+  - Added bilingual English/Japanese labels directly in the Start page flow.
+  - Routed the user to `/player` immediately after choosing a difficulty.
+  - Hid the iPad access icon once a language has been selected.
+- Exact scope completed:
+  - Language selection now locks in once chosen for the current flow.
+  - Difficulty selection stores its value in shared state and navigates to the Player page.
+- Existing components/hooks/utilities/styles considered:
+  - Considered keeping state local to the Start page and considered reusing only route state.
+- What was reused:
+  - Reused the existing routing setup and Start page route.
+- What was newly created:
+  - Shared game state provider in `src/app/GameStateProvider.jsx`
+- Why new code was needed where reuse was not possible:
+  - The existing app had no shared state mechanism for values that need to be available across pages.
+- Files changed:
+  - `src/App.jsx`
+  - `src/main.jsx`
+  - `src/pages/Start.jsx`
+  - `src/app/GameStateProvider.jsx`
+  - `src/styles.scss`
+  - `src/vibe/epics/EPIC-001/features.txt`
+  - `src/vibe/epics/EPIC-001/implementation.txt`
+  - `src/vibe/epics/EPIC-001/testing.txt`
+  - `src/vibe/epicsOverview.txt`
+- What was intentionally not changed:
+  - No persistence across refreshes was added.
+  - No scoring, player naming, or broader translation system was added.
+- Any assumptions made:
+  - Stored language as `en` or `ja` and difficulty as `easy`, `medium`, or `hard` for lightweight in-session use.
+- Any tradeoffs or follow-up tasks:
+  - Future features can read from the shared game state provider instead of introducing a second source of truth.
+
+Bug fix: BUG-002 - Hide iPad icon after language selection
+- What was implemented:
+  - Confirmed the shared app shell reads `selectedLanguage` from the shared game state.
+  - Confirmed the iPad access icon only renders before language selection begins.
+- Exact scope completed:
+  - The iPad icon now disappears after language selection and remains hidden for the rest of the in-session flow.
+- Existing components/hooks/utilities/styles considered:
+  - Considered the existing `App.jsx` shell logic and `GameStateProvider.jsx` shared state.
+- What was reused:
+  - Reused the existing shared state and route-aware shell added for Features 003 and 004.
+- What was newly created:
+  - No new files.
+- Why new code was needed where reuse was not possible:
+  - No additional app code was required beyond the existing shared-state implementation; this pass recorded and verified the bug fix in the epic workflow files.
+- Files changed:
+  - `src/vibe/epics/EPIC-001/bugs.txt`
+  - `src/vibe/epics/EPIC-001/implementation.txt`
+  - `src/vibe/epics/EPIC-001/testing.txt`
+  - `src/vibe/epicsOverview.txt`
+- What was intentionally not changed:
+  - No new UI, routing, or state architecture was added.
+- Any assumptions made:
+  - Interpreted “never be shown again” as within the current in-memory game session, matching the current non-persistent app state.
+- Any tradeoffs or follow-up tasks:
+  - If a future feature adds persistence across refreshes, this icon-hiding behavior should be carried into that persisted setup state as well.
+
+Bug fix: BUG-003 - Bilingual language question and answers
+- What was implemented:
+  - Updated the Start page language prompt to show both English and Japanese.
+  - Updated the language answer labels to `English` and `日本語`.
+  - Replaced mis-encoded Japanese strings in the Start page labels object.
+- Exact scope completed:
+  - The language-selection step now presents bilingual copy and correct language labels without changing the existing flow logic.
+- Existing components/hooks/utilities/styles considered:
+  - Considered the existing Start page labels object and shared game setup flow.
+- What was reused:
+  - Reused the existing Start page flow, shared state, and button UI.
+- What was newly created:
+  - No new files.
+- Why new code was needed where reuse was not possible:
+  - The existing flow worked, but the visible copy did not match the requested bilingual wording.
+- Files changed:
+  - `src/pages/Start.jsx`
+  - `src/vibe/epics/EPIC-001/bugs.txt`
+  - `src/vibe/epics/EPIC-001/implementation.txt`
+  - `src/vibe/epics/EPIC-001/testing.txt`
+  - `src/vibe/epicsOverview.txt`
+- What was intentionally not changed:
+  - No route, layout, or state behavior was changed.
+  - No translation system or persistence layer was added.
+- Any assumptions made:
+  - Interpreted the bug as applying to the initial language prompt and answer labels only.
+- Any tradeoffs or follow-up tasks:
+  - Future features can move these labels into a broader translation structure if the copy surface grows.
+
+Feature: Feature-005 - Remove Header Content and Separate iPad Icon
+- What was implemented:
+  - Removed all content from the old `app-shell__header` area by removing the header entirely.
+  - Removed the visible player navigation links from the shell.
+  - Moved the iPad access control into its own top-right shell control outside any header element.
+- Exact scope completed:
+  - `app-shell__header` is no longer used for layout content.
+  - The iPad icon remains subtle, routes to `/ipad`, and still hides after language selection.
+- Existing components/hooks/utilities/styles considered:
+  - Considered the existing `App.jsx` shell structure and `styles.scss` shell classes.
+- What was reused:
+  - Reused the existing route-aware shell and the existing iPad access behavior.
+- What was newly created:
+  - No new files.
+- Why new code was needed where reuse was not possible:
+  - The previous shell still contained title and nav content inside the header, which directly conflicted with the feature requirements.
+- Files changed:
+  - `src/App.jsx`
+  - `src/styles.scss`
+- What was intentionally not changed:
+  - No game flow logic was changed.
+  - No new navigation links were added.
+- Any assumptions made:
+  - Treated complete header removal as the preferred outcome because the feature explicitly allowed removing the element if no longer needed.
+- Any tradeoffs or follow-up tasks:
+  - Later features should continue using standalone shell controls instead of reintroducing header content.
+
+Feature: Feature-006 - Replace iPad Icon with Return to Start Button
+- What was implemented:
+  - Added a separate Return to Start control that appears once a language has been selected.
+  - Kept the iPad icon visible only before language selection.
+  - Localized the Return to Start button label based on the selected language.
+- Exact scope completed:
+  - Before language selection: iPad icon only.
+  - After language selection: Return to Start button only.
+  - The button routes to `/` and does not reset the current in-memory state.
+- Existing components/hooks/utilities/styles considered:
+  - Considered the existing shared game state in `GameStateProvider.jsx`.
+  - Considered the existing shell control location used by the iPad icon.
+- What was reused:
+  - Reused `selectedLanguage` from the existing shared state.
+  - Reused the shared shell control placement from Feature-005.
+- What was newly created:
+  - No new files.
+- Why new code was needed where reuse was not possible:
+  - The app needed a second shell control state after setup began, but the control placement could stay inside the existing shell component.
+- Files changed:
+  - `src/App.jsx`
+  - `src/styles.scss`
+  - `src/vibe/epics/EPIC-001/features.txt`
+  - `src/vibe/epics/EPIC-001/implementation.txt`
+  - `src/vibe/epics/EPIC-001/testing.txt`
+  - `src/vibe/epicsOverview.txt`
+- What was intentionally not changed:
+  - Returning to Start does not clear selected language or difficulty in this pass.
+  - No additional routing or reset logic was introduced.
+- Any assumptions made:
+  - Treated the Return to Start control as relevant on normal player-facing routes and hidden on the iPad route.
+- Any tradeoffs or follow-up tasks:
+  - If a future feature adds a full reset flow, the Return to Start button may become the place to trigger it.
+
+Bug fix: BUG-004 - Remove page eyebrow titles
+- What was implemented:
+  - Removed all `page-copy__eyebrow` elements from Start, Player, Score, and iPad.
+  - Removed the now-unused `.page-copy__eyebrow` style rule.
+- Exact scope completed:
+  - Current pages no longer show eyebrow title text above their main headings.
+- Existing components/hooks/utilities/styles considered:
+  - Considered the existing `page-copy` pattern and the shared `styles.scss` page copy styles.
+- What was reused:
+  - Reused the existing `page-copy` structure and main heading/content layout.
+- What was newly created:
+  - No new files.
+- Why new code was needed where reuse was not possible:
+  - The page-copy layout could stay in place, but the eyebrow layer needed to be removed entirely.
+- Files changed:
+  - `src/pages/Start.jsx`
+  - `src/pages/Player.jsx`
+  - `src/pages/Score.jsx`
+  - `src/pages/Ipad.jsx`
+  - `src/styles.scss`
+- What was intentionally not changed:
+  - No route or game-state behavior was changed as part of this bug.
+- Any assumptions made:
+  - Applied the bug to the current page set already using `page-copy__eyebrow`.
+- Any tradeoffs or follow-up tasks:
+  - Later features should avoid reintroducing eyebrow title copy unless explicitly requested.
+
+Bug fix: BUG-005 - Return to Start should restore the original Start state
+- What was implemented:
+  - Added `resetGameSetup` to the shared state provider.
+  - Updated the Return to Start control to clear selected language and difficulty before routing to `/`.
+- Exact scope completed:
+  - Returning to Start now shows the pre-language-selection Start view instead of resuming the in-progress setup flow.
+- Existing components/hooks/utilities/styles considered:
+  - Considered the existing `selectedLanguage` and `selectedDifficulty` state in `GameStateProvider.jsx`.
+  - Considered the existing Return to Start control in `App.jsx`.
+- What was reused:
+  - Reused the existing shared game state and shell control.
+- What was newly created:
+  - No new files.
+- Why new code was needed where reuse was not possible:
+  - The existing control already routed correctly, but the shared state needed an explicit reset action.
+- Files changed:
+  - `src/app/GameStateProvider.jsx`
+  - `src/App.jsx`
+  - `src/vibe/epics/EPIC-001/bugs.txt`
+  - `src/vibe/epics/EPIC-001/implementation.txt`
+  - `src/vibe/epics/EPIC-001/testing.txt`
+  - `src/vibe/epicsOverview.txt`
+- What was intentionally not changed:
+  - No additional reset side effects were added beyond language and difficulty.
+- Any assumptions made:
+  - Interpreted “original state” as clearing only the currently tracked setup state fields.
+- Any tradeoffs or follow-up tasks:
+  - If more setup state is added later, `resetGameSetup` should be extended to cover it.
+
+Feature: Feature-007 - Centered Layout Rules and Reusable Button Component
+- What was implemented:
+  - Added a shared `GameButton` component for the main game button pattern.
+  - Updated the Start page language and difficulty choices to use `GameButton`.
+  - Adjusted the shared shell and page styles so page content, headings, questions, and button groups center by default.
+- Exact scope completed:
+  - Start, Player, Score, and iPad now follow the centered layout rule within their existing shells.
+  - Button styling for the Start flow is now controlled from one reusable component/class.
+- Existing components/hooks/utilities/styles considered:
+  - Considered the existing shell structure in `src/App.jsx`.
+  - Considered the existing Start page button usage in `src/pages/Start.jsx`.
+  - Considered the shared page and button styles already present in `src/styles.scss`.
+- What was reused:
+  - Reused the existing route-aware app shell and shared page structure.
+  - Reused the existing Start page flow and shared game setup state.
+- What was newly created:
+  - `src/components/GameButton.jsx`
+- Why new code was needed where reuse was not possible:
+  - The existing button pattern was repeated directly in page markup and styles, so a small shared component was needed to centralize button presentation without changing game flow logic.
+- Files changed:
+  - `src/App.jsx`
+  - `src/components/GameButton.jsx`
+  - `src/pages/Start.jsx`
+  - `src/styles.scss`
+  - `src/vibe/epics/EPIC-001/features.txt`
+  - `src/vibe/epics/EPIC-001/implementation.txt`
+  - `src/vibe/epics/EPIC-001/testing.txt`
+  - `src/vibe/epicsOverview.txt`
+- What was intentionally not changed:
+  - No routes, page flow, or game-state behavior were changed beyond reusing the shared button for the existing Return to Start action.
+  - No new navigation links, desktop-specific layouts, or extra UI states were added.
+- Any assumptions made:
+  - Treated the existing top-right iPad icon as intentionally separate from the reusable main button pattern.
+- Any tradeoffs or follow-up tasks:
+  - If future features introduce more interactive controls, they can reuse `GameButton` before adding any second button pattern.
+
+Bug fix: BUG-006 - Return to Start should stay independent from the main game buttons
+- What was implemented:
+  - Switched the Return to Start control back to the standalone shell control pattern in `App.jsx`.
+  - Removed the now-unused return-button-specific style hook from `styles.scss`.
+- Exact scope completed:
+  - Return to Start no longer uses the shared `GameButton` component and now matches the shell-control styling approach used by the iPad icon.
+- Existing components/hooks/utilities/styles considered:
+  - Considered the shared `GameButton` component in `src/components/GameButton.jsx`.
+  - Considered the existing shell control pattern already used for the iPad icon in `src/App.jsx` and `src/styles.scss`.
+- What was reused:
+  - Reused the existing `app-shell__control` and `app-shell__control--button` shell control classes.
+- What was newly created:
+  - No new files.
+- Why new code was needed where reuse was not possible:
+  - Reusing `GameButton` for Return to Start blurred the distinction between the main game action buttons and the shell-level utility control.
+- Files changed:
+  - `src/App.jsx`
+  - `src/styles.scss`
+  - `src/vibe/epics/EPIC-001/bugs.txt`
+  - `src/vibe/epics/EPIC-001/implementation.txt`
+  - `src/vibe/epics/EPIC-001/testing.txt`
+  - `src/vibe/epicsOverview.txt`
+- What was intentionally not changed:
+  - The Start page language and difficulty buttons still use `GameButton`.
+  - No routing, reset logic, or layout behavior was changed beyond the Return to Start control styling/pattern.
+- Any assumptions made:
+  - Interpreted “follow the style of the ipad icon” as following the same standalone shell-control pattern rather than becoming a square icon.
+- Any tradeoffs or follow-up tasks:
+  - If more shell-level utility controls are added later, they should reuse the shell control pattern instead of the main game button component.

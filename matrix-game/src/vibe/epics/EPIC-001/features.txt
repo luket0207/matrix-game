@@ -159,3 +159,440 @@ Expected demo:
 - The README should explain the future deployment process clearly.
 - The app should still work locally after the GitHub Pages setup.
 - The deployed GitHub Pages site should not show a blank screen because of an incorrect base path.
+
+
+Feature-003 - Mobile-First Page Aesthetic Structure
+Status: done
+
+Set up the basic aesthetic structure of the pages.
+
+The game will be played entirely on mobile phones, so the layout only needs to be designed properly for mobile screens. Desktop support is not important for gameplay, but the app should still be usable during development on desktop.
+
+Important layout rule:
+
+- The normal player-facing pages should always behave like a mobile app.
+- On desktop, the app should display at mobile width and be centered on the screen.
+- Do not create a full desktop layout.
+- Do not add responsive desktop-specific layouts.
+- Keep the visual structure focused on mobile use.
+
+Pages affected:
+
+- Start
+- Player
+- Score
+
+These pages should use the mobile-width app shell.
+
+Suggested layout behavior:
+
+- The main app container should have a maximum mobile-style width.
+- On larger screens, this container should be centered horizontally.
+- The app should still fill the available height nicely.
+- Content should be easy to tap on a phone.
+- Buttons should be large enough for mobile use.
+- Spacing should be clean and simple.
+
+The iPad exception:
+
+The iPad page is different from the normal player-facing pages.
+
+- The iPad page is intended to be used on an iPad.
+- It can use a wider layout than the other pages.
+- It should not be restricted to the same narrow mobile width as the Start, Player, and Score pages.
+- The iPad page can have its own wider page shell or modifier class.
+
+Navigation changes:
+
+- Hide the normal visible navigation link to the iPad page.
+- Most players should not see or use the iPad page link.
+- The iPad page should only be accessible from a small icon in the top-right area of the app.
+- The icon should be subtle, because it is for a special circumstance.
+- The icon should route to /ipad when clicked.
+- Keep the normal player navigation simple.
+
+Requirements:
+
+- Create or update the shared layout structure for the app.
+- Add a mobile app shell for normal pages.
+- Add different layout handling for the iPad page.
+- Center the mobile shell on desktop screens.
+- Keep desktop behavior simple and only useful for development.
+- Add basic styling for:
+  - Page shell
+  - Page content area
+  - Mobile-width container
+  - iPad-width container
+  - Top-right iPad access icon
+  - Large mobile-friendly buttons
+- Do not add game logic in this feature.
+- Do not add language or difficulty selection logic in this feature.
+- Do not over-design the final UI yet.
+- The goal is only to create the aesthetic structure that future features will use.
+
+Expected demo:
+
+- On a mobile-sized screen, Start, Player, and Score should look like mobile pages.
+- On desktop, Start, Player, and Score should appear as a centered mobile-width app.
+- The iPad page should be wider than the other pages.
+- There should be no normal nav link to the iPad page.
+- The iPad page should be reachable by clicking a small icon in the top-right area.
+- The app should still route correctly between all existing pages.
+
+
+Feature-004 - Start Page Language and Difficulty Selection
+Status: done
+
+Implement the start page options that prepare the player for the game.
+
+The start page needs to collect two choices from the player:
+
+1. Language
+2. Difficulty
+
+This site will be bilingual and used in both English and Japanese.
+
+Language selection:
+
+When the user arrives on the Start page, the first question should ask which language they want to play the game in.
+
+The language options should be:
+
+- English
+- Japanese
+
+Requirements:
+
+- The language choice should be selected using buttons.
+- Do not use dropdowns.
+- Do not use radio buttons.
+- Pressing a language button should immediately submit that choice.
+- After the player chooses a language, move them to the next question.
+- The selected language should be stored somewhere accessible by the rest of the app.
+- The selected language should not change after it has been chosen during this game flow.
+- Once the language has been selected, remove or hide the iPad access icon from the Start page.
+- The iPad option should only be available before the normal player begins the game setup.
+
+Difficulty selection:
+
+After the player selects their language, ask what difficulty they want to play.
+
+The difficulty options should be:
+
+- Easy
+- Medium
+- Hard
+
+Requirements:
+
+- The difficulty choice should be selected using buttons.
+- Do not use dropdowns.
+- Do not use radio buttons.
+- Pressing a difficulty button should immediately submit that choice.
+- Once the difficulty has been selected, move the user to the Player page.
+- The selected difficulty should be stored somewhere accessible by the rest of the app.
+
+Flow requirements:
+
+- Start page opens.
+- User sees the language question first.
+- User selects English or Japanese by pressing a button.
+- The app saves the selected language.
+- The app moves to the difficulty question.
+- The iPad access icon is hidden after language selection.
+- User selects Easy, Medium, or Hard by pressing a button.
+- The app saves the selected difficulty.
+- The user is routed to /player.
+
+State requirements:
+
+- Add a simple app-level state structure for storing:
+  - selectedLanguage
+  - selectedDifficulty
+- Keep this state simple for now.
+- It only needs to work during the current session.
+- It does not need to survive a page refresh yet.
+- Do not build a full backend or persistence layer.
+- Do not add player name logic yet.
+- Do not add scoring logic yet.
+
+Bilingual text requirements:
+
+When English is selected, future visible game text should be able to use English labels.
+
+When Japanese is selected, future visible game text should be able to use Japanese labels.
+
+For this feature, include bilingual labels for the Start page flow.
+
+Suggested English text:
+
+Language question:
+Choose your language
+
+Language buttons:
+English
+Japanese
+
+Difficulty question:
+Choose your difficulty
+
+Difficulty buttons:
+Easy
+Medium
+Hard
+
+Suggested Japanese text:
+
+Language question:
+言語を選んでください
+
+Language buttons:
+English
+日本語
+
+Difficulty question:
+難易度を選んでください
+
+Difficulty buttons:
+かんたん
+ふつう
+むずかしい
+
+Implementation guidance:
+
+- Consider creating a simple game context or app state provider.
+- The context can store selectedLanguage and selectedDifficulty.
+- The Start page can update this context when buttons are clicked.
+- The Player page can later read from this same context.
+- Keep the implementation lightweight.
+- Do not overbuild a full translation system yet.
+- A simple labels object is enough for now.
+- Use react-router-dom navigation after the difficulty is selected.
+
+Expected demo:
+
+- Visiting / should show the language selection first.
+- Clicking English should store English and show the difficulty question in English.
+- Clicking Japanese should store Japanese and show the difficulty question in Japanese.
+- After choosing a language, the iPad icon should no longer be visible on the Start page.
+- Clicking Easy, Medium, or Hard should store the difficulty.
+- After selecting difficulty, the user should be routed to /player.
+- The selected language and difficulty should be available in shared app state.
+
+
+Feature-005 - Remove Header Content and Separate iPad Icon
+Status: done
+
+Remove everything currently inside app-shell__header and make sure it is not recreated later.
+
+The only exception is the iPad icon.
+
+The iPad icon should be removed from app-shell__header and made into its own separate element/component.
+
+Requirements:
+
+- Remove all content from app-shell__header.
+- Do not replace the header content with new navigation, titles, text, buttons, or decorative elements.
+- Do not use app-shell__header for layout content anymore.
+- If app-shell__header is no longer needed after this cleanup, remove the element entirely.
+- If the CSS for app-shell__header is no longer needed, remove the unused styling too.
+- Keep the iPad icon functionality.
+- Move the iPad icon out of app-shell__header.
+- The iPad icon should exist as its own separate element or component.
+- The iPad icon should still sit in the top-right area of the app.
+- The iPad icon should still link to /ipad.
+- The iPad icon should still be subtle and not part of the main player navigation.
+- The iPad icon should still disappear once the language choice has been made.
+- Do not add any new normal navigation links.
+- Do not bring back a visible header layout.
+- Do not add new game logic in this feature.
+
+Important rule:
+
+app-shell__header should not contain anything after this feature. The AI agent should not reintroduce header content in future work unless explicitly instructed by a later feature.
+
+Expected demo:
+
+- Start, Player, Score, and iPad pages should no longer show any header content from app-shell__header.
+- The iPad icon should still appear in the top-right area before the language choice is made.
+- Clicking the iPad icon should still navigate to /ipad.
+- After the user chooses a language, the iPad icon should disappear.
+- No normal nav links should be visible.
+- The mobile app shell should still layout correctly without the old header content.
+
+Feature-006 - Replace iPad Icon with Return to Start Button
+Status: done
+
+After the player chooses their language, replace the iPad access icon with a Return to Start button.
+
+The iPad icon should only be available before the player has chosen a language. Once the language has been selected, the iPad icon should disappear and should not come back during the current game flow.
+
+From that point onward, a Return to Start button should be shown instead.
+
+Requirements:
+
+- Before language selection:
+  - Show the iPad icon.
+  - Do not show the Return to Start button.
+
+- After language selection:
+  - Hide the iPad icon.
+  - Show the Return to Start button.
+
+- The Return to Start button should remain visible from then on.
+- The Return to Start button should be available on the relevant player-facing pages after setup has begun.
+- The Return to Start button should route the user back to the Start page.
+- The button should respect the selected language.
+- Do not put this button inside app-shell__header.
+- Do not recreate app-shell__header content.
+- Keep this button as its own separate element or component, similar to the separated iPad icon.
+- Do not add normal navigation links.
+- Do not add unrelated game logic.
+
+Language requirements:
+
+If selectedLanguage is English, the button text should be:
+
+Return to start
+
+If selectedLanguage is Japanese, the button text should be:
+
+スタートに戻る
+
+Behavior requirements:
+
+- The button should appear immediately after the language choice is made.
+- The button should still be visible after the player chooses a difficulty and moves to /player.
+- The button should still be visible on later player-facing pages that are part of the normal game flow.
+- Clicking the button should navigate to /.
+- For now, clicking Return to Start does not need to fully reset all game state unless that is already required by existing logic.
+- If returning to Start keeps the selected language, the Start page should continue to respect that language.
+- Do not bring the iPad icon back after clicking Return to Start, unless the selected language state has been deliberately cleared by a future feature.
+
+Implementation guidance:
+
+- Create a reusable component for this control if helpful.
+- It can live near the app shell but must not live inside app-shell__header.
+- Use the existing selectedLanguage state to decide:
+  - whether the iPad icon should show
+  - whether the Return to Start button should show
+  - which language the Return to Start label should use
+
+Expected demo:
+
+- On first visiting the Start page, the iPad icon is visible.
+- The Return to Start button is not visible before language selection.
+- After choosing English, the iPad icon disappears and a Return to start button appears.
+- After choosing Japanese, the iPad icon disappears and a スタートに戻る button appears.
+- After selecting difficulty and moving to /player, the Return to Start button is still visible.
+- Clicking the Return to Start button routes the user back to /.
+- app-shell__header remains empty or removed.
+
+
+```txt
+Feature-007 - Centered Layout Rules and Reusable Button Component
+Status: done
+
+Sort out the basic visual structure of the site and centralize the button styling.
+
+The general layout rule for this project is that text and elements should be centered on the page by default. This game is designed for mobile play, so the interface should feel simple, direct, and easy to tap.
+
+General alignment rule:
+
+- Text should be centered by default.
+- Page content should be centered by default.
+- Main elements should be centered horizontally.
+- Button groups should be centered.
+- Question text should be centered.
+- Page headings should be centered.
+- Do not left-align content unless a future feature specifically asks for it.
+
+Requirements:
+
+- Review the existing app shell and page layout styles.
+- Update the shared layout so normal page content is centered.
+- Make sure the Start, Player, and Score pages follow the centered layout rule.
+- Keep the mobile-width app shell behavior from earlier features.
+- On desktop, the mobile-width app should still be centered on the screen.
+- The iPad page can still use its wider layout, but its content should also follow the centered rule unless there is a clear reason not to.
+- Do not add desktop-specific layouts.
+- Do not reintroduce app-shell__header content.
+- Do not add normal navigation links.
+- Keep the iPad icon and Return to Start button behavior from previous features.
+
+Reusable button component:
+
+Create a reusable button component so that buttons can be edited from one central location.
+
+Requirements:
+
+- Create a reusable button component.
+- Use this button component for the Start page language buttons.
+- Use this button component for the Start page difficulty buttons.
+- Use this button component for the Return to Start button if appropriate.
+- Any future game buttons should be able to reuse this same component.
+- Button styling should be controlled centrally through this component and its SCSS/CSS.
+- Avoid repeating button classes and styling across multiple pages.
+- The button component should support normal click handling through props.
+- The button component should support button text/content through props or children.
+- Keep the component simple and lightweight.
+
+Suggested component name:
+
+GameButton.jsx
+
+Suggested location:
+
+src/components/GameButton.jsx
+
+Suggested usage:
+
+<GameButton onClick={handleClick}>
+  Button text
+</GameButton>
+
+Button styling requirements:
+
+- Buttons should be mobile-friendly.
+- Buttons should be large enough to tap comfortably.
+- Buttons should be centered by default.
+- Buttons should have consistent width, padding, spacing, border radius, and font size.
+- Buttons should have a clear pressed/hover/focus state.
+- Buttons should not be tiny desktop-style buttons.
+- Button groups should stack cleanly on mobile.
+- Do not use dropdowns for language or difficulty choices.
+
+Suggested structure:
+
+src/
+  components/
+    GameButton.jsx
+  pages/
+    Start.jsx
+    Ipad.jsx
+    Player.jsx
+    Score.jsx
+
+Implementation guidance:
+
+- If there are already repeated button styles, move them into the reusable component styling.
+- If using SCSS, create a central style for the button component.
+- Keep class names clear and reusable.
+- Avoid styling buttons directly inside each page unless it is page-specific layout only.
+- Keep business logic out of the button component.
+- The button component should only handle presentation and click behavior passed into it.
+
+Expected demo:
+
+- Text and main page elements are centered across the app.
+- The Start page language question and buttons are centered.
+- The Start page difficulty question and buttons are centered.
+- The Player and Score placeholder content is centered.
+- The iPad page content is centered while still being allowed to use a wider layout.
+- Language and difficulty buttons use the new reusable GameButton component.
+- Updating the GameButton component styling changes the buttons in all places where it is used.
+- The iPad icon still appears before language selection.
+- The iPad icon still disappears after language selection.
+- The Return to Start button still appears after language selection.
+- app-shell__header remains empty or removed.
+```

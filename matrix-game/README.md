@@ -4,6 +4,7 @@ This project is a lightweight React app built with Vite.
 
 ## Available Scripts
 
+- `npm start` starts the local development server.
 - `npm run dev` starts the local development server.
 - `npm run build` creates the production build in `dist/`.
 - `npm run preview` previews the production build locally.

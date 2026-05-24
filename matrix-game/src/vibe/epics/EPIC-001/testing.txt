@@ -37,3 +37,217 @@ Feature: Feature-002 - GitHub Pages Setup
   - Browser verification of the live GitHub Pages URL after Pages finishes publishing.
 - Test status:
   - passed
+
+Bug fix: BUG-001 - Local site start path
+- Manual test steps:
+  1. Run `npm start`.
+  2. Wait for the Vite development server to start.
+  3. Open the local URL shown by Vite in a browser.
+- Expected result for each step:
+  1. The `start` script runs without falling back to the old CRA/Webpack startup path.
+  2. The dev server stays running and serves the app.
+  3. The app loads instead of showing the Html Webpack Plugin error.
+- Automated tests completed where relevant:
+  - `npm run build`
+  - `npm start -- --host 127.0.0.1` was launched successfully as a long-running dev-server command and timed out only because the process remains open.
+- Automated tests still needed to fully prove behavior:
+  - Open the dev server URL in a browser during a local manual test session.
+- Test status:
+  - passed
+
+Feature: Feature-003 - Mobile-First Page Aesthetic Structure
+- Manual test steps:
+  1. Run `npm start`.
+  2. Open `/`, `/player`, and `/score` on a desktop-width browser.
+  3. Confirm those pages appear as centered mobile-width shells instead of stretching full-width.
+  4. Open `/ipad` and confirm it uses a visibly wider shell than the other pages.
+  5. Confirm the main nav does not contain a normal visible iPad link.
+  6. Confirm the iPad route can still be opened by the small top-right access icon before language selection.
+- Expected result for each step:
+  1. The Vite dev server starts without errors.
+  2. The normal player-facing routes render in the shared shell.
+  3. The shell stays narrow and centered on desktop screens.
+  4. The iPad route uses a wider layout.
+  5. Only Start, Player, and Score appear in the visible nav.
+  6. The icon routes to `/ipad`.
+- Automated tests completed where relevant:
+  - `npm run build`
+- Automated tests still needed to fully prove behavior:
+  - Manual browser confirmation of the shell widths and icon placement.
+- Test status:
+  - passed
+
+Feature: Feature-004 - Start Page Language and Difficulty Selection
+- Manual test steps:
+  1. Visit `/`.
+  2. Confirm the first question asks for language selection.
+  3. Click `English` and confirm the next question asks for difficulty in English.
+  4. Return to `/` and repeat with `Japanese`, confirming the difficulty question appears in Japanese.
+  5. Confirm the iPad icon disappears after a language has been selected.
+  6. Click any difficulty option and confirm the app routes to `/player`.
+- Expected result for each step:
+  1. The Start page loads.
+  2. Language buttons are shown first.
+  3. The selected language is stored and the flow advances immediately.
+  4. Japanese labels are shown when Japanese is selected.
+  5. The iPad access icon is hidden once the setup flow has started.
+  6. The selected difficulty is stored and the user is routed to the Player page.
+- Automated tests completed where relevant:
+  - `npm run build`
+- Automated tests still needed to fully prove behavior:
+  - Manual browser verification that the route transition and button flow behave correctly during interaction.
+- Test status:
+  - passed
+
+Bug fix: BUG-002 - Hide iPad icon after language selection
+- Manual test steps:
+  1. Visit `/`.
+  2. Confirm the iPad icon is visible before any language is selected.
+  3. Click `English` or `Japanese`.
+  4. Confirm the icon disappears immediately.
+  5. Navigate to another normal page and return to `/`.
+- Expected result for each step:
+  1. The Start page loads.
+  2. The special iPad access icon is available before setup begins.
+  3. The language choice is saved in shared state.
+  4. The icon is no longer visible.
+  5. The icon remains hidden for the rest of the current in-session flow.
+- Automated tests completed where relevant:
+  - `npm run build`
+- Automated tests still needed to fully prove behavior:
+  - Manual browser verification of the icon visibility change during interaction.
+- Test status:
+  - passed
+
+Bug fix: BUG-003 - Bilingual language question and answers
+- Manual test steps:
+  1. Visit `/`.
+  2. Confirm the first question reads `Choose your language / 言語を選んでください`.
+  3. Confirm the two language buttons read `English` and `日本語`.
+  4. Click `日本語` and confirm the next screen uses readable Japanese text.
+- Expected result for each step:
+  1. The Start page loads.
+  2. The language prompt is bilingual.
+  3. The answers show English in English and Japanese in Japanese.
+  4. The difficulty step displays readable Japanese labels.
+- Automated tests completed where relevant:
+  - `npm run build`
+- Automated tests still needed to fully prove behavior:
+  - Manual browser verification of the visible bilingual copy.
+- Test status:
+  - passed
+
+Feature: Feature-005 - Remove Header Content and Separate iPad Icon
+- Manual test steps:
+  1. Visit `/`, `/player`, `/score`, and `/ipad`.
+  2. Confirm there is no header title or visible nav content on any page.
+  3. Confirm the iPad icon appears as a separate top-right control before language selection.
+  4. Click the iPad icon and confirm it routes to `/ipad`.
+- Expected result for each step:
+  1. Each route loads successfully.
+  2. The old shell header content is gone.
+  3. The icon is not part of a visible header or main nav.
+  4. The iPad page opens correctly.
+- Automated tests completed where relevant:
+  - `npm run build`
+- Automated tests still needed to fully prove behavior:
+  - Manual browser verification of the control placement and lack of header content.
+- Test status:
+  - passed
+
+Feature: Feature-006 - Replace iPad Icon with Return to Start Button
+- Manual test steps:
+  1. Visit `/` before language selection.
+  2. Confirm the iPad icon is visible and the Return to Start button is not.
+  3. Select a language.
+  4. Confirm the iPad icon disappears and a Return to Start button appears.
+  5. Continue to `/player` after selecting a difficulty and confirm the button is still visible.
+  6. Click Return to Start and confirm the app routes to `/`.
+- Expected result for each step:
+  1. The Start page loads.
+  2. Only the iPad icon is shown before setup begins.
+  3. The selected language is saved.
+  4. The control swaps immediately.
+  5. The button remains available during the normal player flow.
+  6. The user returns to the Start route without re-showing the iPad icon.
+- Automated tests completed where relevant:
+  - `npm run build`
+- Automated tests still needed to fully prove behavior:
+  - Manual browser verification of the control swap and language-specific label text.
+- Test status:
+  - passed
+
+Bug fix: BUG-004 - Remove page eyebrow titles
+- Manual test steps:
+  1. Visit `/`, `/player`, `/score`, and `/ipad`.
+  2. Confirm each page shows only its main heading and content, without eyebrow title text above it.
+- Expected result for each step:
+  1. Each route loads normally.
+  2. No `page-copy__eyebrow` titles are visible on the current page set.
+- Automated tests completed where relevant:
+  - `npm run build`
+- Automated tests still needed to fully prove behavior:
+  - Manual browser verification of the simplified page copy.
+- Test status:
+  - passed
+
+Bug fix: BUG-005 - Return to Start should restore the original Start state
+- Manual test steps:
+  1. Visit `/` and choose a language.
+  2. Confirm the Return to Start button appears.
+  3. Click Return to Start.
+  4. Confirm the Start page shows the original language question instead of the difficulty question.
+  5. Confirm the iPad icon is visible again after the reset.
+- Expected result for each step:
+  1. The setup flow begins.
+  2. The post-language control is available.
+  3. The app returns to `/`.
+  4. The setup flow is reset to its initial state.
+  5. The pre-language shell state is restored.
+- Automated tests completed where relevant:
+  - `npm run build`
+- Automated tests still needed to fully prove behavior:
+  - Manual browser verification of the reset flow during interaction.
+- Test status:
+  - passed
+
+Feature: Feature-007 - Centered Layout Rules and Reusable Button Component
+- Manual test steps:
+  1. Visit `/` on a desktop-width browser and confirm the main content sits centered inside the existing mobile shell.
+  2. Confirm the Start page question text and button group are centered.
+  3. Select a language and confirm the difficulty question and buttons remain centered.
+  4. Continue to `/player` and `/score` and confirm the placeholder content is centered.
+  5. Visit `/ipad` and confirm the page still uses the wider shell while keeping its content centered.
+  6. Confirm the language and difficulty controls share the same main button styling.
+- Expected result for each step:
+  1. The player-facing shell stays centered on desktop without switching to a desktop-specific layout.
+  2. The Start page content is centered by default.
+  3. The second setup step preserves the same centered layout.
+  4. Player and Score content follow the centered rule as well.
+  5. The iPad page remains wider than the mobile shell but keeps centered content.
+  6. Updating the shared button styling affects the reused Start flow buttons consistently.
+- Automated tests completed where relevant:
+  - `npm run build`
+- Automated tests still needed to fully prove behavior:
+  - Add a project `lint` script if linting is expected as part of the epic quality gate.
+  - Manual browser verification of spacing and centered alignment at mobile and desktop widths.
+- Test status:
+  - passed
+
+Bug fix: BUG-006 - Return to Start should stay independent from the main game buttons
+- Manual test steps:
+  1. Visit `/` and choose a language so the Return to Start control appears.
+  2. Confirm the Return to Start control appears in the top-right shell controls area rather than as a full-width main game button.
+  3. Compare it with the iPad icon state before language selection and confirm both use the same standalone shell-control style family.
+  4. Click Return to Start and confirm the app still returns to the initial Start state.
+- Expected result for each step:
+  1. The setup flow begins and the utility control becomes visible.
+  2. Return to Start remains visually independent from the language and difficulty buttons.
+  3. The control follows the same shell-level styling pattern as the iPad icon.
+  4. The reset behavior continues to work.
+- Automated tests completed where relevant:
+  - `npm run build`
+- Automated tests still needed to fully prove behavior:
+  - Manual browser verification of the shell-control styling difference from the main game buttons.
+- Test status:
+  - passed
