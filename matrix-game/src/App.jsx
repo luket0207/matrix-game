@@ -23,11 +23,15 @@ function App() {
   const { resetGameSetup, selectedLanguage } = useGameState();
   const shellMode = pageShellModes[location.pathname] ?? 'mobile';
   const isIpadRoute = location.pathname === '/ipad';
+  const isStartRoute = location.pathname === '/';
   const showIpadAccess = !isIpadRoute && selectedLanguage === null;
   const showReturnToStart = !isIpadRoute && selectedLanguage !== null;
-  const showShellControls = showIpadAccess || showReturnToStart || isIpadRoute;
+  const showRulesButton = isStartRoute;
+  const showShellControls =
+    showRulesButton || showIpadAccess || showReturnToStart || isIpadRoute;
   const returnToStartLabel =
     selectedLanguage === 'ja' ? returnToStartLabels.ja : returnToStartLabels.en;
+  const rulesLabel = selectedLanguage === 'ja' ? 'ルール' : 'Rules';
 
   useEffect(() => {
     if (!isIpadRoute) {
@@ -48,6 +52,14 @@ function App() {
               isIpadRoute ? ' app-shell__controls--split app-shell__controls--ipad' : ''
             }`}
           >
+            {showRulesButton ? (
+              <Link
+                className="app-shell__control app-shell__control--button app-shell__control--button-left"
+                to="/rules"
+              >
+                {rulesLabel}
+              </Link>
+            ) : null}
             {showIpadAccess ? (
               <Link
                 aria-label="Open iPad page"

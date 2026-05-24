@@ -1,0 +1,60 @@
+Feature: Feature-001 - Add Rules Button and Rules Page
+- Manual test steps:
+  1. Visit `/`.
+  2. Confirm the top controls row shows a `Rules` button on the left.
+  3. Click `Rules`.
+  4. Confirm the app routes to `/rules`.
+  5. Confirm the Rules page shows a simple heading and a button back to Start.
+  6. Click the back button and confirm the app returns to `/`.
+  7. Visit `/player` and `/ipad` and confirm the Rules button is not shown there.
+- Expected result for each step:
+  1. The Start page loads normally.
+  2. The Rules button appears without disturbing the existing right-side control behavior.
+  3. The click is accepted.
+  4. The Rules page loads.
+  5. The Rules page stays simple and centered.
+  6. The app routes back to the Start page.
+  7. The Rules control remains Start-page-specific.
+- Automated tests completed where relevant:
+  - `npm run build`
+- Automated tests still needed to fully prove behavior:
+  - `npm run lint` if a lint script is added to the project.
+  - Manual browser verification of the top-controls spacing on narrow mobile widths.
+- Test status:
+  - passed
+
+Feature: Feature-002 - Player Page Gameplay Loop
+- Manual test steps:
+  1. Visit `/`, choose a language, choose a difficulty, and confirm the app routes to `/player`.
+  2. Confirm the Player page shows a running score, `Start Turn`, `It's my turn`, and an `End Game` button at the bottom.
+  3. Click `Start Turn` and confirm a number matrix appears that matches the selected difficulty.
+  4. Tap a number and confirm an `Are you sure?` modal opens.
+  5. Click `No` and confirm the modal closes and the matrix remains available.
+  6. Tap a number again, click `Yes`, and confirm the matrix becomes disabled and `Reveal Answer` is shown.
+  7. Click `Reveal Answer` and confirm the selected guess appears upside down on the top half of the page and a second number matrix appears below it.
+  8. Tap the correct secret number and confirm the score updates and the page returns to the start-turn stage.
+  9. Repeat with an exact-match turn and confirm it adds 3 points.
+  10. Repeat with a same-row or same-column non-exact turn and confirm it adds 1 point.
+  11. Click `It's my turn`, select a number from 0 to 10, submit it, and confirm the score increases by `count * 3`.
+  12. Click `End Game` and confirm the app routes to `/score`.
+- Expected result for each step:
+  1. The selected setup routes into the Player page.
+  2. The Player page shows the requested controls and running score.
+  3. The matrix size matches easy 3x3, medium 4x4, or hard 5x5.
+  4. The confirmation modal opens.
+  5. The modal closes without locking the guess.
+  6. The confirmed guess stays selected, the matrix is non-interactive, and `Reveal Answer` is the main next action.
+  7. The reveal layout shows the upside-down guess above and the answer-entry matrix below.
+  8. The turn score is added and the page returns to the start stage.
+  9. Exact match awards 3 points.
+  10. Same row or same column without exact match awards 1 point.
+  11. The iPad-player route awards 3 points per selected correct guesser and then returns to the start stage.
+  12. The route changes to `/score`.
+- Automated tests completed where relevant:
+  - `npm run build`
+- Automated tests still needed to fully prove behavior:
+  - `npm run lint` if a lint script is added to the project.
+  - Manual browser verification of the upside-down reveal layout and bottom `End Game` button positioning on mobile widths.
+  - Automated component or utility tests for `calculateTurnScore` if the project adds a test setup later.
+- Test status:
+  - passed

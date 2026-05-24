@@ -45,3 +45,10 @@ EPIC-002
   - Fixed the reveal button rest-state styling so it stays visibly lighter than the primary secret-number action even before hover.
   - Prevented the same secret number from appearing on consecutive turns and added a centered Show QR Code control with a QR modal for the GitHub Pages join URL.
   - Restored the QR control and QR modal Japanese text after the latest encoding regression.
+
+EPIC-003
+- Status: in progress
+- Epic folder: `src/vibe/epics/EPIC-003/`
+- Latest notes:
+  - Added a Start-page Rules control, a new `/rules` route, and a minimal Rules page with a return path back to `/`.
+  - Replaced the placeholder Player page with the first player-facing gameplay loop, including score tracking, guess confirmation, reveal flow, iPad-player scoring, and a bottom End Game button.

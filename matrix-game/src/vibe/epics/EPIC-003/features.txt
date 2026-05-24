@@ -1,0 +1,546 @@
+```txt
+Feature-001 - Add Rules Button and Rules Page
+Status: done
+
+Start implementing the player-facing part of the game by adding a Rules route and a Rules button.
+
+This feature adds a new Rules button to the controls element at the top of the Start page. The Rules page can be mostly empty for now.
+
+Important:
+
+- This feature affects the normal player-facing pages.
+- Do not change the iPad gameplay loop in this feature.
+- Do not add the full rules content yet.
+- Do not show the Rules button on the Player page.
+
+New route:
+
+Add a new Rules page route.
+
+Route:
+
+/rules -> Rules
+
+Suggested page file:
+
+src/pages/Rules.jsx
+
+Rules page requirements:
+
+- Create a new Rules page.
+- The Rules page can be empty for now.
+- It should show a simple heading.
+- It should include a link or button back to the Start page.
+- The back link/button should route to /.
+- Keep the page centered like the rest of the player-facing pages.
+- Use the existing mobile-width page shell.
+- Do not add full rules text yet.
+
+Suggested Rules page text:
+
+Rules
+
+Back to Start
+
+Japanese text can be added later unless the existing app language state makes it simple to support now.
+
+Start page controls change:
+
+Add a Rules button to the controls element at the top of the Start page.
+
+Requirements:
+
+- The Rules button should sit on the left side of the controls element.
+- The Rules button should route to /rules.
+- Use react-router-dom navigation or Link/NavLink.
+- Use the reusable GameButton component if appropriate.
+- The button should be mobile-friendly.
+- The button should not interfere with the existing iPad icon / Return to Start button behavior.
+- The button should not be placed inside app-shell__header.
+- Do not recreate app-shell__header content.
+
+Button visibility requirements:
+
+- The Rules button should be visible on the Start page.
+- The Rules button should not be visible on the Player page.
+- The Rules button does not need to be visible on the Score page unless already part of a shared control area and easy to hide.
+- The Rules button should not appear on the iPad page.
+- Do not add normal navigation links.
+
+Suggested English button text:
+
+Rules
+
+Suggested Japanese button text if language has already been selected:
+
+ルール
+
+Implementation guidance:
+
+- If there is already a top controls component, update it to support page-specific buttons.
+- Keep the Rules button page-specific to the Start page.
+- Do not put it in a global nav that appears everywhere.
+- If the language has not been selected yet, use English text by default.
+- If selectedLanguage already exists, the Rules button can respect it.
+- Keep this simple and avoid overbuilding a full navigation system.
+
+Expected demo:
+
+- Visiting / shows the Start page.
+- The top controls area includes a Rules button on the left.
+- Clicking Rules routes to /rules.
+- The Rules page loads.
+- The Rules page includes a way to return to /.
+- The Rules button is not visible on /player.
+- The Rules button is not visible on /ipad.
+- app-shell__header remains empty or removed.
+```
+
+```txt
+Feature-002 - Player Page Gameplay Loop
+Status: done
+
+Implement the first version of the player-facing gameplay loop on the Player page.
+
+This player page game loop complements the iPad gameplay loop. The iPad controls the category, scales, secret number, and turn order. The Player page is where each player makes guesses, reveals their own answer, enters the correct secret number after it is revealed on the iPad, and scores points.
+
+This feature only affects the normal Player page and related player-facing state.
+
+Do not change the iPad gameplay loop unless absolutely required.
+
+Important:
+
+- The Player page should use the language selected on the Start page.
+- The Player page should use the difficulty selected on the Start page.
+- The matrix size on the Player page should match the selected difficulty.
+- The Player page does not need categories, scales, or secret number generation.
+- The Player page only needs a number matrix matching the difficulty.
+- Scores only need to exist during the current browser session for now.
+- Scores do not need to persist after refresh.
+- The Scores page does not need full implementation yet.
+
+Ever-present End Game button:
+
+Add an End Game button at the bottom of the Player page.
+
+Requirements:
+
+- The End Game button should always be visible on the Player page.
+- It should be positioned at the bottom of the player-facing mobile view.
+- It should route the user to /score.
+- Do not calculate final scores yet.
+- Do not build out the Score page yet.
+- Use the reusable GameButton component if appropriate.
+- The button should respect the selected language.
+
+Suggested English text:
+
+End Game
+
+Suggested Japanese text:
+
+ゲーム終了
+
+Player page state requirements:
+
+Add simple state for the Player page gameplay loop.
+
+Suggested state:
+
+- playerTurnStage
+- selectedGuess
+- correctSecretNumber
+- runningScore
+- isGuessConfirmOpen
+- isMatrixDisabled
+
+Suggested player turn stages:
+
+- "start"
+- "guessing"
+- "guessLocked"
+- "revealAnswer"
+- "ipadTurn"
+
+The exact names can vary, but the flow should remain clear.
+
+Difficulty matrix rules:
+
+Easy:
+
+- Matrix size: 3x3
+- Numbers: 1 to 9
+
+Medium:
+
+- Matrix size: 4x4
+- Numbers: 1 to 16
+
+Hard:
+
+- Matrix size: 5x5
+- Numbers: 1 to 25
+
+Matrix numbering:
+
+Numbers should be displayed in normal reading order from left to right, top to bottom.
+
+Example 3x3:
+
+1 2 3
+4 5 6
+7 8 9
+
+Example 4x4:
+
+1 2 3 4
+5 6 7 8
+9 10 11 12
+13 14 15 16
+
+Example 5x5:
+
+1 2 3 4 5
+6 7 8 9 10
+11 12 13 14 15
+16 17 18 19 20
+21 22 23 24 25
+
+Main player turn route:
+
+Step 1 - Start turn screen:
+
+Show two buttons:
+
+1. Start Turn
+2. It's my turn
+
+The Start Turn button is for normal guessing turns.
+
+The It's my turn button is for when this player is the person currently using the iPad.
+
+Both buttons should respect the selected language.
+
+Suggested English text:
+
+Start Turn
+
+It's my turn
+
+Suggested Japanese text:
+
+ターン開始
+
+自分の番です
+
+Requirements:
+
+- The Start Turn button starts a normal guessing turn.
+- The It's my turn button starts the iPad-player turn flow.
+- Use the reusable GameButton component.
+- Keep the buttons centered.
+- Keep the interface mobile-friendly.
+
+Step 2 - Normal guessing turn:
+
+When the player clicks Start Turn:
+
+- Display a matrix that matches the selected difficulty.
+- The player can tap one number in the matrix.
+- The selected number should be visibly highlighted before confirmation if possible.
+- After selecting a number, show an Are you sure modal.
+
+Requirements:
+
+- The matrix should only show numbers.
+- Do not show category labels.
+- Do not show scale labels.
+- Do not generate a secret number.
+- The player can choose any number in the matrix.
+- Tapping a number opens an Are you sure confirmation.
+- The confirmation should respect the selected language.
+- The confirmation should have Yes and No buttons.
+- Pressing No closes the modal and allows the player to choose again.
+- Pressing Yes locks in the player's guess.
+- Once the guess is locked, the matrix should be disabled.
+- After the guess is locked, only the Reveal Answer button should be enabled for the next action.
+
+Suggested English modal text:
+
+Are you sure?
+
+Yes
+
+No
+
+Suggested Japanese modal text:
+
+本当にいいですか？
+
+はい
+
+いいえ
+
+Step 3 - Guess locked state:
+
+After the player confirms their guess:
+
+- The selected guess is stored.
+- The matrix is disabled.
+- Show a Reveal Answer button.
+
+Suggested English text:
+
+Reveal Answer
+
+Suggested Japanese text:
+
+答えを見る
+
+Requirements:
+
+- The player should not be able to change their guess after confirming it.
+- The selected guess should remain stored.
+- The matrix should be visually disabled or non-interactive.
+- The Reveal Answer button should be the main available action.
+
+Step 4 - Reveal answer screen:
+
+When Reveal Answer is pressed:
+
+- Display the player's chosen answer upside down on the top half of the screen.
+- Display a second matrix on the bottom half of the screen.
+- The second matrix is used to input the correct secret number after it has been revealed on the iPad.
+
+Requirements:
+
+- The player's chosen answer should be large and clear.
+- The player's chosen answer should be upside down.
+- The upside-down display should be on the top half of the screen.
+- The correct secret number input matrix should be on the bottom half of the screen.
+- The correct secret number matrix should match the selected difficulty.
+- The player should tap the number that was revealed on the iPad.
+- After the correct secret number is tapped, calculate the score for that turn.
+- Then add the score to the player's running total.
+- Then return the player to the start stage of the player loop.
+
+Suggested layout:
+
+Top half:
+
+- Upside-down selected guess.
+
+Bottom half:
+
+- Matrix for entering the correct secret number.
+
+Scoring rules for normal guessing turn:
+
+Compare the player's selected guess with the correct secret number entered after the iPad reveal.
+
+- If the selected guess is exactly the correct secret number, award 3 points.
+- If the selected guess is in the same row or same column as the correct secret number, award 1 point.
+- Otherwise, award 0 points.
+
+Important scoring priority:
+
+- Exact match should score 3 points, not 1 point.
+- Same row or same column only scores 1 point if it is not an exact match.
+
+Row and column calculation:
+
+The row and column depend on the matrix size.
+
+For a matrix size of N:
+
+- row = Math.floor((number - 1) / N)
+- column = (number - 1) % N
+
+Examples for a 3x3 matrix:
+
+- 1 is row 0, column 0.
+- 2 is row 0, column 1.
+- 4 is row 1, column 0.
+- 9 is row 2, column 2.
+
+Requirements:
+
+- Calculate the score after the correct secret number is entered.
+- Add the score to runningScore.
+- Then clear the current turn state:
+  - selectedGuess
+  - correctSecretNumber
+  - modal state
+  - matrix disabled state
+- Return to the Start Turn stage.
+- The running score should remain.
+- Display the running score somewhere simple on the Player page for testing.
+
+Suggested English score text:
+
+Score: {runningScore}
+
+Suggested Japanese score text:
+
+スコア: {runningScore}
+
+Alternate iPad-player route:
+
+There is another route a player can take if it is their turn to use the iPad.
+
+Step 1 alternate:
+
+Instead of clicking Start Turn, the player clicks:
+
+It's my turn
+
+Suggested Japanese text:
+
+自分の番です
+
+When clicked, show the iPad-player turn screen.
+
+iPad-player turn screen:
+
+Display this text:
+
+Play your turn on the iPad
+
+Then beneath that:
+
+How many people correctly guessed the secret number?
+
+This should respect the selected language.
+
+Suggested English text:
+
+Play your turn on the iPad
+
+How many people correctly guessed the secret number?
+
+Suggested Japanese text:
+
+iPadで自分のターンをプレイしてください
+
+何人が秘密の番号を正しく当てましたか？
+
+Input requirement:
+
+- Provide a dropdown from 0 to 10.
+- This is one of the few places where a dropdown is allowed.
+- The dropdown records how many people correctly guessed the secret number.
+- Once the player selects a number, show a submit button or immediately submit if the implementation is clean.
+- For every person who correctly guessed the secret number, add 3 points to the player's running total.
+- After scoring, return the player to the Start Turn stage.
+
+Scoring rule for iPad-player turn:
+
+pointsAwarded = numberOfCorrectGuessers * 3
+
+Example:
+
+- If 0 people guessed correctly, add 0 points.
+- If 2 people guessed correctly, add 6 points.
+- If 10 people guessed correctly, add 30 points.
+
+Suggested submit button text:
+
+Submit
+
+送信
+
+Requirements:
+
+- The selected count should be from 0 to 10.
+- Add count * 3 to the running score.
+- Then return to the Start Turn stage.
+- Clear the iPad-player turn input after submitting.
+- Running score should remain visible for testing.
+
+Language requirements:
+
+The Player page should respect the selected language from the Start page.
+
+English labels:
+
+- Start Turn
+- It's my turn
+- Are you sure?
+- Yes
+- No
+- Reveal Answer
+- End Game
+- Play your turn on the iPad
+- How many people correctly guessed the secret number?
+- Submit
+- Score: {runningScore}
+
+Japanese labels:
+
+- ターン開始
+- 自分の番です
+- 本当にいいですか？
+- はい
+- いいえ
+- 答えを見る
+- ゲーム終了
+- iPadで自分のターンをプレイしてください
+- 何人が秘密の番号を正しく当てましたか？
+- 送信
+- スコア: {runningScore}
+
+Implementation guidance:
+
+- Create helper functions for matrix size and scoring.
+- Reuse matrix rendering logic if practical, but keep iPad and Player behavior separate.
+- The Player page matrix does not need axis labels or category labels.
+- The Player page matrix only needs numbers.
+- Keep the Player page state simple.
+- Do not create backend persistence.
+- Do not connect to the iPad page in real time.
+- The player manually inputs the revealed secret number after seeing it on the iPad.
+- Use the reusable GameButton component for buttons.
+- Use the existing modal style if one exists.
+- If no modal component exists, create a simple reusable confirmation modal.
+- Keep all user-facing elements centered unless the bottom End Game button needs specific positioning.
+
+Suggested components if useful:
+
+src/pages/Player.jsx
+src/components/GameButton.jsx
+src/components/NumberMatrix.jsx
+src/components/ConfirmModal.jsx
+
+Suggested helper functions:
+
+getMatrixSizeFromDifficulty(difficulty)
+getNumbersForMatrix(difficulty)
+getRowAndColumn(number, matrixSize)
+calculateTurnScore(selectedGuess, correctSecretNumber, matrixSize)
+
+Expected demo:
+
+- After choosing language and difficulty on the Start page, the user is routed to /player.
+- The Player page shows a running score.
+- The Player page shows Start Turn and It's my turn buttons.
+- The Player page has an End Game button at the bottom.
+- Clicking End Game routes to /score.
+- Clicking Start Turn displays a number matrix matching the selected difficulty.
+- Tapping a number opens an Are you sure modal.
+- Pressing No allows the player to choose again.
+- Pressing Yes locks the guess.
+- After the guess is locked, the matrix is disabled and Reveal Answer is shown.
+- Clicking Reveal Answer shows the player's selected number upside down on the top half of the screen.
+- A second matrix appears on the bottom half of the screen for entering the correct secret number.
+- Tapping the correct secret number calculates points:
+  - exact match = 3 points
+  - same row or same column = 1 point
+  - otherwise = 0 points
+- The score is added to the running total.
+- The page returns to the Start Turn stage.
+- Clicking It's my turn displays the iPad-player turn instructions.
+- The player can select 0 to 10 correct guessers.
+- Submitting adds 3 points per correct guesser to the running total.
+- The page returns to the Start Turn stage.
+- All visible text respects the language selected on the Start page.
+```

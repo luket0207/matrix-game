@@ -1,0 +1,87 @@
+Feature: Feature-001 - Add Rules Button and Rules Page
+- What was implemented:
+  - Added a new `/rules` route and a minimal `Rules` page with a heading and a button back to `/`.
+  - Added a page-specific `Rules` button to the left side of the Start page top controls.
+  - Kept the existing iPad icon / Return to Start behavior intact on the right side of the controls row.
+- Exact scope completed:
+  - Visiting `/` now shows a `Rules` button in the top controls area.
+  - Clicking `Rules` routes to `/rules`, and `/rules` includes a simple route back to `/`.
+- Existing components/hooks/utilities/styles considered:
+  - Considered the existing top shell controls in `App.jsx`.
+  - Considered the existing `GameButton` component and centered page-shell layout classes.
+- What was reused:
+  - Reused the existing `app-shell__control` button styling for the top Rules control.
+  - Reused `GameButton` for the Rules page back action.
+  - Reused the existing mobile-width player-facing shell and centered page layout.
+- What was newly created:
+  - `src/pages/Rules.jsx`
+- Why new code was needed where reuse was not possible:
+  - The app had no `/rules` route or Rules page yet, so one small new page component was required.
+- Files changed:
+  - `src/App.jsx`
+  - `src/routes.jsx`
+  - `src/pages/Rules.jsx`
+  - `src/vibe/epics/EPIC-003/features.txt`
+  - `src/vibe/epics/EPIC-003/implementation.txt`
+  - `src/vibe/epics/EPIC-003/testing.txt`
+  - `src/vibe/epicsOverview.txt`
+- What was intentionally not changed:
+  - No iPad gameplay logic was changed.
+  - No full rules content was added.
+  - No normal nav system or extra shared header content was introduced.
+- Any assumptions made:
+  - Used English by default when no language has been selected yet, and Japanese only when `selectedLanguage === 'ja'`.
+- Any tradeoffs or follow-up tasks:
+  - Full rules copy and any richer bilingual rules content should be added in a separate prompt.
+
+Feature: Feature-002 - Player Page Gameplay Loop
+- What was implemented:
+  - Replaced the placeholder `Player` page with the first player-facing gameplay loop.
+  - Added a running score display, `Start Turn`, `It's my turn`, and an always-visible bottom `End Game` button.
+  - Added number-matrix guessing with confirmation modal, locked-guess state, upside-down reveal stage, and score calculation from the correct secret number input.
+  - Added the alternate iPad-player scoring path with a 0 to 10 dropdown and submit action.
+  - Added small supporting pieces for this flow: a reusable `NumberMatrix` component, a simple `ConfirmModal`, and player scoring helpers.
+- Exact scope completed:
+  - The Player page now uses the selected language and difficulty from the existing shared setup state.
+  - Normal guessing turns and iPad-player turns both add to an in-memory running score for the current browser session.
+  - `End Game` routes to `/score` without building out final score handling yet.
+- Existing components/hooks/utilities/styles considered:
+  - Considered the existing shared setup state in `GameStateProvider.jsx`.
+  - Considered the existing `GameButton` component.
+  - Considered the existing matrix-size/number helpers already in `src/utils/matrixGame.js`.
+  - Considered the existing modal overlay styling pattern already used in the iPad flow.
+- What was reused:
+  - Reused `selectedLanguage` and `selectedDifficulty` from `GameStateProvider.jsx`.
+  - Reused `GameButton` for all Player page actions.
+  - Reused `getMatrixSize` and `getGridNumbers` from `src/utils/matrixGame.js`.
+  - Reused the existing modal overlay visual pattern as the basis for the new player confirmation modal styling.
+- What was newly created:
+  - `src/components/ConfirmModal.jsx`
+  - `src/components/NumberMatrix.jsx`
+  - `src/utils/playerGame.js`
+- Why new code was needed where reuse was not possible:
+  - The Player page previously had no gameplay state or number-matrix UI.
+  - The iPad matrix component includes category/axis/reveal behavior that does not fit the simpler player-facing number-only matrix.
+  - There was no existing generic confirmation modal component in the repo to reuse directly.
+- Files changed:
+  - `src/pages/Player.jsx`
+  - `src/components/ConfirmModal.jsx`
+  - `src/components/NumberMatrix.jsx`
+  - `src/utils/playerGame.js`
+  - `src/styles.scss`
+  - `src/vibe/epics/EPIC-003/features.txt`
+  - `src/vibe/epics/EPIC-003/implementation.txt`
+  - `src/vibe/epics/EPIC-003/testing.txt`
+  - `src/vibe/epicsOverview.txt`
+- What was intentionally not changed:
+  - No iPad gameplay loop behavior was changed.
+  - No realtime connection between Player and iPad was added.
+  - No persistence after refresh was added.
+  - No full Score page implementation was added.
+  - No PrimeReact dependency was introduced because this repo does not currently have PrimeReact installed and the requested flow works with the existing stack.
+- Any assumptions made:
+  - Assumed the Player page is normally reached through the Start flow, so if shared setup state is missing the page falls back to English and easy difficulty rather than adding a new redirect flow in this pass.
+  - Treated the correct-secret-number input on the reveal stage as immediate submit when the user taps a number.
+- Any tradeoffs or follow-up tasks:
+  - If later prompts need Player/iPad sync, player identities, or persisted scoreboards, the current local Player state will need to be extended in a future pass.
+  - If the repo later installs PrimeReact, the Player dropdown and confirmation modal could be aligned to a shared PrimeReact pattern then.
