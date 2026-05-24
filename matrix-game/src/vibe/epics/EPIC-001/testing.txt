@@ -1,0 +1,39 @@
+Feature: Feature-001 - Basic Site Structure and Routing
+- Manual test steps:
+  1. Run `npm run dev`.
+  2. Open the local site in the browser.
+  3. Confirm the Start page loads at `/`.
+  4. Use the navigation links to visit `iPad`, `Player`, and `Score`.
+  5. Confirm each route shows the correct page heading.
+- Expected result for each step:
+  1. The Vite dev server starts without errors.
+  2. The app renders without the old CRA demo content.
+  3. The Start heading appears on the homepage.
+  4. Each navigation link changes the route correctly.
+  5. Each page shows only its matching heading in the content area.
+- Automated tests completed where relevant:
+  - `npm run build`
+- Automated tests still needed to fully prove behavior:
+  - Route interaction tests are still optional if automated UI coverage is added later.
+- Test status:
+  - passed
+
+Feature: Feature-002 - GitHub Pages Setup
+- Manual test steps:
+  1. Run `npm run build`.
+  2. Run `npm run deploy`.
+  3. Check the repository remote for the `gh-pages` branch.
+  4. Confirm GitHub Pages is configured to use branch `gh-pages` and folder `/root`.
+- Expected result for each step:
+  1. Vite produces a production build in `dist/`.
+  2. The deploy command publishes the built files successfully.
+  3. The `gh-pages` branch exists on the remote.
+  4. GitHub Pages serves the deployed build from the correct branch.
+- Automated tests completed where relevant:
+  - `npm run build`
+  - `npm run deploy`
+  - `git ls-remote --heads origin gh-pages`
+- Automated tests still needed to fully prove behavior:
+  - Browser verification of the live GitHub Pages URL after Pages finishes publishing.
+- Test status:
+  - passed

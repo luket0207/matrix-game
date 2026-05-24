@@ -1,0 +1,7 @@
+EPIC-001
+- Status: in progress
+- Epic folder: `src/vibe/epics/EPIC-001/`
+- Latest notes:
+  - Replaced the CRA boilerplate with a Vite app shell and React Router page structure.
+  - Added Start, iPad, Player, and Score routes with minimal navigation.
+  - Configured GitHub Pages deployment, created the initial commit, and published `gh-pages`.

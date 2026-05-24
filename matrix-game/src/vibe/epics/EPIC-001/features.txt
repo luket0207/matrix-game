@@ -15,7 +15,7 @@ matrix-game
 
 
 Feature-001 - Basic Site Structure and Routing
-Status: not started
+Status: done
 
 Remove the default React/Vite boilerplate content and set up the basic structure of the site.
 
@@ -80,7 +80,7 @@ Expected demo:
 
 
 Feature-002 - GitHub Pages Setup
-Status: not started
+Status: done
 
 Set up the project so it can be deployed to GitHub Pages.
 

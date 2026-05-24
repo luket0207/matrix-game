@@ -1,0 +1,87 @@
+Feature: Feature-001 - Basic Site Structure and Routing
+- What was implemented:
+  - Replaced the Create React App boilerplate with a Vite entry setup.
+  - Added `App.jsx`, `main.jsx`, `routes.jsx`, and page components for Start, iPad, Player, and Score.
+  - Added simple navigation using `NavLink` so each route can be tested.
+  - Added minimal SCSS styling for the shared app shell.
+- Exact scope completed:
+  - Homepage route `/` renders Start.
+  - Added `/ipad`, `/player`, and `/score` routes.
+  - Removed the default CRA demo content and CRA-only source files.
+- Existing components/hooks/utilities/styles considered:
+  - Considered reusing the existing CRA `App.js`, `index.js`, and default CSS files.
+  - Considered the existing public assets and vibe workflow files.
+- What was reused:
+  - Reused the existing project folder, public assets, and vibe structure.
+- What was newly created:
+  - `src/App.jsx`
+  - `src/main.jsx`
+  - `src/routes.jsx`
+  - `src/pages/Start.jsx`
+  - `src/pages/Ipad.jsx`
+  - `src/pages/Player.jsx`
+  - `src/pages/Score.jsx`
+  - `src/styles.scss`
+  - `index.html`
+  - `vite.config.js`
+- Why new code was needed where reuse was not possible:
+  - The existing CRA entry files and demo UI did not match the Vite + React Router structure required by the feature.
+- Files changed:
+  - `package.json`
+  - `package-lock.json`
+  - `.gitignore`
+  - `README.md`
+  - `index.html`
+  - `vite.config.js`
+  - `src/App.jsx`
+  - `src/main.jsx`
+  - `src/routes.jsx`
+  - `src/pages/Start.jsx`
+  - `src/pages/Ipad.jsx`
+  - `src/pages/Player.jsx`
+  - `src/pages/Score.jsx`
+  - `src/styles.scss`
+  - Removed CRA-only files from `src/`
+- What was intentionally not changed:
+  - No game logic was added.
+  - No full UI design pass was added.
+  - No extra routes or data models were introduced.
+- Any assumptions made:
+  - Treated the nested `matrix-game/` folder as the app source directory while the git repository root remains one level above it.
+  - Used `BrowserRouter` with `basename={import.meta.env.BASE_URL}` so routing works with the configured GitHub Pages base path.
+- Any tradeoffs or follow-up tasks:
+  - GitHub repository settings still need to point Pages at the `gh-pages` branch and `/root` folder if that is not already configured.
+
+Feature: Feature-002 - GitHub Pages Setup
+- What was implemented:
+  - Installed `vite`, `@vitejs/plugin-react`, `react-router-dom`, `gh-pages`, and `sass`.
+  - Updated package scripts for `dev`, `build`, `preview`, `predeploy`, and `deploy`.
+  - Added `vite.config.js` with `base: "/matrix-game/"`.
+  - Updated `README.md` with the GitHub Pages deployment steps.
+  - Added `/dist` to `.gitignore`.
+  - Created the initial git commit and ran `npm run deploy`.
+  - Verified the remote `gh-pages` branch exists after deployment.
+- Exact scope completed:
+  - Deployment flow now builds with Vite and publishes `dist/` using `gh-pages`.
+- Existing components/hooks/utilities/styles considered:
+  - Considered keeping the CRA build and deployment flow.
+  - Considered the existing `package.json` scripts and ignore rules.
+- What was reused:
+  - Reused the existing repository, remote origin, and public asset folder.
+- What was newly created:
+  - Vite build configuration and deploy scripts.
+- Why new code was needed where reuse was not possible:
+  - The previous CRA configuration did not satisfy the requested Vite-based GitHub Pages deployment setup.
+- Files changed:
+  - `package.json`
+  - `package-lock.json`
+  - `.gitignore`
+  - `README.md`
+  - `vite.config.js`
+- What was intentionally not changed:
+  - No CI workflow or extra deployment automation was added.
+  - No unrelated repo restructuring was done.
+- Any assumptions made:
+  - Used the repository name `matrix-game` from the feature file as the required Vite base path.
+- Any tradeoffs or follow-up tasks:
+  - None inside the current feature scope.
