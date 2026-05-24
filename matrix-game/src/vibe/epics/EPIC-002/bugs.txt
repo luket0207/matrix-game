@@ -634,3 +634,37 @@ Attempted fixes:
 
 Final fix if solved:
 - `Reveal to Everyone` now has a lighter, less prominent rest state while `Show Secret Number` keeps the original stronger primary styling.
+
+
+BUG-027
+
+Status: fixed
+
+Again, the japanese translation has gone wrong. It's happened in the following locations around the QR code modal:
+
+Expected behavior:
+- The QR control button should show the correct Japanese text for `Show QR Code`.
+- The QR modal title should show the correct Japanese text for `Scan to join`.
+
+Actual behavior:
+- The Japanese QR control and modal-title strings were rendering as mojibake instead of readable Japanese.
+
+Suspected cause:
+- The Japanese QR strings in `App.jsx` and `QrCodeModal.jsx` had been saved with corrupted encoding.
+
+Attempted fixes:
+- Restored the Japanese QR control string in `App.jsx`.
+- Restored the Japanese QR modal title string in `QrCodeModal.jsx`.
+
+Final fix if solved:
+- The QR control and QR modal title now render with the correct Japanese text again.
+
+        <BilingualText
+            english="Show QR Code"
+            japanese="QRã‚³ãƒ¼ãƒ‰ã‚’è¡¨ç¤º"
+        />
+
+        <BilingualText
+            english="Scan to join"
+            japanese="å‚åŠ ã™ã‚‹ã«ã¯ã‚¹ã‚­ãƒ£ãƒ³ã—ã¦ãã ã•ã„"
+        />

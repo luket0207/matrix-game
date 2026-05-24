@@ -511,3 +511,70 @@ Bug fix: BUG-026 - Keep the reveal action visually lighter at rest
   - Manual browser verification of the final rest-state styling on the stacked matrix actions at iPad-like widths.
 - Test status:
   - passed
+
+Feature: Feature-007 - Prevent Same Secret Number Twice in a Row
+- Manual test steps:
+  1. Visit `/ipad`, complete setup, and start a gameplay turn.
+  2. Reveal the secret number and remember it.
+  3. End the turn and start the next turn.
+  4. Confirm the newly generated secret number is different from the previous turn's number.
+  5. Repeat across several turns and confirm a number can return later, just not immediately after itself.
+  6. Restart the iPad flow and confirm the first new turn can again generate any valid number.
+- Expected result for each step:
+  1. The iPad gameplay loop starts normally.
+  2. The current secret number is visible after reveal.
+  3. The next turn generates normally.
+  4. The next secret number is not equal to the last one.
+  5. The rule prevents only immediate repeats, not all future repeats.
+  6. Restart clears the previous-number restriction.
+- Automated tests completed where relevant:
+  - `npm run build`
+- Automated tests still needed to fully prove behavior:
+  - Add a project `lint` script if linting is expected as part of the epic quality gate.
+  - Manual browser verification across multiple difficulties and turn transitions.
+- Test status:
+  - passed
+
+Feature: Feature-008 - Add Show QR Code Control and Modal
+- Manual test steps:
+  1. Visit `/ipad`.
+  2. Confirm the shell controls row shows Return to Start on the left, Show QR Code in the middle, and Restart on the right.
+  3. Click Show QR Code.
+  4. Confirm a modal opens above the iPad page with a QR code, bilingual title, URL text, and an OK button.
+  5. Click OK and confirm the modal closes without leaving `/ipad`.
+  6. Reopen the modal during gameplay and confirm the game state remains unchanged after closing it.
+- Expected result for each step:
+  1. The iPad route loads successfully.
+  2. The three controls appear in the requested positions.
+  3. The QR modal opens.
+  4. The modal shows the correct destination URL and QR code content.
+  5. The modal closes cleanly and the route does not change.
+  6. Opening and closing the modal does not reset the current iPad setup/game state.
+- Automated tests completed where relevant:
+  - `npm run build`
+- Automated tests still needed to fully prove behavior:
+  - Add a project `lint` script if linting is expected as part of the epic quality gate.
+  - Manual browser verification of QR readability and control spacing at iPad-like widths.
+- Test status:
+  - passed
+
+Bug fix: BUG-027 - Restore the QR control and modal Japanese text
+- Manual test steps:
+  1. Visit `/ipad`.
+  2. Confirm the center shell control reads `Show QR Code` with `QRコードを表示` beneath it.
+  3. Click `Show QR Code`.
+  4. Confirm the modal title reads `Scan to join` with `参加するにはスキャンしてください` beneath it.
+  5. Click `OK` and confirm the modal closes without leaving `/ipad`.
+- Expected result for each step:
+  1. The iPad route loads successfully.
+  2. The QR control shows readable Japanese text instead of mojibake.
+  3. The QR modal opens normally.
+  4. The modal title shows readable Japanese text instead of mojibake.
+  5. The modal closes cleanly and the route does not change.
+- Automated tests completed where relevant:
+  - `npm run build`
+- Automated tests still needed to fully prove behavior:
+  - Add a project `lint` script if linting is expected as part of the epic quality gate.
+  - Manual browser verification of the QR-related Japanese copy in the browser at iPad-like widths.
+- Test status:
+  - passed

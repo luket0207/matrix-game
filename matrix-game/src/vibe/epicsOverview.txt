@@ -43,3 +43,5 @@ EPIC-002
   - Centered the wider iPad details copy block, tightened the matrix axis spacing, moved reveal confirmation into a modal overlay, and made the whole board animate away before the revealed number appears.
   - Restored the Japanese matrix button text, stacked the matrix actions with a softer secondary reveal button, and enlarged/recentered the revealed number.
   - Fixed the reveal button rest-state styling so it stays visibly lighter than the primary secret-number action even before hover.
+  - Prevented the same secret number from appearing on consecutive turns and added a centered Show QR Code control with a QR modal for the GitHub Pages join URL.
+  - Restored the QR control and QR modal Japanese text after the latest encoding regression.

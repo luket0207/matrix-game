@@ -43,10 +43,18 @@ export function pickTwoDifferentScales(category) {
   };
 }
 
-export function createTurnData(categories, difficulty) {
+export function getRandomSecretNumber(difficulty, previousSecretNumber) {
+  const availableNumbers = getGridNumbers(difficulty).filter(
+    (number) => number !== previousSecretNumber,
+  );
+
+  return availableNumbers[getRandomInt(availableNumbers.length)];
+}
+
+export function createTurnData(categories, difficulty, previousSecretNumber) {
   const category = pickRandomCategory(categories);
   const { xAxisScale, yAxisScale } = pickTwoDifferentScales(category);
-  const secretNumber = getRandomInt(getMaxSecretNumber(difficulty)) + 1;
+  const secretNumber = getRandomSecretNumber(difficulty, previousSecretNumber);
 
   return {
     category,

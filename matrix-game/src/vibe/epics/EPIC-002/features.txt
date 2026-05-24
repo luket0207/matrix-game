@@ -1284,3 +1284,252 @@ Expected demo:
 - Restart resets the iPad page back to difficulty selection.
 - Return to Start routes to /.
 ```
+
+```txt
+Feature-007 - Prevent Same Secret Number Twice in a Row
+Status: done
+
+Add a small piece of gameplay logic to prevent the same secret number from being selected two turns in a row.
+
+This feature only affects the iPad gameplay loop.
+
+Current behavior:
+
+- Each turn generates a random secret number based on the selected difficulty.
+- Easy generates 1 to 9.
+- Medium generates 1 to 16.
+- Hard generates 1 to 25.
+
+New behavior:
+
+- The same secret number should not be selected on two consecutive turns.
+- The game should remember the previous turn's secret number.
+- When generating the next turn's secret number, exclude the previous secret number from the available options.
+- After the new secret number is selected, update the stored previous secret number.
+
+Example:
+
+If the previous turn's secret number was 7:
+
+- The next turn can generate any valid number except 7.
+- After the next turn generates 12, the following turn can generate any valid number except 12.
+- 7 becomes valid again after one turn has passed.
+
+Requirements:
+
+- Add state to track the previous secret number.
+- Use this value when generating the next random secret number.
+- Do not allow the generated secret number to equal the previous turn's secret number.
+- This rule should apply across all difficulties.
+- This rule should apply across all players.
+- This rule should apply even when the category and scales are different.
+- Do not change the matrix size rules.
+- Do not change the visible matrix numbering.
+- Do not change the category or scale selection logic.
+- Do not change turn order logic.
+
+Difficulty rules:
+
+Easy:
+
+- Valid numbers are 1 to 9.
+- Exclude the previous secret number if it exists.
+
+Medium:
+
+- Valid numbers are 1 to 16.
+- Exclude the previous secret number if it exists.
+
+Hard:
+
+- Valid numbers are 1 to 25.
+- Exclude the previous secret number if it exists.
+
+Initial turn behavior:
+
+- On the first turn, there is no previous secret number.
+- Any valid number can be selected.
+
+Restart behavior:
+
+- Restarting the game should clear the previous secret number.
+- After restart, the first new turn can again select any valid number.
+
+Suggested state:
+
+previousSecretNumber
+
+Suggested helper behavior:
+
+- Create or update a helper function for generating the secret number.
+- The helper should accept:
+  - difficulty
+  - previousSecretNumber
+- The helper should return a random valid number that is not equal to previousSecretNumber.
+
+Suggested helper shape:
+
+getRandomSecretNumber(difficulty, previousSecretNumber)
+
+Implementation guidance:
+
+- Keep this logic simple.
+- Do not use recursion if a simple filtered array is clearer.
+- Generate an array of possible numbers.
+- Remove previousSecretNumber from the array if it exists.
+- Pick randomly from the remaining numbers.
+- Store the selected number as the current turn's secret number.
+- When the turn has been generated, update previousSecretNumber appropriately.
+
+Expected demo:
+
+- Start a game on the iPad page.
+- Complete a turn and reveal the secret number.
+- End the turn.
+- Start the next turn.
+- The newly generated secret number is different from the previous turn's secret number.
+- Repeat several turns to confirm the same number can appear again later, just not immediately after itself.
+- Restarting the game clears the previous secret number rule.
+```
+
+```txt
+Feature-008 - Add Show QR Code Control and Modal
+Status: done
+
+Add a Show QR Code button to the iPad page controls section.
+
+This button should appear in the middle of the existing iPad controls section.
+
+Current iPad controls section:
+
+- Return to Start button on the left.
+- Restart button on the right.
+
+New controls layout:
+
+- Return to Start button on the left.
+- Show QR Code button in the middle.
+- Restart button on the right.
+
+Button text:
+
+Show QR Code
+
+Because the iPad page uses bilingual controls in places, use bilingual text if consistent with the current iPad controls style:
+
+Show QR Code
+QRコードを表示
+
+Requirements:
+
+- Add a Show QR Code button to the same controls element as the Return to Start and Restart buttons.
+- The Show QR Code button should be centered in the controls area.
+- Keep Return to Start left aligned.
+- Keep Restart right aligned.
+- The button should be easy to tap on iPad.
+- Use the reusable GameButton component if appropriate.
+- Do not add this button to app-shell__header.
+- Do not recreate app-shell__header content.
+
+QR code behavior:
+
+- When Show QR Code is clicked, display a modal.
+- The modal should contain a QR code for this URL:
+
+  https://luket0207.github.io/matrix-game/
+
+- The modal should have an OK button to close it.
+- Clicking OK should close the modal.
+- The modal should not navigate away from the iPad page.
+- The modal should sit above the current iPad page content.
+- The modal should be readable and usable on iPad.
+
+Modal content:
+
+The modal should include:
+
+- A title.
+- The QR code.
+- The URL as text underneath the QR code if useful.
+- An OK button.
+
+Suggested title:
+
+Scan to join
+参加するにはスキャンしてください
+
+Suggested OK button text:
+
+OK
+
+QR code implementation guidance:
+
+- Use a lightweight QR code package if needed.
+- A suitable package would be qrcode.react if not already installed.
+- Do not build a QR code generator manually.
+- If adding a dependency, update package.json properly.
+- Keep the QR code component isolated so it is easy to replace later.
+
+Suggested install:
+
+npm install qrcode.react
+
+Suggested usage idea:
+
+import { QRCodeSVG } from "qrcode.react";
+
+<QRCodeSVG value="https://luket0207.github.io/matrix-game/" size={240} />
+
+Modal implementation guidance:
+
+- If a reusable modal component already exists, use it.
+- If not, create a simple local modal component for this feature.
+- Keep the modal simple.
+- The modal should have:
+  - Overlay
+  - Modal panel
+  - QR code content
+  - OK button
+- Clicking OK should close the modal.
+- Optionally, clicking the overlay can also close the modal, but this is not required.
+- Add keyboard accessibility if simple:
+  - Escape closes modal.
+  - Focus should not become confusing.
+
+Suggested state:
+
+isQrModalOpen
+
+Suggested component structure:
+
+src/components/IpadGameplayControls.jsx
+src/components/QrCodeModal.jsx
+
+Alternative if not splitting yet:
+
+- Keep the modal inside Ipad.jsx for now.
+- Split it later only if the file becomes hard to manage.
+
+Visibility requirements:
+
+- The Show QR Code button should be available wherever the iPad controls section is currently shown.
+- If the controls section only appears during gameplay, add the QR button there.
+- If the controls section exists across more iPad stages, the QR button may appear there too, as long as it does not interfere with setup.
+- Do not show the QR button on the normal player-facing Start, Player, or Score pages.
+
+Expected demo:
+
+- On the iPad page, the controls section shows:
+  - Return to Start on the left.
+  - Show QR Code in the middle.
+  - Restart on the right.
+- Clicking Show QR Code opens a modal.
+- The modal displays a QR code for:
+
+  https://luket0207.github.io/matrix-game/
+
+- The modal has an OK button.
+- Clicking OK closes the modal.
+- The iPad gameplay state remains unchanged after opening and closing the modal.
+- Return to Start and Restart still work exactly as before.
+```

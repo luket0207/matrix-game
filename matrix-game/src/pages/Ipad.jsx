@@ -44,6 +44,7 @@ function Ipad({ restartSignal }) {
   const [currentXAxisScale, setCurrentXAxisScale] = useState(null);
   const [currentYAxisScale, setCurrentYAxisScale] = useState(null);
   const [secretNumber, setSecretNumber] = useState(null);
+  const [previousSecretNumber, setPreviousSecretNumber] = useState(null);
   const [isSecretNumberHeld, setIsSecretNumberHeld] = useState(false);
   const [isConfirmRevealOpen, setIsConfirmRevealOpen] = useState(false);
   const [isRevealAnimating, setIsRevealAnimating] = useState(false);
@@ -107,6 +108,7 @@ function Ipad({ restartSignal }) {
     setSelectedPlayerCount(null);
     setPlayers([]);
     setCurrentPlayerIndex(null);
+    setPreviousSecretNumber(null);
     setTurnStage('passDevice');
     setIpadStage('selectDifficulty');
   }
@@ -148,17 +150,23 @@ function Ipad({ restartSignal }) {
     const firstPlayerIndex = getRandomInt(players.length);
     clearTurnData();
     setCurrentPlayerIndex(firstPlayerIndex);
+    setPreviousSecretNumber(null);
     setTurnStage('passDevice');
     setIpadStage('gameplay');
   }
 
   function handleBeginTurn() {
-    const turnData = createTurnData(matrixCategories, selectedDifficulty);
+    const turnData = createTurnData(
+      matrixCategories,
+      selectedDifficulty,
+      previousSecretNumber,
+    );
 
     setCurrentCategory(turnData.category);
     setCurrentXAxisScale(turnData.xAxisScale);
     setCurrentYAxisScale(turnData.yAxisScale);
     setSecretNumber(turnData.secretNumber);
+    setPreviousSecretNumber(turnData.secretNumber);
     setIsSecretNumberHeld(false);
     setIsConfirmRevealOpen(false);
     setIsRevealAnimating(false);

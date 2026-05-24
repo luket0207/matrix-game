@@ -708,3 +708,99 @@ Bug fix: BUG-026 - Keep the reveal action visually lighter at rest
   - Interpreted this bug as a rest-state styling correction only, since the hover-state difference had already been added in the previous pass.
 - Any tradeoffs or follow-up tasks:
   - If later prompts want a stronger visual distinction between primary and secondary actions across the app, that should be handled as a broader shared-button styling task.
+
+Feature: Feature-007 - Prevent Same Secret Number Twice in a Row
+- What was implemented:
+  - Added `previousSecretNumber` state to the iPad gameplay flow.
+  - Added `getRandomSecretNumber` in `src/utils/matrixGame.js` and updated `createTurnData` to exclude the previous turn's secret number.
+  - Cleared `previousSecretNumber` on iPad restart and at the start of a fresh game.
+- Exact scope completed:
+  - Consecutive turns can no longer generate the same secret number immediately, across all players and all difficulties.
+- Existing components/hooks/utilities/styles considered:
+  - Considered the existing `createTurnData` helper and current local iPad gameplay state in `Ipad.jsx`.
+- What was reused:
+  - Reused the existing turn-generation flow and matrix helper structure.
+- What was newly created:
+  - No new files.
+- Why new code was needed where reuse was not possible:
+  - The previous turn-generation helper did not accept any prior-number context, so it needed one small helper extension and one new local state value.
+- Files changed:
+  - `src/utils/matrixGame.js`
+  - `src/pages/Ipad.jsx`
+  - `src/vibe/epics/EPIC-002/features.txt`
+  - `src/vibe/epics/EPIC-002/implementation.txt`
+  - `src/vibe/epics/EPIC-002/testing.txt`
+  - `src/vibe/epicsOverview.txt`
+- What was intentionally not changed:
+  - No category/scale selection logic, matrix size logic, turn-order logic, or reveal flow was changed.
+- Any assumptions made:
+  - Treated “previous turn” as the last generated secret number across the entire iPad game flow, regardless of player.
+- Any tradeoffs or follow-up tasks:
+  - If later prompts need broader anti-repeat rules, that should be handled separately from this immediate-repeat-only pass.
+
+Feature: Feature-008 - Add Show QR Code Control and Modal
+- What was implemented:
+  - Added a centered `Show QR Code` control to the existing iPad shell controls row in `App.jsx`.
+  - Added a local `QrCodeModal.jsx` component that renders a QR code, bilingual title, URL text, and an OK button.
+  - Added QR modal state at the app-shell level and closed the modal automatically when leaving `/ipad`.
+  - Installed `qrcode.react` and used `QRCodeSVG` for the QR rendering.
+- Exact scope completed:
+  - On `/ipad`, the shell controls now show Return to Start on the left, Show QR Code in the middle, and Restart on the right.
+  - Clicking Show QR Code opens a modal for `https://luket0207.github.io/matrix-game/` and clicking OK closes it without affecting the game state.
+- Existing components/hooks/utilities/styles considered:
+  - Considered the existing iPad shell controls in `App.jsx`.
+  - Considered the existing `GameButton` and `BilingualText` shared components.
+  - Considered whether a reusable modal or PrimeReact dialog already existed, but this repo still does not currently include PrimeReact as an installed dependency.
+- What was reused:
+  - Reused `BilingualText` for the control and modal title copy.
+  - Reused `GameButton` for the modal OK action.
+  - Reused the existing iPad shell-controls placement pattern.
+- What was newly created:
+  - `src/components/QrCodeModal.jsx`
+- Why new code was needed where reuse was not possible:
+  - The QR feature required a modal and QR renderer, and there was no existing in-repo modal component or installed QR library available before this pass.
+- Files changed:
+  - `package.json`
+  - `package-lock.json`
+  - `src/App.jsx`
+  - `src/components/QrCodeModal.jsx`
+  - `src/styles.scss`
+  - `src/vibe/epics/EPIC-002/features.txt`
+  - `src/vibe/epics/EPIC-002/implementation.txt`
+  - `src/vibe/epics/EPIC-002/testing.txt`
+  - `src/vibe/epicsOverview.txt`
+- What was intentionally not changed:
+  - No iPad gameplay logic, turn order, restart behavior, or normal Start/Player/Score behavior was changed beyond adding the QR control/modal.
+- Any assumptions made:
+  - Kept the QR control visible wherever the current iPad shell controls row is visible, which in the current app means across all `/ipad` stages.
+  - Used a local modal implementation because no installed dialog system exists in this repo today.
+- Any tradeoffs or follow-up tasks:
+  - If the project later adds a shared modal system, this QR modal could be aligned to that pattern.
+
+Bug fix: BUG-027 - Restore the QR control and modal Japanese text
+- What was implemented:
+  - Restored the Japanese `Show QR Code` label in `App.jsx`.
+  - Restored the Japanese `Scan to join` title in `QrCodeModal.jsx`.
+- Exact scope completed:
+  - The QR shell control and QR modal title now display the intended Japanese text again.
+- Existing components/hooks/utilities/styles considered:
+  - Considered the existing `BilingualText` component and the current QR modal structure.
+- What was reused:
+  - Reused the existing `BilingualText` rendering path and QR modal component structure.
+- What was newly created:
+  - No new files.
+- Why new code was needed where reuse was not possible:
+  - The issue was in the saved string values themselves, so the smallest fix was to replace those corrupted literals directly in the existing components.
+- Files changed:
+  - `src/App.jsx`
+  - `src/components/QrCodeModal.jsx`
+  - `src/vibe/epics/EPIC-002/bugs.txt`
+  - `src/vibe/epics/EPIC-002/implementation.txt`
+  - `src/vibe/epics/EPIC-002/testing.txt`
+  - `src/vibe/epicsOverview.txt`
+- What was intentionally not changed:
+  - No QR layout, modal behavior, URL, gameplay logic, or non-QR bilingual copy was changed.
+- Any assumptions made:
+  - Treated this bug as limited to the two QR-related Japanese strings listed in `bugs.txt`.
+- Any tradeoffs or follow-up tasks:
+  - If more Japanese copy regressions appear later, they should be handled as separate encoding/copy fixes rather than broad text rewrites.

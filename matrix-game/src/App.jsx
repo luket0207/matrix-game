@@ -1,12 +1,15 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import BilingualText from './components/BilingualText.jsx';
+import QrCodeModal from './components/QrCodeModal.jsx';
 import { useGameState } from './app/GameStateProvider.jsx';
 import AppRoutes from './routes.jsx';
 
 const pageShellModes = {
   '/ipad': 'wide',
 };
+
+const joinUrl = 'https://luket0207.github.io/matrix-game/';
 
 const returnToStartLabels = {
   en: 'Return to start',
@@ -16,6 +19,7 @@ const returnToStartLabels = {
 function App() {
   const location = useLocation();
   const [iPadRestartSignal, setIpadRestartSignal] = useState(0);
+  const [isQrModalOpen, setIsQrModalOpen] = useState(false);
   const { resetGameSetup, selectedLanguage } = useGameState();
   const shellMode = pageShellModes[location.pathname] ?? 'mobile';
   const isIpadRoute = location.pathname === '/ipad';
@@ -24,6 +28,12 @@ function App() {
   const showShellControls = showIpadAccess || showReturnToStart || isIpadRoute;
   const returnToStartLabel =
     selectedLanguage === 'ja' ? returnToStartLabels.ja : returnToStartLabels.en;
+
+  useEffect(() => {
+    if (!isIpadRoute) {
+      setIsQrModalOpen(false);
+    }
+  }, [isIpadRoute]);
 
   const handleIpadRestart = () => {
     setIpadRestartSignal((currentSignal) => currentSignal + 1);
@@ -35,7 +45,7 @@ function App() {
         {showShellControls ? (
           <div
             className={`app-shell__controls${
-              isIpadRoute ? ' app-shell__controls--split' : ''
+              isIpadRoute ? ' app-shell__controls--split app-shell__controls--ipad' : ''
             }`}
           >
             {showIpadAccess ? (
@@ -68,7 +78,17 @@ function App() {
                   />
                 </Link>
                 <button
-                  className="app-shell__control app-shell__control--button"
+                  className="app-shell__control app-shell__control--button app-shell__control--button-center"
+                  onClick={() => setIsQrModalOpen(true)}
+                  type="button"
+                >
+                  <BilingualText
+                    english="Show QR Code"
+                    japanese="QRコードを表示"
+                  />
+                </button>
+                <button
+                  className="app-shell__control app-shell__control--button app-shell__control--button-right"
                   onClick={handleIpadRestart}
                   type="button"
                 >
@@ -83,6 +103,10 @@ function App() {
           <AppRoutes iPadRestartSignal={iPadRestartSignal} />
         </main>
       </div>
+
+      {isIpadRoute && isQrModalOpen ? (
+        <QrCodeModal onClose={() => setIsQrModalOpen(false)} url={joinUrl} />
+      ) : null}
     </div>
   );
 }
