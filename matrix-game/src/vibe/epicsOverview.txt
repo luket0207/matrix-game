@@ -42,3 +42,4 @@ EPIC-002
   - Fixed the matrix hold interaction, added directional axis arrows, removed the unrequested gameplay difficulty chip, and aligned the top y-axis label to the grid edge.
   - Centered the wider iPad details copy block, tightened the matrix axis spacing, moved reveal confirmation into a modal overlay, and made the whole board animate away before the revealed number appears.
   - Restored the Japanese matrix button text, stacked the matrix actions with a softer secondary reveal button, and enlarged/recentered the revealed number.
+  - Fixed the reveal button rest-state styling so it stays visibly lighter than the primary secret-number action even before hover.

@@ -490,3 +490,24 @@ Bug fix: BUG-023, BUG-024, BUG-025 - Japanese button text restore and reveal act
   - Manual browser verification of the Japanese copy, stacked action layout, and reveal centering at iPad-like widths.
 - Test status:
   - passed
+
+Bug fix: BUG-026 - Keep the reveal action visually lighter at rest
+- Manual test steps:
+  1. Visit `/ipad` and start a gameplay turn.
+  2. Look at the two stacked action buttons before hovering either one.
+  3. Confirm `Show Secret Number` keeps the existing dark primary styling.
+  4. Confirm `Reveal to Everyone` already appears lighter and less prominent at rest.
+  5. Hover `Reveal to Everyone` and confirm it still has its softer secondary hover treatment.
+- Expected result for each step:
+  1. The gameplay turn starts normally.
+  2. Both actions are visible in their stacked layout.
+  3. The main secret-number action remains the primary visual action.
+  4. The reveal action reads as secondary even without hover.
+  5. The reveal action keeps its lighter secondary behavior on hover too.
+- Automated tests completed where relevant:
+  - `npm run build`
+- Automated tests still needed to fully prove behavior:
+  - Add a project `lint` script if linting is expected as part of the epic quality gate.
+  - Manual browser verification of the final rest-state styling on the stacked matrix actions at iPad-like widths.
+- Test status:
+  - passed

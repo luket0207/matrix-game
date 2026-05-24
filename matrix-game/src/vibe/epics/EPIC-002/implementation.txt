@@ -680,3 +680,31 @@ Bug fix: BUG-023, BUG-024, BUG-025 - Japanese button text restore and reveal act
   - Treated the Japanese button-text bug as applying to the current matrix-turn and reveal-confirmation buttons in the affected iPad flow.
 - Any tradeoffs or follow-up tasks:
   - If later prompts want the reveal-state number to use a more elaborate animation, that should be handled separately from this sizing/layout pass.
+
+Bug fix: BUG-026 - Keep the reveal action visually lighter at rest
+- What was implemented:
+  - Moved the reveal-button secondary styling to a more specific selector that applies after the shared `.game-button` base styles.
+  - Kept the `Show Secret Number` button styling unchanged.
+- Exact scope completed:
+  - The reveal action now appears visually lighter and less prominent even before hover.
+- Existing components/hooks/utilities/styles considered:
+  - Considered the current `GameButton` shared styling and the existing `matrix-turn__action-button--secondary` class.
+- What was reused:
+  - Reused the existing secondary reveal-button class and stacked action layout from the previous pass.
+- What was newly created:
+  - No new files.
+- Why new code was needed where reuse was not possible:
+  - The issue was caused by CSS order rather than missing structure, so the smallest fix was a more specific post-base style override.
+- Files changed:
+  - `src/styles.scss`
+  - `src/vibe/epics/EPIC-002/bugs.txt`
+  - `src/vibe/epics/EPIC-002/implementation.txt`
+  - `src/vibe/epics/EPIC-002/testing.txt`
+  - `src/vibe/epicsOverview.txt`
+- What was intentionally not changed:
+  - No button order, copy, reveal timing, or gameplay logic was changed.
+  - No new dependency was added.
+- Any assumptions made:
+  - Interpreted this bug as a rest-state styling correction only, since the hover-state difference had already been added in the previous pass.
+- Any tradeoffs or follow-up tasks:
+  - If later prompts want a stronger visual distinction between primary and secondary actions across the app, that should be handled as a broader shared-button styling task.
