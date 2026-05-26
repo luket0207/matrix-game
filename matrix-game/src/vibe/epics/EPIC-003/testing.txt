@@ -177,3 +177,26 @@ Feature: Feature-003 - Add Bilingual Rules Page Content
   - Manual browser verification of long-form rules readability on narrow mobile widths.
 - Test status:
   - passed
+
+Bug fix: Bug-007 and Bug-008 - Rules iPad-holder instruction and matrix axis placement
+- Manual test steps:
+  1. Visit `/rules`.
+  2. In the English tab, find Taking a Turn, then If you have the iPad.
+  3. Confirm the instructions tell the iPad holder to show everyone else the category and scales before saying the answer.
+  4. Switch to the Japanese tab and confirm the same instruction appears in the iPad-holder turn steps.
+  5. In the Round Example section, confirm the Small to Big scale appears above the example matrix.
+  6. Switch language tabs and confirm the top-axis placement is unchanged while the labels change language.
+- Expected result for each step:
+  1. The Rules page loads.
+  2. The English iPad-holder instructions are visible.
+  3. The new instruction appears before the answer is spoken.
+  4. The Japanese iPad-holder instructions include the matching new instruction.
+  5. The horizontal scale is above the matrix, not below it.
+  6. The matrix layout remains correct in both language tabs.
+- Automated tests completed where relevant:
+  - `npm run build`
+- Automated tests still needed to fully prove behavior:
+  - `npm run lint` if a lint script is added to the project.
+  - Manual browser verification of the Rules diagram on narrow mobile widths.
+- Test status:
+  - passed

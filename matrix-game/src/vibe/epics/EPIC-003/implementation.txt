@@ -254,3 +254,35 @@ Feature: Feature-003 - Add Bilingual Rules Page Content
   - Kept the tab labels as `English` and `Japanese` so the language switcher is understandable before a language is selected.
 - Any tradeoffs or follow-up tasks:
   - If later prompts require more visual polish or print-style rule formatting, that should be handled as a separate Rules page design pass.
+
+Bug fix: Bug-007 and Bug-008 - Rules iPad-holder instruction and matrix axis placement
+- What was implemented:
+  - Added a Rules step telling the iPad holder to show everyone else the round category and scales before giving their answer.
+  - Added the same instruction to the Japanese Rules tab.
+  - Moved the Round Example Small to Big scale above the example matrix.
+- Exact scope completed:
+  - Fixed only the two EPIC-003 Rules bugs marked `not started`.
+- Existing components/hooks/utilities/styles considered:
+  - Considered the existing `Rules.jsx` content map, `RuleMatrixExample.jsx`, and current SCSS grid layout.
+- What was reused:
+  - Reused the existing bilingual Rules data structure and diagram component.
+  - Reused the existing `rule-matrix` SCSS classes with small row-placement changes.
+- What was newly created:
+  - No new files.
+- Why new code was needed where reuse was not possible:
+  - The missing instruction was copy in the existing Rules content.
+  - The scale label position was controlled by the existing matrix component and grid styles.
+- Files changed:
+  - `src/pages/Rules.jsx`
+  - `src/components/RuleMatrixExample.jsx`
+  - `src/styles.scss`
+  - `src/vibe/epics/EPIC-003/bugs.txt`
+  - `src/vibe/epics/EPIC-003/implementation.txt`
+  - `src/vibe/epics/EPIC-003/testing.txt`
+  - `src/vibe/epicsOverview.txt`
+- What was intentionally not changed:
+  - No Rules route behavior, tab behavior, Player gameplay, iPad gameplay, scoring, or extra Rules content was changed.
+- Any assumptions made:
+  - Interpreted "on or before step 8" as placing the new instruction immediately before the answer is spoken.
+- Any tradeoffs or follow-up tasks:
+  - If the Japanese wording needs a different tone, that can be handled as a separate copy-only pass.

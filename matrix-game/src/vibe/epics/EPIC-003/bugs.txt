@@ -153,3 +153,51 @@ Attempted fixes:
 
 Final fix if solved:
 - The Player route bottom `End Game` control now remains centered below `app-shell__content`.
+
+
+Bug-007
+
+Status: fixed
+
+In the rules we need to put something about when the player has the ipad, they must show everyone else what the category and scales for the round are. This should happen either on or before step 8.
+
+We need to make this change for both languages. 
+
+Expected behavior:
+- The Rules page should tell the iPad holder to show everyone else the category and scales for the round before they give their answer.
+- The instruction should appear in both English and Japanese.
+
+Actual behavior:
+- The iPad-holder turn steps moved from choosing an answer directly to saying the answer out loud, without telling the player to show the category and scales first.
+
+Suspected cause:
+- The first Rules content pass included the player-facing phone instruction to look at category and scales, but missed the iPad-holder responsibility to show those values.
+
+Attempted fixes:
+- Added an English step before the answer is spoken.
+- Added the matching Japanese step before the answer is spoken.
+
+Final fix if solved:
+- The Rules page now tells the iPad holder to show the round category and scales to everyone else before giving their answer in both language tabs.
+
+Bug-008
+
+Status: fixed
+
+In the example of the matrix in the rules, the top scale example "small to big" has been placed below the matrix when it should be at the top. 
+
+Expected behavior:
+- The Round Example matrix should show the top scale, Small to Big, above the matrix.
+
+Actual behavior:
+- The Small to Big axis rendered below the example matrix.
+
+Suspected cause:
+- The first `RuleMatrixExample` layout placed the x-axis in the final grid row beneath the matrix.
+
+Attempted fixes:
+- Moved the x-axis markup before the grid.
+- Updated the Rules matrix grid rows so the x-axis occupies the top row and the matrix sits below it.
+
+Final fix if solved:
+- The Round Example matrix now shows the Small to Big scale above the matrix in both language tabs.

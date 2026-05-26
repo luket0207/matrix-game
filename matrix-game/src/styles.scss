@@ -378,18 +378,18 @@ a {
 }
 
 .rule-matrix__y-label--top {
-  grid-row: 1;
+  grid-row: 2;
   align-self: start;
 }
 
 .rule-matrix__y-label--bottom {
-  grid-row: 3;
+  grid-row: 4;
   align-self: end;
 }
 
 .rule-matrix__grid {
   grid-column: 2;
-  grid-row: 1 / 4;
+  grid-row: 2 / 5;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.45rem;
@@ -414,7 +414,7 @@ a {
 
 .rule-matrix__x-axis {
   grid-column: 2;
-  grid-row: 4;
+  grid-row: 1;
   display: flex;
   justify-content: space-between;
   color: #6f614f;
