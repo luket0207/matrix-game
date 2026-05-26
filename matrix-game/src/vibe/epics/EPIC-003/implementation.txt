@@ -85,3 +85,133 @@ Feature: Feature-002 - Player Page Gameplay Loop
 - Any tradeoffs or follow-up tasks:
   - If later prompts need Player/iPad sync, player identities, or persisted scoreboards, the current local Player state will need to be extended in a future pass.
   - If the repo later installs PrimeReact, the Player dropdown and confirmation modal could be aligned to a shared PrimeReact pattern then.
+
+Bug fix: Bug-001 - Clarify the Player iPad-turn button label
+- What was implemented:
+  - Changed the Player page alternate turn button from `It's my turn` to `It's my turn on the iPad`.
+  - Added the matching Japanese label `iPadで自分の番です`.
+- Exact scope completed:
+  - The Player start stage now makes the iPad-specific alternate route clearer in both supported languages.
+- Existing components/hooks/utilities/styles considered:
+  - Considered the existing Player page copy map and `GameButton` usage.
+- What was reused:
+  - Reused the existing Player page state, language selection, and button rendering.
+- What was newly created:
+  - No new files.
+- Why new code was needed where reuse was not possible:
+  - The bug was a copy clarity issue in the existing label values, so the smallest fix was updating the copy constants directly.
+- Files changed:
+  - `src/pages/Player.jsx`
+  - `src/vibe/epics/EPIC-003/bugs.txt`
+  - `src/vibe/epics/EPIC-003/implementation.txt`
+  - `src/vibe/epics/EPIC-003/testing.txt`
+  - `src/vibe/epicsOverview.txt`
+- What was intentionally not changed:
+  - No Player gameplay state, scoring logic, routing, layout, or iPad gameplay behavior was changed.
+- Any assumptions made:
+  - Used `iPadで自分の番です` as the Japanese equivalent for the clearer iPad-specific button intent.
+- Any tradeoffs or follow-up tasks:
+  - If the Japanese wording needs a more casual or formal tone later, that can be adjusted as a separate copy pass.
+
+Bug fix: Bug-002 - Add correct-answer prompt to the Player reveal stage
+- What was implemented:
+  - Added the reveal-stage prompt `What was the correct answer?` above the answer-entry matrix.
+  - Added the Japanese prompt `正しい答えは何でしたか？`.
+  - Added a small centered prompt style for the Player reveal screen.
+- Exact scope completed:
+  - After `Reveal Answer`, players now see the prompt directly above the matrix used to enter the correct secret number.
+- Existing components/hooks/utilities/styles considered:
+  - Considered the existing Player page copy map, reveal-stage layout, and `NumberMatrix` rendering.
+- What was reused:
+  - Reused the existing Player reveal-stage structure and selected-language copy lookup.
+- What was newly created:
+  - No new files.
+- Why new code was needed where reuse was not possible:
+  - The requested prompt was missing from the existing reveal-stage markup, so a small text addition was required.
+- Files changed:
+  - `src/pages/Player.jsx`
+  - `src/styles.scss`
+  - `src/vibe/epics/EPIC-003/bugs.txt`
+  - `src/vibe/epics/EPIC-003/implementation.txt`
+  - `src/vibe/epics/EPIC-003/testing.txt`
+  - `src/vibe/epicsOverview.txt`
+- What was intentionally not changed:
+  - No Player scoring, turn state, matrix behavior, routing, or iPad gameplay behavior was changed.
+- Any assumptions made:
+  - Used `正しい答えは何でしたか？` as the Japanese equivalent for the requested prompt.
+- Any tradeoffs or follow-up tasks:
+  - If the answer-entry stage gets fuller instructions later, that should be handled as a separate copy/layout pass.
+
+Bug fix: Bug-003 - Move End Game outside the player content panel
+- What was implemented:
+  - Moved the visible `End Game` control from `Player.jsx` into the shared shell in `App.jsx`.
+  - Rendered it only on `/player`, centered below `app-shell__content`.
+  - Switched it from the main `GameButton` styling to the existing shell-control styling family used by `Return to start`.
+- Exact scope completed:
+  - The Player route now keeps `End Game` visually separate from the game content and outside the main content panel.
+- Existing components/hooks/utilities/styles considered:
+  - Considered the existing `app-shell__control` button pattern in `App.jsx` and `styles.scss`.
+  - Considered the existing Player route and selected-language state for the label.
+- What was reused:
+  - Reused React Router `Link` navigation.
+  - Reused the existing shell-control styling pattern.
+  - Reused `selectedLanguage` from shared game state to keep the label language-aware.
+- What was newly created:
+  - No new files.
+- Why new code was needed where reuse was not possible:
+  - The button needed to sit outside `app-shell__content`, so it had to move from the Player page markup into the app shell layer.
+- Files changed:
+  - `src/App.jsx`
+  - `src/pages/Player.jsx`
+  - `src/styles.scss`
+  - `src/vibe/epics/EPIC-003/bugs.txt`
+  - `src/vibe/epics/EPIC-003/implementation.txt`
+  - `src/vibe/epics/EPIC-003/testing.txt`
+  - `src/vibe/epicsOverview.txt`
+- What was intentionally not changed:
+  - No Player gameplay state, scoring logic, matrix behavior, or iPad gameplay behavior was changed.
+- Any assumptions made:
+  - Interpreted `outside the app-shell__content element` as still inside the same `app-shell__frame`, but rendered after the main content area.
+- Any tradeoffs or follow-up tasks:
+  - If later prompts need additional bottom shell controls, the bottom-control row can be extended then.
+
+Bug fix: Bug-004, Bug-005, Bug-006 - Player score summary and final score display
+- What was implemented:
+  - Added shared `playerScore` state to `GameStateProvider.jsx`.
+  - Updated `Player.jsx` to add points into the shared score and track the last turn's awarded points.
+  - Added a start-stage message after the first completed turn showing last turn points and the current total.
+  - Replaced the Score page placeholder with a large final score and a Return to Start button.
+  - Scoped the bottom shell-control margin so the Player `End Game` button remains centered.
+- Exact scope completed:
+  - The Player start stage now summarizes the previous turn after any completed scoring turn.
+  - Clicking `End Game` routes to `/score`, where the current Player score is displayed prominently.
+  - The bottom `End Game` shell control is centered below the content panel.
+- Existing components/hooks/utilities/styles considered:
+  - Considered the existing `GameStateProvider.jsx` setup state before adding a new storage mechanism.
+  - Considered the existing Player scoring logic, Score route, `GameButton`, and shell-control styles.
+- What was reused:
+  - Reused the existing shared game state provider for temporary in-session score state.
+  - Reused the existing Player turn scoring paths.
+  - Reused `GameButton` for the Score page return action.
+  - Reused the existing shell-control style family for the bottom `End Game` control.
+- What was newly created:
+  - No new files.
+- Why new code was needed where reuse was not possible:
+  - The score had to be available after routing away from `/player`, so the local Player score needed to move into existing shared state.
+  - The Score page placeholder needed the smallest real final-score view to satisfy the end-game behavior.
+- Files changed:
+  - `src/app/GameStateProvider.jsx`
+  - `src/pages/Player.jsx`
+  - `src/pages/Score.jsx`
+  - `src/styles.scss`
+  - `src/vibe/epics/EPIC-003/bugs.txt`
+  - `src/vibe/epics/EPIC-003/implementation.txt`
+  - `src/vibe/epics/EPIC-003/testing.txt`
+  - `src/vibe/epicsOverview.txt`
+- What was intentionally not changed:
+  - No iPad gameplay loop, realtime sync, persistence, player identity handling, or final scoreboard list was added.
+- Any assumptions made:
+  - Treated "player's current score" and "final score" as the single local player score already tracked by the Player flow.
+  - Kept the score in memory only, consistent with the existing EPIC-003 scope.
+- Any tradeoffs or follow-up tasks:
+  - If later prompts need multiple player score summaries, the current single-score state will need to be expanded into a player score model.

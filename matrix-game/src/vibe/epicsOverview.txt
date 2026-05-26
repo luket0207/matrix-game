@@ -52,3 +52,7 @@ EPIC-003
 - Latest notes:
   - Added a Start-page Rules control, a new `/rules` route, and a minimal Rules page with a return path back to `/`.
   - Replaced the placeholder Player page with the first player-facing gameplay loop, including score tracking, guess confirmation, reveal flow, iPad-player scoring, and a bottom End Game button.
+  - Clarified the Player page alternate turn button so it now says `It's my turn on the iPad` with matching Japanese copy.
+  - Added the correct-answer prompt above the Player reveal-stage answer-entry matrix in English and Japanese.
+  - Moved the Player `End Game` control outside the main content panel and centered it below the shell content.
+  - Added shared in-session Player score state, last-turn scoring summaries, and a final Score page with a large score display and Return to Start action.

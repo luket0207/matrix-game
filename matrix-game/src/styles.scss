@@ -137,6 +137,16 @@ a {
   border: 1px solid rgba(255, 255, 255, 0.6);
 }
 
+.app-shell__bottom-controls {
+  display: flex;
+  justify-content: center;
+  min-height: 2.5rem;
+}
+
+.app-shell__bottom-controls .app-shell__control--button {
+  margin-left: 0;
+}
+
 .qr-modal {
   position: fixed;
   inset: 0;
@@ -379,8 +389,16 @@ a {
   color: #6f614f;
 }
 
-.player-page__primary-action,
-.player-page__end-game {
+.player-page__last-turn {
+  margin: 0;
+  max-width: 20rem;
+  color: #6f614f;
+  font-weight: 700;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.player-page__primary-action {
   width: 100%;
   max-width: 18rem;
   margin: 0 auto;
@@ -402,6 +420,14 @@ a {
   font-weight: 800;
   color: #8c5c2b;
   transform: rotate(180deg);
+}
+
+.player-page__answer-prompt {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-align: center;
+  color: #6f614f;
 }
 
 .player-page__copy {
@@ -430,6 +456,13 @@ a {
   color: #1b2230;
   font: inherit;
   font-weight: 700;
+}
+
+.score-page__final-score {
+  font-size: clamp(5rem, 18vw, 8rem);
+  font-weight: 800;
+  line-height: 1;
+  color: #8c5c2b;
 }
 
 .ipad-page {

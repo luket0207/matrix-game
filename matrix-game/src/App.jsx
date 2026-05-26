@@ -16,6 +16,11 @@ const returnToStartLabels = {
   ja: 'スタートに戻る',
 };
 
+const endGameLabels = {
+  en: 'End Game',
+  ja: 'ゲーム終了',
+};
+
 function App() {
   const location = useLocation();
   const [iPadRestartSignal, setIpadRestartSignal] = useState(0);
@@ -23,6 +28,7 @@ function App() {
   const { resetGameSetup, selectedLanguage } = useGameState();
   const shellMode = pageShellModes[location.pathname] ?? 'mobile';
   const isIpadRoute = location.pathname === '/ipad';
+  const isPlayerRoute = location.pathname === '/player';
   const isStartRoute = location.pathname === '/';
   const showIpadAccess = !isIpadRoute && selectedLanguage === null;
   const showReturnToStart = !isIpadRoute && selectedLanguage !== null;
@@ -31,6 +37,8 @@ function App() {
     showRulesButton || showIpadAccess || showReturnToStart || isIpadRoute;
   const returnToStartLabel =
     selectedLanguage === 'ja' ? returnToStartLabels.ja : returnToStartLabels.en;
+  const endGameLabel =
+    selectedLanguage === 'ja' ? endGameLabels.ja : endGameLabels.en;
   const rulesLabel = selectedLanguage === 'ja' ? 'ルール' : 'Rules';
 
   useEffect(() => {
@@ -114,6 +122,17 @@ function App() {
         <main className="app-shell__content">
           <AppRoutes iPadRestartSignal={iPadRestartSignal} />
         </main>
+
+        {isPlayerRoute ? (
+          <div className="app-shell__bottom-controls">
+            <Link
+              className="app-shell__control app-shell__control--button"
+              to="/score"
+            >
+              {endGameLabel}
+            </Link>
+          </div>
+        ) : null}
       </div>
 
       {isIpadRoute && isQrModalOpen ? (

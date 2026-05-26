@@ -3,6 +3,7 @@ import { createContext, useContext, useState } from 'react';
 const GameStateContext = createContext(null);
 
 function GameStateProvider({ children }) {
+  const [playerScore, setPlayerScore] = useState(0);
   const [selectedLanguage, setSelectedLanguage] = useState(null);
   const [selectedDifficulty, setSelectedDifficulty] = useState(null);
 
@@ -14,7 +15,16 @@ function GameStateProvider({ children }) {
     setSelectedDifficulty(difficulty);
   };
 
+  const addPlayerScore = (points) => {
+    setPlayerScore((currentScore) => currentScore + points);
+  };
+
+  const resetPlayerScore = () => {
+    setPlayerScore(0);
+  };
+
   const resetGameSetup = () => {
+    setPlayerScore(0);
     setSelectedLanguage(null);
     setSelectedDifficulty(null);
   };
@@ -22,9 +32,12 @@ function GameStateProvider({ children }) {
   return (
     <GameStateContext.Provider
       value={{
+        addPlayerScore,
         chooseDifficulty,
         chooseLanguage,
+        playerScore,
         resetGameSetup,
+        resetPlayerScore,
         selectedDifficulty,
         selectedLanguage,
       }}

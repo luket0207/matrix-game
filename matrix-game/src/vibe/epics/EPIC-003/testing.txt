@@ -58,3 +58,95 @@ Feature: Feature-002 - Player Page Gameplay Loop
   - Automated component or utility tests for `calculateTurnScore` if the project adds a test setup later.
 - Test status:
   - passed
+
+Bug fix: Bug-001 - Clarify the Player iPad-turn button label
+- Manual test steps:
+  1. Visit `/`, choose English, choose a difficulty, and arrive on `/player`.
+  2. Confirm the alternate turn button reads `It's my turn on the iPad`.
+  3. Return to `/`, choose Japanese, choose a difficulty, and arrive on `/player`.
+  4. Confirm the alternate turn button reads `iPadで自分の番です`.
+  5. Click the alternate turn button and confirm it still opens the existing iPad-player scoring flow.
+- Expected result for each step:
+  1. The English Player page loads normally.
+  2. The iPad-specific English label is visible.
+  3. The Japanese Player page loads normally.
+  4. The iPad-specific Japanese label is visible.
+  5. The existing alternate turn behavior still works.
+- Automated tests completed where relevant:
+  - `npm run build`
+- Automated tests still needed to fully prove behavior:
+  - `npm run lint` if a lint script is added to the project.
+  - Manual browser verification of the updated label on mobile widths.
+- Test status:
+  - passed
+
+Bug fix: Bug-002 - Add correct-answer prompt to the Player reveal stage
+- Manual test steps:
+  1. Visit `/`, choose English, choose a difficulty, and arrive on `/player`.
+  2. Click `Start Turn`, choose a number, confirm the guess, and click `Reveal Answer`.
+  3. Confirm `What was the correct answer?` appears directly above the answer-entry matrix.
+  4. Return to `/`, choose Japanese, choose a difficulty, and repeat the same reveal flow.
+  5. Confirm `正しい答えは何でしたか？` appears directly above the answer-entry matrix.
+- Expected result for each step:
+  1. The English Player page loads normally.
+  2. The reveal stage opens normally.
+  3. The English prompt appears above the matrix.
+  4. The Japanese reveal stage opens normally.
+  5. The Japanese prompt appears above the matrix.
+- Automated tests completed where relevant:
+  - `npm run build`
+- Automated tests still needed to fully prove behavior:
+  - `npm run lint` if a lint script is added to the project.
+  - Manual browser verification that the new prompt spacing looks correct on mobile widths.
+- Test status:
+  - passed
+
+Bug fix: Bug-003 - Move End Game outside the player content panel
+- Manual test steps:
+  1. Visit `/`, choose a language and difficulty, and arrive on `/player`.
+  2. Confirm `End Game` appears centered below the main white game content panel.
+  3. Confirm the button uses the lighter shell-control style, similar to the top `Return to start` control.
+  4. Click `End Game` and confirm the app routes to `/score`.
+  5. Visit `/`, `/rules`, `/score`, and `/ipad` and confirm this bottom `End Game` control is not shown there.
+- Expected result for each step:
+  1. The Player page loads normally.
+  2. The `End Game` control is outside `app-shell__content`.
+  3. The control feels visually separate from the main game actions.
+  4. The route changes to `/score`.
+  5. The bottom control remains Player-route-specific.
+- Automated tests completed where relevant:
+  - `npm run build`
+- Automated tests still needed to fully prove behavior:
+  - `npm run lint` if a lint script is added to the project.
+  - Manual browser verification of the bottom-control placement on narrow mobile widths.
+- Test status:
+  - passed
+
+Bug fix: Bug-004, Bug-005, Bug-006 - Player score summary and final score display
+- Manual test steps:
+  1. Visit `/`, choose a language and difficulty, and arrive on `/player`.
+  2. Confirm the first start stage does not show a last-turn summary.
+  3. Complete a normal guessing turn and enter the correct secret number.
+  4. Confirm the Player page returns to the start stage and shows the points gained last turn plus the current total score.
+  5. Complete an iPad-player turn and confirm the same summary updates after submit.
+  6. Confirm `End Game` is centered beneath the main content panel.
+  7. Click `End Game`.
+  8. Confirm `/score` shows the final score large on screen.
+  9. Click `Return to Start` and confirm the app returns to `/`.
+- Expected result for each step:
+  1. The Player page loads normally.
+  2. No last-turn message appears before a turn has been scored.
+  3. The turn scores normally.
+  4. The last-turn message and current total are visible.
+  5. The iPad-player awarded points are included in the shared total and summary.
+  6. The `End Game` shell control is centered.
+  7. The route changes to `/score`.
+  8. The final score is displayed prominently.
+  9. The app returns to the Start screen and clears setup/score state.
+- Automated tests completed where relevant:
+  - `npm run build`
+- Automated tests still needed to fully prove behavior:
+  - `npm run lint` if a lint script is added to the project.
+  - Manual browser verification of the final score layout and bottom-control centering on narrow mobile widths.
+- Test status:
+  - passed

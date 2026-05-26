@@ -11,35 +11,44 @@ const copy = {
     confirmCancel: 'No',
     confirmHeading: 'Are you sure?',
     confirmYes: 'Yes',
-    endGame: 'End Game',
     ipadPrompt: 'Play your turn on the iPad',
     ipadQuestion: 'How many people correctly guessed the secret number?',
-    itsMyTurn: "It's my turn",
+    itsMyTurn: "It's my turn on the iPad",
     revealAnswer: 'Reveal Answer',
     scoreLabel: 'Score',
     startTurn: 'Start Turn',
     submit: 'Submit',
+    correctAnswerPrompt: 'What was the correct answer?',
+    lastTurnMessage: (lastTurnScore, playerScore) =>
+      `Last turn: +${lastTurnScore}. Current score: ${playerScore}.`,
   },
   ja: {
     confirmCancel: 'いいえ',
     confirmHeading: '本当にいいですか？',
     confirmYes: 'はい',
-    endGame: 'ゲーム終了',
     ipadPrompt: 'iPadで自分のターンをプレイしてください',
     ipadQuestion: '何人が秘密の番号を正しく当てましたか？',
-    itsMyTurn: '自分の番です',
+    itsMyTurn: 'iPadで自分の番です',
     revealAnswer: '答えを見る',
     scoreLabel: 'スコア',
     startTurn: 'ターン開始',
     submit: '送信',
+    correctAnswerPrompt: '正しい答えは何でしたか？',
+    lastTurnMessage: (lastTurnScore, playerScore) =>
+      `前のターン: +${lastTurnScore}。現在のスコア: ${playerScore}。`,
   },
 };
 
 function Player() {
-  const { selectedDifficulty, selectedLanguage } = useGameState();
+  const {
+    addPlayerScore,
+    playerScore,
+    selectedDifficulty,
+    selectedLanguage,
+  } = useGameState();
   const [playerTurnStage, setPlayerTurnStage] = useState('start');
   const [selectedGuess, setSelectedGuess] = useState(null);
-  const [runningScore, setRunningScore] = useState(0);
+  const [lastTurnScore, setLastTurnScore] = useState(null);
   const [isGuessConfirmOpen, setIsGuessConfirmOpen] = useState(false);
   const [correctGuessCount, setCorrectGuessCount] = useState('0');
 
@@ -104,7 +113,8 @@ function Player() {
       matrixSize,
     );
 
-    setRunningScore((currentScore) => currentScore + turnScore);
+    addPlayerScore(turnScore);
+    setLastTurnScore(turnScore);
     resetTurnState();
     setPlayerTurnStage('start');
   }
@@ -112,7 +122,8 @@ function Player() {
   function handleIpadTurnSubmit() {
     const awardedPoints = Number(correctGuessCount) * 3;
 
-    setRunningScore((currentScore) => currentScore + awardedPoints);
+    addPlayerScore(awardedPoints);
+    setLastTurnScore(awardedPoints);
     setCorrectGuessCount('0');
     setPlayerTurnStage('start');
   }
@@ -121,11 +132,16 @@ function Player() {
     <section className="player-page">
       <div className="player-page__body">
         <p className="player-page__score">
-          {currentCopy.scoreLabel}: {runningScore}
+          {currentCopy.scoreLabel}: {playerScore}
         </p>
 
         {playerTurnStage === 'start' ? (
           <div className="page-stack player-page__content">
+            {lastTurnScore !== null ? (
+              <p className="player-page__last-turn">
+                {currentCopy.lastTurnMessage(lastTurnScore, playerScore)}
+              </p>
+            ) : null}
             <div className="choice-list">
               <GameButton onClick={handleStartTurn}>
                 {currentCopy.startTurn}
@@ -159,6 +175,9 @@ function Player() {
         {playerTurnStage === 'revealAnswer' && selectedGuess !== null ? (
           <div className="player-page__reveal">
             <div className="player-page__revealed-guess">{selectedGuess}</div>
+            <p className="player-page__answer-prompt">
+              {currentCopy.correctAnswerPrompt}
+            </p>
             <NumberMatrix
               matrixSize={matrixSize}
               numbers={numbers}
@@ -195,10 +214,6 @@ function Player() {
             </div>
           </div>
         ) : null}
-      </div>
-
-      <div className="player-page__end-game">
-        <GameButton to="/score">{currentCopy.endGame}</GameButton>
       </div>
 
       {isGuessConfirmOpen ? (

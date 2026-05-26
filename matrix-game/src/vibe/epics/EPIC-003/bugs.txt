@@ -1,0 +1,155 @@
+Bug-001
+
+Status: fixed
+
+On the player page there are two buttons, "Start Turn" and "It's my turn"
+
+I want to make the "It's my turn" button clearer in it's intentions so it should say "It's my turn on the iPad".
+
+This should be translated into japanese too.
+
+Expected behavior:
+- The alternate Player page turn button should clearly indicate that it is for the iPad turn flow.
+- The label should respect English and Japanese language selection.
+
+Actual behavior:
+- The button label only said `It's my turn`, which did not make the iPad-specific intent clear enough.
+
+Suspected cause:
+- The first Player loop used the shorter copy from the original feature text.
+
+Attempted fixes:
+- Updated the English Player page label to `It's my turn on the iPad`.
+- Updated the Japanese Player page label to `iPadで自分の番です`.
+
+Final fix if solved:
+- The Player page alternate turn button now uses clearer iPad-specific copy in both supported languages.
+
+
+Bug-002
+
+Status: fixed
+
+When the "Reveal Answer" button has been clicked and we show the player guess upside down. Just above the matrix at this point there should be a line of text that says "What was the correct answer?".
+
+This needs to be translated in the japanese version too.
+
+Expected behavior:
+- After `Reveal Answer`, the reveal screen should show `What was the correct answer?` directly above the answer-entry matrix.
+- The prompt should respect the selected language.
+
+Actual behavior:
+- The reveal screen showed the upside-down guess and the answer-entry matrix, but no prompt above the matrix.
+
+Suspected cause:
+- The first Player loop implemented the reveal mechanics but did not include this guiding prompt.
+
+Attempted fixes:
+- Added English and Japanese reveal-stage prompt copy to the Player page copy map.
+- Rendered the prompt between the upside-down guess and the answer-entry matrix.
+- Added a small centered style for the prompt.
+
+Final fix if solved:
+- The reveal stage now shows `What was the correct answer?` in English and `正しい答えは何でしたか？` in Japanese above the answer-entry matrix.
+
+
+Bug-003
+
+Status: fixed
+
+The "End Game" button needs to be outside the app-shell__content element. Making it look separate from the game itself to stop accidental clicks. It should also resemble the styles of the "Return to start" button at the top, but should remain centred at the bottom.
+
+Expected behavior:
+- The `End Game` button should sit outside `app-shell__content` on the Player route.
+- It should be centered at the bottom of the app shell.
+- It should use the same shell-control style family as `Return to start`.
+
+Actual behavior:
+- `End Game` was rendered inside `Player.jsx`, so it lived inside `app-shell__content`.
+- It used the main `GameButton` style, which made it feel like part of the active game controls.
+
+Suspected cause:
+- The first Player loop implemented `End Game` as a page-level game action instead of a shell-level utility action.
+
+Attempted fixes:
+- Moved the visible `End Game` route control into `App.jsx` after `app-shell__content`.
+- Kept it visible only on `/player`.
+- Reused the existing `app-shell__control app-shell__control--button` style family.
+- Removed the old in-content `End Game` button from `Player.jsx`.
+
+Final fix if solved:
+- `End Game` now appears centered beneath `app-shell__content` on `/player` and uses the lighter shell-control styling.
+
+
+Bug-004
+
+Status: fixed
+
+At the start of every turn apart from the very first turn, it should show a message to say what score was gained in the last turn, and what the player's current score is now.
+
+Expected behavior:
+- The first Player start stage should not show a last-turn message.
+- After any completed normal or iPad-player turn, the next start stage should show the points gained last turn and the current total score.
+
+Actual behavior:
+- The Player page only showed the running score and did not summarize the last turn.
+
+Suspected cause:
+- The first Player loop tracked only the running total, not the last awarded score.
+
+Attempted fixes:
+- Added `lastTurnScore` state in `Player.jsx`.
+- Set `lastTurnScore` after both normal guessing turns and iPad-player scoring turns.
+- Added English and Japanese start-stage summary copy.
+
+Final fix if solved:
+- Starting with the second turn, the Player start stage now shows the last turn's points and the current total score.
+
+
+Bug-005
+
+Status: fixed
+
+When the "End Game" button has been clicked, it should show the players score with their final score large on the screen. It should also have a button to return us to the start screen.
+
+Expected behavior:
+- Clicking `End Game` should route to the Score page.
+- The Score page should show the player's final score large on screen.
+- The Score page should include a button back to the Start screen.
+
+Actual behavior:
+- The Score page still showed placeholder text.
+- The Player score was local to `Player.jsx`, so the Score page could not display it.
+
+Suspected cause:
+- The first Player loop intentionally kept score local because the Score page had not been implemented yet.
+
+Attempted fixes:
+- Moved the Player score total into `GameStateProvider.jsx`.
+- Updated `Player.jsx` to add to the shared score after each scoring action.
+- Updated `Score.jsx` to display the final score prominently and provide a Return to Start button.
+
+Final fix if solved:
+- `End Game` routes to `/score`, where the current Player score is shown large with a Return to Start action.
+
+
+Bug-006
+
+Status: fixed
+
+The "End Game" button should be centered to the page
+
+Expected behavior:
+- The bottom `End Game` shell control should be centered within the player-facing shell.
+
+Actual behavior:
+- The inherited shell button margin could pull the bottom control away from true center.
+
+Suspected cause:
+- `.app-shell__control--button` uses `margin-left: auto` for top-right shell controls, and the bottom control reused that class.
+
+Attempted fixes:
+- Added a scoped `.app-shell__bottom-controls .app-shell__control--button` rule that clears the left auto margin only in the bottom control row.
+
+Final fix if solved:
+- The Player route bottom `End Game` control now remains centered below `app-shell__content`.
