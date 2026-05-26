@@ -150,3 +150,30 @@ Bug fix: Bug-004, Bug-005, Bug-006 - Player score summary and final score displa
   - Manual browser verification of the final score layout and bottom-control centering on narrow mobile widths.
 - Test status:
   - passed
+
+Feature: Feature-003 - Add Bilingual Rules Page Content
+- Manual test steps:
+  1. Visit `/rules`.
+  2. Confirm the Rules page shows language tabs at the top.
+  3. Confirm the English tab shows English rules only.
+  4. Switch to the Japanese tab and confirm Japanese rules appear without showing English rules at the same time.
+  5. Confirm the sections are present: Overview, Setup, Taking a Turn, Round Example, Scoring, and Ending the Game.
+  6. In the Round Example section, confirm the 3 by 3 matrix appears and number `3` is highlighted.
+  7. Switch tabs and confirm the matrix scale labels change language.
+  8. Confirm the Back to Start button routes back to `/`.
+- Expected result for each step:
+  1. The Rules page loads.
+  2. The tab control is visible and usable.
+  3. English rules are readable on the mobile-width shell.
+  4. Japanese rules are readable and replace the English content.
+  5. All requested sections are present.
+  6. The example matrix is visible and cell `3` is emphasized.
+  7. Diagram labels follow the selected Rules language.
+  8. The app returns to the Start page.
+- Automated tests completed where relevant:
+  - `npm run build`
+- Automated tests still needed to fully prove behavior:
+  - `npm run lint` if a lint script is added to the project.
+  - Manual browser verification of long-form rules readability on narrow mobile widths.
+- Test status:
+  - passed

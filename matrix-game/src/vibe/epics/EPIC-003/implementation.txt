@@ -215,3 +215,42 @@ Bug fix: Bug-004, Bug-005, Bug-006 - Player score summary and final score displa
   - Kept the score in memory only, consistent with the existing EPIC-003 scope.
 - Any tradeoffs or follow-up tasks:
   - If later prompts need multiple player score summaries, the current single-score state will need to be expanded into a player score model.
+
+Feature: Feature-003 - Add Bilingual Rules Page Content
+- What was implemented:
+  - Replaced the mostly empty Rules page with tabbed English and Japanese rules content.
+  - Added the requested sections: Overview, Setup, Taking a Turn, Round Example, Scoring, and Ending the Game.
+  - Added a small language tab component for switching between English and Japanese rules.
+  - Added an HTML/CSS 3 by 3 example matrix component that highlights secret number `3`.
+  - Added Rules page styling for readable mobile-first sections, tabs, lists, and the matrix diagram.
+- Exact scope completed:
+  - `/rules` now presents one selected language at a time.
+  - The Round Example diagram uses matching scale labels for the selected language and highlights the top-right `3` cell.
+- Existing components/hooks/utilities/styles considered:
+  - Considered the existing `Rules.jsx` page, `GameButton`, mobile shell layout, and global SCSS structure.
+- What was reused:
+  - Reused `GameButton` for returning to Start.
+  - Reused the existing mobile-width app shell and page typography patterns.
+  - Reused `selectedLanguage` from shared game state to choose the initial Rules tab.
+- What was newly created:
+  - `src/components/RulesLanguageTabs.jsx`
+  - `src/components/RuleMatrixExample.jsx`
+- Why new code was needed where reuse was not possible:
+  - The existing Rules page only had a heading and back button.
+  - No tab control or rules-specific matrix diagram component existed in the repo.
+- Files changed:
+  - `src/pages/Rules.jsx`
+  - `src/components/RulesLanguageTabs.jsx`
+  - `src/components/RuleMatrixExample.jsx`
+  - `src/styles.scss`
+  - `src/vibe/epics/EPIC-003/features.txt`
+  - `src/vibe/epics/EPIC-003/implementation.txt`
+  - `src/vibe/epics/EPIC-003/testing.txt`
+  - `src/vibe/epicsOverview.txt`
+- What was intentionally not changed:
+  - No iPad setup flow, iPad gameplay loop, Player gameplay flow, scoring logic, routing beyond existing `/rules`, or persistence behavior was changed.
+- Any assumptions made:
+  - Used natural Japanese text matching the provided rule intent rather than preserving the mojibake text shown in `features.txt`.
+  - Kept the tab labels as `English` and `Japanese` so the language switcher is understandable before a language is selected.
+- Any tradeoffs or follow-up tasks:
+  - If later prompts require more visual polish or print-style rule formatting, that should be handled as a separate Rules page design pass.

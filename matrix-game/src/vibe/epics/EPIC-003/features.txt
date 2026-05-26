@@ -544,3 +544,334 @@ Expected demo:
 - The page returns to the Start Turn stage.
 - All visible text respects the language selected on the Start page.
 ```
+
+
+```txt
+Feature-003 - Add Bilingual Rules Page Content
+Status: done
+
+Add the game rules to the Rules page.
+
+The Rules page should explain how to play the game clearly in both English and Japanese. The user should be able to switch between English and Japanese using a tab control at the top of the page.
+
+This feature only affects the Rules page.
+
+Requirements:
+
+- Add a tab control at the top of the Rules page.
+- The tabs should allow the user to switch between:
+  - English
+  - Japanese
+- Do not show both languages at the same time on this page.
+- The selected tab should clearly show which language is active.
+- The rules should be easy to read on a mobile screen.
+- The page should use the existing mobile-first page structure.
+- Keep the content centered where appropriate, but long rule text can be left-aligned if it is more readable.
+- Do not add game logic in this feature.
+- Do not change the iPad setup flow.
+- Do not change the Player page game flow.
+- Do not change scoring logic yet.
+- This feature is only for presenting the rules clearly.
+
+Rules page structure:
+
+Use the following sections:
+
+1. Overview
+2. Setup
+3. Taking a Turn
+4. Round Example
+5. Scoring
+6. Ending the Game
+
+The rules can be split into two player roles where helpful:
+
+- If you have the iPad
+- If you are playing on your phone
+
+Round example diagram:
+
+In the Round Example section, include a simple diagram of the matrix showing the example round.
+
+The example is:
+
+Category: Animals
+Top Scale: Small to Big
+Side Scale: Scary to Cute
+Difficulty: Easy
+Secret Number: 3
+
+For this example, the diagram should make it clear that number 3 is:
+
+- Far right on the top scale
+- High on the side scale
+- Big
+- Scary
+
+Example matrix for Easy difficulty:
+
+Scary
+  1   2   3
+  4   5   6
+  7   8   9
+Cute
+
+Small       Big
+
+The number 3 should be visually highlighted in the diagram.
+
+Implementation guidance for the diagram:
+
+- Create the matrix using HTML and CSS.
+- Do not use an image file.
+- Use a simple 3 by 3 grid for the Easy example.
+- Show the top scale from Small to Big.
+- Show the side scale from Scary to Cute.
+- Highlight the secret number cell.
+- Keep the diagram readable on mobile.
+- The diagram should appear in both the English and Japanese rule tabs.
+- The labels in the diagram should match the selected language.
+
+English diagram labels:
+
+- Scary
+- Cute
+- Small
+- Big
+
+Japanese diagram labels:
+
+- Scary: こわい
+- Cute: かわいい
+- Small: 小さい
+- Big: 大きい
+
+English rules content:
+
+Overview
+
+This is a guessing game where one player gives a clue and the other players try to guess a secret number.
+
+Each round has:
+
+- A category
+- A top scale
+- A side scale
+- A secret number
+- One player holding the iPad
+- The other players guessing on their phones
+
+The aim is to choose an example from the category that helps the other players find the secret number.
+
+Setup
+
+1. Every player starts the game on their own phone.
+2. Each player chooses the language they want to play in.
+3. Every player must choose the same difficulty that was selected on the iPad.
+4. The iPad controls the main game.
+5. The iPad chooses who takes the first turn.
+6. The player whose turn it is should take the iPad.
+
+Taking a turn
+
+If you have the iPad:
+
+1. On your phone, press the button for playing with the iPad.
+2. On the iPad, start the turn.
+3. The iPad will generate the round.
+4. Hide the iPad screen from the other players.
+5. Hold the Show Secret Number button.
+6. Look at the secret number without showing anyone else.
+7. Choose something from the category that fits the secret number position on the matrix.
+8. Say your answer out loud.
+9. Wait for every other player to lock in their guess on their phone.
+10. Reveal the secret number.
+11. Ask how many players guessed the exact secret number.
+12. Enter that number on your phone so your score can be calculated.
+
+If you are playing on your phone:
+
+1. Press Start Turn.
+2. Look at the category and scales for the round.
+3. Listen to the answer given by the player with the iPad.
+4. Guess the secret number on your phone.
+5. Lock in your guess.
+6. Do not reveal your guess yet.
+7. When the iPad player reveals the secret number, enter the correct secret number on your phone.
+8. Your score for the round will be calculated.
+9. If you guessed the exact secret number, tell the player with the iPad.
+
+Round example
+
+Example round:
+
+- Category: Animals
+- Top scale: Small to Big
+- Side scale: Scary to Cute
+- Difficulty: Easy
+- Secret number: 3
+
+In this example, the secret number is 3.
+
+On the matrix, 3 is at the top-right.
+
+That means the answer should be:
+
+- Big
+- Scary
+
+A good answer could be something like:
+
+Tiger
+
+This is because a tiger is a big and scary animal.
+
+Scoring
+
+If you have the iPad:
+
+- You get 3 points for every other player who guesses the exact secret number.
+
+If you are playing on your phone:
+
+- You get 1 point if your guess is in the correct row.
+- You get 1 point if your guess is in the correct column.
+- You get 3 points if you guess the exact secret number.
+
+Ending the game
+
+When everyone wants to finish, every player presses the End Game button.
+
+The scores are added up.
+
+The player with the highest score wins.
+
+Japanese rules content:
+
+概要
+
+このゲームは、1人がヒントを出して、他のプレイヤーが秘密の数字を当てるゲームです。
+
+各ラウンドには、次のものがあります。
+
+- カテゴリー
+- 上のスケール
+- 横のスケール
+- 秘密の数字
+- iPadを持つプレイヤー
+- スマホで答える他のプレイヤー
+
+カテゴリーに合うものを言って、他のプレイヤーに秘密の数字を伝えることを目指します。
+
+準備
+
+1. 全員が自分のスマホでゲームを始めます。
+2. 各プレイヤーは、自分が使いたい言語を選びます。
+3. 全員が、iPadで選ばれた難易度と同じ難易度を選びます。
+4. iPadはゲーム全体を進めるために使います。
+5. iPadが最初のプレイヤーを選びます。
+6. 選ばれたプレイヤーがiPadを持ちます。
+
+ターンの進め方
+
+iPadを持っている場合:
+
+1. 自分のスマホで、iPadを持っている人用のボタンを押します。
+2. iPadでもターンを開始します。
+3. iPadに今回のラウンドが表示されます。
+4. 他のプレイヤーにiPadの画面を見せないようにします。
+5. Show Secret Numberボタンを長押しします。
+6. 秘密の数字を確認します。他の人には見せません。
+7. カテゴリーの中から、秘密の数字の位置に合うものを選びます。
+8. 選んだ答えを声に出して言います。
+9. 他のプレイヤー全員がスマホで答えをロックするまで待ちます。
+10. 秘密の数字を発表します。
+11. 何人が秘密の数字をぴったり当てたか確認します。
+12. その人数を自分のスマホに入力して、自分のスコアを計算します。
+
+スマホでプレイしている場合:
+
+1. Start Turnボタンを押します。
+2. 今回のカテゴリーとスケールを確認します。
+3. iPadを持っているプレイヤーの答えを聞きます。
+4. 自分のスマホで秘密の数字を予想します。
+5. 答えをロックします。
+6. まだ答えは見せません。
+7. iPadのプレイヤーが秘密の数字を発表したら、正しい秘密の数字を自分のスマホに入力します。
+8. そのラウンドのスコアが計算されます。
+9. 秘密の数字をぴったり当てた場合は、iPadを持っているプレイヤーに伝えます。
+
+ラウンド例
+
+ラウンド例:
+
+- カテゴリー: 動物
+- 上のスケール: 小さい から 大きい
+- 横のスケール: こわい から かわいい
+- 難易度: かんたん
+- 秘密の数字: 3
+
+この例では、秘密の数字は3です。
+
+マトリックスでは、3は右上にあります。
+
+つまり、答えは次のようなものになります。
+
+- 大きい
+- こわい
+
+よい答えの例:
+
+トラ
+
+トラは大きくてこわい動物なので、この位置に合います。
+
+スコア
+
+iPadを持っている場合:
+
+- 他のプレイヤーが秘密の数字をぴったり当てるたびに、3点をもらいます。
+
+スマホでプレイしている場合:
+
+- 自分の予想が正しい行にある場合、1点をもらいます。
+- 自分の予想が正しい列にある場合、1点をもらいます。
+- 秘密の数字をぴったり当てた場合、3点をもらいます。
+
+ゲーム終了
+
+みんながゲームを終わりたいと思ったら、全員がEnd Gameボタンを押します。
+
+スコアが合計されます。
+
+一番スコアが高いプレイヤーが勝ちです。
+
+Suggested component structure:
+
+src/pages/Rules.jsx
+src/components/RulesLanguageTabs.jsx
+src/components/RuleMatrixExample.jsx
+
+Suggested tab state:
+
+- selectedRulesLanguage: "english" or "japanese"
+
+Suggested matrix component behavior:
+
+- Accept a language prop.
+- Render the same 3 by 3 matrix in both languages.
+- Highlight cell 3.
+- Change the scale labels based on the selected rules language.
+
+Expected demo:
+
+- Visiting the Rules page shows a tab control at the top.
+- The user can switch between English and Japanese rules.
+- English rules are clear and concise.
+- Japanese rules are clear and natural.
+- The Round Example section includes a visible 3 by 3 matrix.
+- The number 3 is highlighted in the matrix.
+- The diagram labels change between English and Japanese.
+- The Rules page remains readable on mobile.
+- No gameplay logic is changed.
+```
