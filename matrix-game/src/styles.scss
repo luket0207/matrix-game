@@ -1126,6 +1126,8 @@ a {
   line-height: 1.2;
   text-align: center;
   text-decoration: none;
+  -webkit-user-select: none;
+  user-select: none;
   cursor: pointer;
   box-shadow: 0 12px 24px rgba(27, 34, 48, 0.16);
   transition:

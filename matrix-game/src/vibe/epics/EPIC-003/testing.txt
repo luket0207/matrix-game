@@ -200,3 +200,24 @@ Bug fix: Bug-007 and Bug-008 - Rules iPad-holder instruction and matrix axis pla
   - Manual browser verification of the Rules diagram on narrow mobile widths.
 - Test status:
   - passed
+
+Bug fix: Bug-009 - Prevent iPad hold button text selection
+- Manual test steps:
+  1. Visit `/ipad`.
+  2. Complete setup through difficulty, player count, player details, and Start Game.
+  3. Start a turn until the matrix screen appears.
+  4. Press and hold `Show Secret Number`.
+  5. Confirm the secret number is shown while the button text is not highlighted or selected.
+- Expected result for each step:
+  1. The iPad flow loads.
+  2. Gameplay setup completes normally.
+  3. The iPad matrix turn appears normally.
+  4. The hold interaction reveals the secret number.
+  5. Button text remains unselected during the hold interaction.
+- Automated tests completed where relevant:
+  - `npm run build`
+- Automated tests still needed to fully prove behavior:
+  - `npm run lint` if a lint script is added to the project.
+  - Manual verification on an actual iPad or Safari touch device.
+- Test status:
+  - passed

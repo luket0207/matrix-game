@@ -201,3 +201,25 @@ Attempted fixes:
 
 Final fix if solved:
 - The Round Example matrix now shows the Small to Big scale above the matrix in both language tabs.
+
+
+Bug-009
+
+Status: fixed
+
+When the player holds down the button to reveal the secret number on the iPad, it is highlighing and selecting the text within the button. Can we make the text within the button component unselectable/highlightable please.
+
+Expected behavior:
+- Holding the iPad `Show Secret Number` button should reveal the secret number without selecting or highlighting the button text.
+
+Actual behavior:
+- Long-pressing the reveal button could highlight/select the text inside the button.
+
+Suspected cause:
+- The shared button style did not disable text selection, so long press interactions could trigger native text selection.
+
+Attempted fixes:
+- Added `user-select: none` and `-webkit-user-select: none` to the shared `.game-button` style.
+
+Final fix if solved:
+- Text inside shared game buttons, including the iPad hold-to-reveal button, is now unselectable during press-and-hold interactions.

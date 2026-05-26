@@ -58,3 +58,4 @@ EPIC-003
   - Added shared in-session Player score state, last-turn scoring summaries, and a final Score page with a large score display and Return to Start action.
   - Added bilingual tabbed Rules page content with the requested sections and a highlighted HTML/CSS matrix example.
   - Fixed Rules copy so the iPad holder shows the category/scales before answering, and moved the example matrix top scale above the grid.
+  - Prevented shared game button text selection during the iPad hold-to-reveal interaction.

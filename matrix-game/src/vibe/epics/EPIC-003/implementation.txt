@@ -286,3 +286,30 @@ Bug fix: Bug-007 and Bug-008 - Rules iPad-holder instruction and matrix axis pla
   - Interpreted "on or before step 8" as placing the new instruction immediately before the answer is spoken.
 - Any tradeoffs or follow-up tasks:
   - If the Japanese wording needs a different tone, that can be handled as a separate copy-only pass.
+
+Bug fix: Bug-009 - Prevent iPad hold button text selection
+- What was implemented:
+  - Made shared `GameButton` text unselectable via the existing `.game-button` SCSS rule.
+  - Included the WebKit-prefixed selection rule for iPad/Safari-style long-press behavior.
+- Exact scope completed:
+  - Fixed the iPad hold-to-reveal button text highlighting issue without changing reveal timing or gameplay behavior.
+- Existing components/hooks/utilities/styles considered:
+  - Considered `GameButton.jsx`, `IpadMatrixTurn.jsx`, and the existing `.game-button` styles.
+- What was reused:
+  - Reused the shared `GameButton` class already applied to the iPad reveal control.
+- What was newly created:
+  - No new files.
+- Why new code was needed where reuse was not possible:
+  - The existing button style did not include text-selection prevention for press-and-hold interactions.
+- Files changed:
+  - `src/styles.scss`
+  - `src/vibe/epics/EPIC-003/bugs.txt`
+  - `src/vibe/epics/EPIC-003/implementation.txt`
+  - `src/vibe/epics/EPIC-003/testing.txt`
+  - `src/vibe/epicsOverview.txt`
+- What was intentionally not changed:
+  - No iPad turn state, secret-number reveal logic, button component API, or unrelated button styling was changed.
+- Any assumptions made:
+  - Treated the requested "button component" behavior as the shared `.game-button` style used by `GameButton`.
+- Any tradeoffs or follow-up tasks:
+  - None.
