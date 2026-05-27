@@ -221,3 +221,28 @@ Bug fix: Bug-009 - Prevent iPad hold button text selection
   - Manual verification on an actual iPad or Safari touch device.
 - Test status:
   - passed
+
+Bug fix: Bug-010 - Hide confirmed Player guess before reveal
+- Manual test steps:
+  1. Visit `/`, choose a language and difficulty, and arrive on `/player`.
+  2. Click `Start Turn`.
+  3. Select a number and confirm the guess.
+  4. Confirm the matrix remains visible while waiting for `Reveal Answer`, but the selected number is not highlighted.
+  5. Click `Reveal Answer`.
+  6. Confirm the chosen number appears only in the reveal view.
+  7. Visit `/ipad` and confirm the iPad matrix reveal behavior is unchanged.
+- Expected result for each step:
+  1. The Player page loads normally.
+  2. The guessing matrix appears.
+  3. The confirmation modal closes and `Reveal Answer` appears.
+  4. No number has selected styling while the guess is locked.
+  5. The reveal stage opens.
+  6. The selected guess is shown only after reveal.
+  7. The iPad matrix still highlights the secret number only through its existing hold/reveal behavior.
+- Automated tests completed where relevant:
+  - `npm run build`
+- Automated tests still needed to fully prove behavior:
+  - `npm run lint` if a lint script is added to the project.
+  - Manual browser verification of the Player locked-guess state.
+- Test status:
+  - passed

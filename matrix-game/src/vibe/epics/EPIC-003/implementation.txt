@@ -313,3 +313,30 @@ Bug fix: Bug-009 - Prevent iPad hold button text selection
   - Treated the requested "button component" behavior as the shared `.game-button` style used by `GameButton`.
 - Any tradeoffs or follow-up tasks:
   - None.
+
+Bug fix: Bug-010 - Hide confirmed Player guess before reveal
+- What was implemented:
+  - Stopped passing the selected guess into the Player `NumberMatrix` after the guess has been confirmed.
+  - Kept the selected guess stored in Player state so `Reveal Answer` and scoring still work.
+- Exact scope completed:
+  - Removed the pre-reveal selected-number visual effect on the Player page only.
+- Existing components/hooks/utilities/styles considered:
+  - Considered `Player.jsx`, `NumberMatrix.jsx`, and the existing selected-cell styling.
+- What was reused:
+  - Reused the existing Player turn stages and `NumberMatrix` selected-number prop.
+- What was newly created:
+  - No new files.
+- Why new code was needed where reuse was not possible:
+  - The existing Player stage rendering passed the same selected value to both active guessing and locked-waiting states.
+- Files changed:
+  - `src/pages/Player.jsx`
+  - `src/vibe/epics/EPIC-003/bugs.txt`
+  - `src/vibe/epics/EPIC-003/implementation.txt`
+  - `src/vibe/epics/EPIC-003/testing.txt`
+  - `src/vibe/epicsOverview.txt`
+- What was intentionally not changed:
+  - No iPad matrix behavior, scoring logic, reveal flow, shared `NumberMatrix` behavior, or selected-cell styling was changed.
+- Any assumptions made:
+  - Kept the selection visible during the initial guess/confirmation step, and hid it only after the guess is confirmed.
+- Any tradeoffs or follow-up tasks:
+  - None.

@@ -160,7 +160,7 @@ function Player() {
               matrixSize={matrixSize}
               numbers={numbers}
               onSelect={handleGuessSelect}
-              selectedNumber={selectedGuess}
+              selectedNumber={playerTurnStage === 'guessing' ? selectedGuess : null}
             />
             {playerTurnStage === 'guessLocked' ? (
               <div className="player-page__primary-action">

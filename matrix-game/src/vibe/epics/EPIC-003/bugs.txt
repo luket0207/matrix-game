@@ -223,3 +223,28 @@ Attempted fixes:
 
 Final fix if solved:
 - Text inside shared game buttons, including the iPad hold-to-reveal button, is now unselectable during press-and-hold interactions.
+
+
+Bug-010
+
+Status: fixed
+
+When the player has selected their guess and confirmed it, and we are waiting to press the "Reveal answer" button. The number that was selected by the player has an effect on it, showing us what that player selected before their number has been revealed. Can we remove this effect on the button of the numbers please so their answer remains hidden until "Reveal" is clicked. This is only on the player's version, do not alter anything to do with the ipad version. 
+
+Expected behavior:
+- After the player confirms their guess, the Player page should show the locked matrix without highlighting the selected number.
+- The selected guess should only be revealed after `Reveal Answer` is clicked.
+- The iPad matrix behavior should not change.
+
+Actual behavior:
+- The Player page kept the selected number visually highlighted while waiting for `Reveal Answer`, which exposed the player's guess early.
+
+Suspected cause:
+- `Player.jsx` continued passing `selectedGuess` into `NumberMatrix` during the `guessLocked` stage.
+
+Attempted fixes:
+- Updated the Player page so `NumberMatrix` only receives `selectedGuess` while the player is actively guessing.
+- During `guessLocked`, the stored guess remains in state, but no selected-number styling is passed to the matrix.
+
+Final fix if solved:
+- The Player page no longer highlights the selected guess after confirmation; the guess remains hidden until the reveal stage.
